@@ -8,14 +8,14 @@
 
 
 ## Team Members
-| Image | Name | Email |
-|-------|------|-------|
-| <img src="Resources/cat.png" alt="Cat" height="64" width="64"> | Cat | cat@example.com |
-| <img src="Resources/dog.png" alt="Dog" height="64" width="64"> | Dog | dog@example.com |
-| <img src="Resources/hippo.png" alt="Hippo" height="64" width="64"> | Hippo | hippo@example.com |
-| <img src="Resources/shark.png" alt="Shark" height="64" width="64"> | Shark | shark@example.com |
 
 
+| Image                                                                                                 | Name                                                       | Email                        |
+| ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------- |
+| <img src="https://avatars.githubusercontent.com/u/126201955" alt="Jiahuan He" height="64" width="64"> | <a href="https://github.com/nakurahe">Jiahuan He</a>       | he.jiahuan@northeastern.edu  |
+| <img src="https://avatars.githubusercontent.com/u/57974800" alt="Liyao Zhang" height="64" width="64"> | <a href="https://github.com/judd147">Liyao Zhang</a>       | zhang.liya@northeastern.edu  |
+| <img src="https://avatars.githubusercontent.com/u/92060735" alt="Tsz Wai Tam" height="64" width="64"> | <a href="https://github.com/dtszwai">Tsz Wai Tam</a>       | tam.ts@northeastern.edu      |
+| <img src="https://avatars.githubusercontent.com/u/156369896" alt="Yuxin Wang" height="64" width="64"> | <a href="https://github.com/YuxinWang-Nora">Yuxin Wang</a> | wang.yuxin5@northeastern.edu |
 
 ## Assigned TA
 Your TA will be one of these:
