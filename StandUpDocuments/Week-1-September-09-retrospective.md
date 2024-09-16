@@ -52,15 +52,17 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   -
 
-### [Team Member 2]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Drafted Team Charter with teammates in class.
+  - Discussed quiz questions with teammates.
+  - Booked timeslots for weekly standups with TA.
 - **Challenges Faced:**
-  -
+  - There were some ambiguities in requirements of some assignments.
 - **Areas for Improvement:**
-  -
+  - Communication
 - **Feedback and Suggestions:**
-  -
+  - More proactive communication with the instructors for clarification.
 
 ### Jiahuan He
 - **Achievements and Contributions:**
