@@ -1,6 +1,5 @@
 # CS 5500 Fall 2024 Template Repository <img src="Resources/teamlogo.jpg" alt="Team Logo" height="256" width="256" align="right">
 
-- This is the landing page of your team.
 - **Team Name:** ClientFirst Solutions
 - **Team Logo:** [ClientFirst Solutions Logo](Resources/teamlogo.jpg)
 - **Team Description:** Our team is dedicated to provide reliable software solutions to address our client's needs.
@@ -25,4 +24,4 @@ Your TA will be one of these:
 
 ## Weekly Stand-Up Time
 
-- [Place holder for the assigned time for the weekly stand up with TA]
+- 13:00 - 13:30 on Friday
