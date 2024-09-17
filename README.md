@@ -12,6 +12,7 @@
 | <img src="https://avatars.githubusercontent.com/u/57974800" alt="Liyao Zhang" height="64" width="64"> | <a href="https://github.com/judd147">Liyao Zhang</a>       | zhang.liya@northeastern.edu  |
 | <img src="https://avatars.githubusercontent.com/u/92060735" alt="Tsz Wai Tam" height="64" width="64"> | <a href="https://github.com/dtszwai">Tsz Wai Tam</a>       | tam.ts@northeastern.edu      |
 | <img src="https://avatars.githubusercontent.com/u/156369896" alt="Yuxin Wang" height="64" width="64"> | <a href="https://github.com/YuxinWang-Nora">Yuxin Wang</a> | wang.yuxin5@northeastern.edu |
+| <img src="https://avatars.githubusercontent.com/u/144647060?v=4" alt="Harshil Chudasama" height="64" width="64"> | <a href="https://github.com/xojoyboy">Harshil Chudasama</a> | chudasama.h@northeastern.edu |
 
 ## Assigned TA
 
