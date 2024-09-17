@@ -75,6 +75,18 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Try to respond to messages as promptly as possible.
 
+### Tsz Wai Tam
+- **Achievements and Contributions:**
+  - Drafted team charter with our team.
+  - Revised several sentences and formatting.
+  - Updated README.md file.
+- **Challenges Faced:**
+  - Hard to determine the team name and logo.
+- **Areas for Improvement:**
+  - Aesthetic design.
+- **Feedback and Suggestions:**
+  - Improve the aesthetic design of the team name and logo.
+
 ### [Team Member 4]
 - **Achievements and Contributions:**
   -
