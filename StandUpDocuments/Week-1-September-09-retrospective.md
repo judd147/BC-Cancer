@@ -42,15 +42,6 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
-- **Achievements and Contributions:**
-  -
-- **Challenges Faced:**
-  -
-- **Areas for Improvement:**
-  -
-- **Feedback and Suggestions:**
-  -
 
 ### Liyao Zhang
 - **Achievements and Contributions:**
@@ -87,15 +78,18 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Improve the aesthetic design of the team name and logo.
 
-### [Team Member 4]
+### Yuxin Wang
 - **Achievements and Contributions:**
-  -
+  - Collaborated with the team to draft the team charter.
+  - Formatted collaborative workspaces, such as Notion, for team use.
 - **Challenges Faced:**
-  -
+  - Using clear and concise language in the team charter.
+  - Responding to team members' messages promptly on Teams.
 - **Areas for Improvement:**
-  -
+  - Enhance communication by responding more promptly to team messages
+  - Continue developing the ability to use more concise and precise language in formal documents.
 - **Feedback and Suggestions:**
-  -
+  - Timely responses are crucial in teamwork; using notifications or setting designated times to check messages could help improve this area.
 
 ---
 
