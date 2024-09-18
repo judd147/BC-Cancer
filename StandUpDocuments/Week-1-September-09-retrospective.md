@@ -91,6 +91,18 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Timely responses are crucial in teamwork; using notifications or setting designated times to check messages could help improve this area.
 
+### Harshil Chudasama
+- **Achievements and Contributions:**
+  - Drafted Team Charter online (changed groups late)
+  - Wrote first self-assessment
+  - Confered with team and caught up on what I missed
+- **Challenges Faced:**
+  - Joined late so have not had enough face time with group yet
+- **Areas for Improvement:**
+  - Further communication and organization for assignments moving forward
+- **Feedback and Suggestions:**
+  - More in-depth materials in class
+    
 ---
 
 ## Overall Team Assessment
