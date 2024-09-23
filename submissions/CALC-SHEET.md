@@ -1,3 +1,46 @@
+## Part 1: Understanding Design Patterns
+### Identify and document at least three design patterns used in the client-server architecture.  
+
+1. **Singleton** for managing single instances of services.  
+**No, this application did not implement** [the Singleton Design Pattern](https://www.geeksforgeeks.org/singleton-design-pattern/). The definition and key components of Singleton Design Pattern is:
+    - **Definition**: Singleton design pattern ensures a class only has one instance, and provides a global point of access to it.
+    - **Key components**:
+      1. Static Instance Variable.
+      2. Private Constructor.
+      3. Static Method to Get the Instance.
+
+    Since in all reachable files, either the instances are initialized directly, or the constructor of that object is not private, we acknowledge that **this application did not implement the Singleton Design Pattern**.
+2. **Observer** or **Publisher-Subscriber** for handling real-time communication between the client and server.  
+**Yes, this application implemented** [the Observer Design Pattern](https://www.geeksforgeeks.org/observer-pattern-set-1-introduction/). The definition and key components of Observer Design Pattern is:
+    - **Definition**: The Observer Design Pattern is a behavioral design pattern that defines a one-to-many dependency between objects so that when one object (the subject) changes state, all its dependents (observers) are notified and updated automatically.
+    - **Key components**:
+      1. Subject: The `SpreadSheetController` class acts as the subject that maintains the state of the spreadsheet and notifies the contributing users of changes., which are implemented by the following snippets.
+          - Maintain a list of observers:
+            ```
+            private _contributingUsers: Map<string, ContributingUser> = new Map<string, ContributingUser>();
+            private _cellsBeingEdited: Map<string, string> = new Map<string, string>();
+            ```
+          - Notify observers of changes:  
+          The methods `requestViewAccess`, `requestEditAccess`, `releaseEditAccess`, `addToken`, `addCell`, `removeToken`, and `clearFormula` manage the state of the spreadsheet and notify the contributing users of changes.
+      2. Observer(s): The contributing users (`ContributingUser` instances) act as observers that are notified of changes in the spreadsheet. The specific implementations are as follows:
+          - Update and notify changes:  
+          The methods `addToken`, `addCell`, `removeToken`, and `clearFormula` update the spreadsheet and notify the system of changes by calling evaluateSheet.
+
+    In conclusion, the `SpreadSheetController` class in `SpreadSheetController.ts` implements the **Observer design pattern**, since it maintains a list of contributing users (observers), notifies them of changes to the spreadsheet (subject), and implemented methods that manage user access and update the spreadsheet, ensuring that all relevant parties are informed of changes.
+3. **Model-View-Controller (MVC)** for separating concerns in the backend.  
+**Yes, this application implemented** [the MVC Design Pattern](https://www.geeksforgeeks.org/mvc-design-pattern/). The definition and key components of MVC Design Pattern is:
+    - **Definition**: The MVC design pattern specifies that an application consists of a data model, presentation information, and control information.
+    - **Key components**:
+      1. Model: The `Engine` folder contains the business logic and data manipulation code. This includes classes and functions that handle the core functionality of the application, such as the `SpreadSheetController.ts` and other files that manage the state and logic of the spreadsheet.
+      2. View: The `Components` folder contains the React components that render the user interface. These components display data to the user and handle user interactions. `SpreadSheet.tsx`, `LoginPageComponent.tsx`, and other components are the evidence.
+      3. Controller: The `Server` folder contains the server-side code that handles HTTP requests, processes user inputs, and interacts with the Model (`DocumentHolder`) to update the state and retrieve data.  
+
+    Therefore, the structure of this application aligns with the MVC architecture, where each folder in `src` has a specific responsibility, ensuring a clear separation of concerns.
+4. **Component Pattern** as a common good practice.  
+From `App.tsx` we know that this entire file is structured around the Component pattern, which is a core concept in React. The `App` function is a React component that renders other components (`SpreadSheet`, `LoginPageComponent`).
+5. **Single Responsibility Principle** as a common good practice.  
+The `App` component adheres to the Single Responsibility Principle by focusing on rendering the appropriate components based on the `documentName` state. It delegates the actual spreadsheet and login functionalities to `SpreadSheet` and `LoginPageComponent` respectively.
+
 ## Part 2: Analyzing the Backend (NodeJS)
 
 ### 1. **Examine the RESTful API**
