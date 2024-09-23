@@ -11,6 +11,7 @@ Week 1 September 09
   - Liyao Zhang
   - Jiahuan He
   - Yuxin Wang (Nora)
+  - Harshil Chudasama
 
 ---
 
