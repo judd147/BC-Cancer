@@ -43,15 +43,15 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Reviewed and analyzed frontend and its interaction with backend in Assignment1.
 - **Challenges Faced:**
-  -
+  - Diving into an existing codebase is challenging and requires effort to be able to understand its structure.
 - **Areas for Improvement:**
-  -
+  - Recoginition of typical design patterns.
 - **Feedback and Suggestions:**
-  -
+  - Have more practice on code reviews.
 
 ### Jiahuan He
 - **Achievements and Contributions:**
@@ -100,14 +100,13 @@ Identify actionable steps that can be taken to improve future projects.
 ## Overall Team Assessment
 Reflect on the team’s performance as a whole.
 - **Team Strengths:**
-  - Maintain open and transparent communication.
-  - Cultivate a collaborative spirit.
-  - Commit to delivering client-focused solutions.
+  - Maintain open and transparent communication to cultivate a collaborative spirit.
+  - Take initiative and ownership when it comes to task splitting.
+  - Leverage tools like Notion to make project management and collaboration more effective.
 - **Areas for Improvement:**
-  - At this stage, there is little to improve.
+  - Communication
 - **Suggestions for Future Projects:**
-  - We will collaborate to achieve our goal of developing a solution that meets our clients' needs.
-  - We may establish the roles within the team at a later time.
+  - It might be a good idea to setup regular weekly meetings among team members.
 
 ---
 
