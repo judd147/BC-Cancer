@@ -37,9 +37,11 @@
 
     Therefore, the structure of this application aligns with the MVC architecture, where each folder in `src` has a specific responsibility, ensuring a clear separation of concerns.
 4. **Component Pattern** as a common good practice.  
-From `App.tsx` we know that this entire file is structured around the Component pattern, which is a core concept in React. The `App` function is a React component that renders other components (`SpreadSheet`, `LoginPageComponent`).
+From `App.tsx` we know that this entire file is structured around the Component pattern, which is a core concept in React. The `App` function is a React component that renders other components (`SpreadSheet`, `LoginPageComponent`). The Component Pattern is a key practice in React applications, where the user interface is split into independent, reusable components. This modular design allows for code reusability, better isolation of concerns, and easier testing. In this project, components such as `LoginPageComponent.tsx` and `SpreadSheet.tsx` demonstrate this pattern by focusing on rendering specific parts of the UI and managing their own state. This pattern enhances maintainability and allows for rapid changes without impacting other components.
+
 5. **Single Responsibility Principle** as a common good practice.  
-The `App` component adheres to the Single Responsibility Principle by focusing on rendering the appropriate components based on the `documentName` state. It delegates the actual spreadsheet and login functionalities to `SpreadSheet` and `LoginPageComponent` respectively.
+The `App` component adheres to the Single Responsibility Principle by focusing on rendering the appropriate components based on the `documentName` state. It delegates the actual spreadsheet and login functionalities to `SpreadSheet` and `LoginPageComponent` respectively. The Single Responsibility Principle (SRP) is followed throughout the application. For example, the `App.tsx` component’s sole responsibility is to manage which component is rendered based on the current URL or document state, delegating the actual functionality to other components like `LoginPageComponent` and `SpreadSheet`. This ensures that each component focuses on a single task, making the code easier to understand and maintain, while reducing the likelihood of bugs when features need to change.
+
 
 ## Part 2: Analyzing the Backend (NodeJS)
 
@@ -69,22 +71,26 @@ The `App` component adheres to the Single Responsibility Principle by focusing o
   - The server then sends the appropriate response:
     - If the request is successful, the server returns the requested data (e.g., document JSON) with a `200 OK` status.
     - For invalid or failed requests (e.g., missing documents or data), the server returns an appropriate error code and message, such as `400 Bad Request` or `404 Not Found`.
+      
+The backend’s RESTful API is well-structured, handling typical CRUD operations on documents. It validates inputs, such as checking for missing `userName` fields and invalid document names, and returns appropriate errors (400 and 404). However, there is no centralized error handler for unexpected issues (e.g., internal server errors), which could be implemented to improve maintainability and user experience. Additionally, the system currently saves documents as files in the local file system, which works well for small-scale applications but may benefit from a more scalable solution, such as using a database like MongoDB or PostgreSQL in the future.
 
 ---
 
 ### 2. **Real-Time Communication (if applicable)**
 
-There is no implementation of real-time communication. The backend uses a request-response model.
+There is no implementation of real-time communication. The backend uses a request-response model. However, real-time features could be implemented using WebSockets to enable live document collaboration, where multiple users can see each other's changes in real-time. This would significantly improve the user experience in a collaborative environment.
 
 ---
 
 ### 3. **User Management**
 
-There are no mechanisms in place for handling user authentication or roles.
+Currently, user management is minimal, with no authentication system in place. All users can access documents as long as they provide a `userName`. To improve security, future implementations could add JWT-based authentication or OAuth, ensuring that users are properly authenticated and their roles (e.g., editor, viewer) are managed securely.
 
 ---
 
 ### 4. **Middleware and Error Handling**
+
+The backend includes middleware for handling CORS and parsing incoming requests (via `bodyParser.json()`), ensuring that the API is accessible from different origins and that request bodies are processed correctly. To further improve the system, a global error handler could be implemented to catch unhandled errors and log them for easier debugging and consistent error messages to the client.
 
 - **Authentication and Session Management**:  
   No authentication or session management middleware is present.
