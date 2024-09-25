@@ -114,7 +114,7 @@ The backend includes middleware for handling CORS and parsing incoming requests 
 Examine how the React app handles navigation between different screens and UI components:
 
 - How is routing set up (e.g., using React Router)?
-    - Instead of using React Router, the application handles navigation between `SpreadSheet` and `LoginPageComponent` ******using `window` API by manually fetching and updating the URL to determine which screen to display. Specifically, if no document name is present in the URL, the `LoginPageComponent` will be rendered. Otherwise, the `SpreadSheet` component will be rendered and the corresponding document name will be reflected in the URL. The major drawback of this approach is that the page will have to reload whenever the key components in the URL are updated, leading to performance issues.
+    - Instead of using React Router, the application handles navigation between `SpreadSheet` and `LoginPageComponent` using `window` API by manually fetching and updating the URL to determine which screen to display. Specifically, if no document name is present in the URL, the `LoginPageComponent` will be rendered. Otherwise, the `SpreadSheet` component will be rendered and the corresponding document name will be reflected in the URL. The major drawback of this approach is that the page will have to reload whenever the key components in the URL are updated, leading to performance issues.
 - How does the app handle protected routes (i.e., only allowing certain users to access specific pages)?
     - There are no protected routes as the spreadsheet documents are public and available to all users as long as there is a username in `window.sessionStorage`. In addition, a robust user authentication and authorization system is not implemented while the log in & out options are mainly serving the purpose of page navigation, which is a major concern in terms of security.
 
@@ -123,7 +123,7 @@ Examine how the React app handles navigation between different screens and UI co
 Investigate how the app manages state across different screens and components:
 
 - How is user state (e.g., authentication status, role) maintained and shared between components?
-    - As mentioned before, the user state (`userName`) is stored in `window.sessionStorage` . According to MDN Web Docs, sessionStorage accesses a session Storage object and a page session survives page reloads and restores. The data in sessionStorage will be cleared when the session ends. In this case, it could be used for global state management as all components have access to the sessionStorage during the session via `window.sessionStorage.getItem()` or `window.sessionStorage.setItem()` .
+    - As mentioned before, the user state (`userName`) is stored in `window.sessionStorage`. According to MDN Web Docs, sessionStorage accesses a session Storage object and a page session survives page reloads and restores. The data in sessionStorage will be cleared when the session ends. In this case, it could be used for global state management as all components have access to the sessionStorage during the session via `window.sessionStorage.getItem()` or `window.sessionStorage.setItem()` .
 - Are tools like Redux or Context API used to manage global state?
     - Neither Redux or Context API is used in the application to manage global state though they are widely used in React ecosystem. Context could be really useful to handle user state since most components require access to it. Flux-architecture solutions like Redux Toolkit or Zustand refactor all states into one giant store and define the reducer functions that update the states at one place, making state management easier in complex applications.
 
@@ -141,7 +141,7 @@ Analyze how the frontend communicates with the backend:
 Investigate how the app displays different UI components based on user roles:
 
 - How does the frontend handle the display of real-time data if applicable (e.g., chat messages, notifications)?
-    - As discussed before, the frontend does not use any real-time communication mechanism.
+    - As discussed before, the frontend does not use any real-time communication mechanism. It relies on the `useEffect` hook to update the UI every 0.05 second.
 - How is the cell ownership displayed to the users.
     - When another client pushes for the next update, their cells state will be updated by the `getSheetDisplayStringsForGUI` function in `SpreadSheetClient` Class in the form of `cell value|name of the user that is editing`. The cells state is passed as a prop to `SheetHolder` component and then to `SheetComponent` component where it is parsed as cell value and editor’s name respectively. Then the editor’s name will be rendered as a `<label>` wrapped by the cell `<button>` to all users.
 
@@ -208,4 +208,4 @@ Trace the flow of data from the moment the frontend sends a request to the serve
         From there, the data will go through multiple layers of Classes: `DocumentHolder`  → `SpreadSheetController` → `SheetMemory` where the data will be saved. Then `DocumentHolder` will utilize the `SpreadSheetController` again to access the updated memory in `SheetMemory` and write to `JSON` file under `documents` folder. After all the procedures, a `DocumentTransport` object is returned to the frontend as response with code 200.
         
 - How does the frontend handle errors returned by the server?
-    - The frontend does not implement error handling, which could affect user experience if there is an error during the communication between server and client.
+    - The frontend does not implement error handling. It just assumes that the server will always return a `200 OK` status code. This is a risky practice as it does not account for potential errors or exceptions that may occur during the request-response cycle. Implementing error handling on the frontend would ensure that the application can gracefully handle unexpected responses from the server, improving the overall user experience and application reliability.
