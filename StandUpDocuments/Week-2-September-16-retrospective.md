@@ -78,15 +78,16 @@ Identify actionable steps that can be taken to improve future projects.
   - For me: time management to learn about course material in more depth
   - For course: provide a more comprehensive and structured learning material for more convenient learning
 
-### [Team Member 4]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Reviewed and analyzed backend and its interaction with frontend in Assignment1.
 - **Challenges Faced:**
-  -
+  - Monorepo structure is new to me, so it took me some time to understand the structure.
 - **Areas for Improvement:**
-  -
+  - Need to learn more VSCode launch.json configurations (debugging).
 - **Feedback and Suggestions:**
-  -
+  - Keep up the good work!
+  - Teach the team members if I know how the things work.
 
 ### [Team Member 5]
 - **Achievements and Contributions:**
