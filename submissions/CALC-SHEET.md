@@ -52,9 +52,9 @@ The `App` component adheres to the Single Responsibility Principle by focusing o
   - **Create**:  
     Data is created using the `POST /documents/create/:name` endpoint. The document name is passed in the URL, and user information (such as `userName`) is sent in the request body. The server then uses the `createDocument` method from `DocumentHolder` to create a new document and associates it with the user.
   - **Read**:  
-    Data can be retrieved in two ways:
+    Data can be retrieved from two Endpoints:
     - `GET /documents`: Retrieves a list of all document names stored in the system.
-    - `GET /documents/:name`: Retrieves the details (in JSON format) of a specific document identified by its `name`.
+    - `GET /documents/:name`: Checks if the document exists and validates the userName in the request body.If valid, it retrieves the details (in JSON format) of a specific document identified by its `name`.
   - **Delete**:  
     Data (tokens) is deleted via the `PUT /document/removetoken/:name` endpoint. This removes a token from the document for the specified user. Although the code doesn’t explicitly show full document deletion, it handles token removal and potentially document reset.
   - **Update**:  
