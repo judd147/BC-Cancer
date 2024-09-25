@@ -65,15 +65,18 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Learn related things as much as possible.
 
-### [Team Member 3]
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  -
+  - Learned about how React and Node.js can make a frontend - backend program.
+  - Learned about more design patterns and saw how each are implemented.
+  - Added potential improvement points for calc-sheet analysis assignment. 
 - **Challenges Faced:**
-  -
+  - Assignment 1 had a steep learning curve because the calc sheet analysis repo was quite comprehensive and a little complex.
 - **Areas for Improvement:**
-  -
+  - Need to futher review material and look at other resources for Javascript applications
 - **Feedback and Suggestions:**
-  -
+  - For me: time management to learn about course material in more depth
+  - For course: provide a more comprehensive and structured learning material for more convenient learning
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
