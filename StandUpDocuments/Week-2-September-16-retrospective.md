@@ -89,15 +89,19 @@ Identify actionable steps that can be taken to improve future projects.
   - Keep up the good work!
   - Teach the team members if I know how the things work.
 
-### [Team Member 5]
+### Yuxin Wang
 - **Achievements and Contributions:**
-  -
+  - Learned the CALC-SHEET application by reviewing the code, engaging in discussions with teammates, and contributing to the revision of the team's analysis.
+  - Gained foundational knowledge of TypeScript.
 - **Challenges Faced:**
-  -
+  - TypeScript is a new language for me, which made it challenging to understand the code initially.
+  - The complexity of the CALC-SHEET application felt overwhelming at the beginning of the course, making it difficult to be fully understood.
 - **Areas for Improvement:**
-  -
+  - Begin tasks earlier to allow more time for learning and contributing effectively to the team.
+  - Seek assistance from teammates when needed and dedicate more time to self-learning TypeScript and other relevant technologies.
 - **Feedback and Suggestions:**
-  -
+  - Maintain a positive mindset when learning new technology.
+  - Prioritize time management and start tasks early to improve productivity.
 
 ---
 
