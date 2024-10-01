@@ -24,6 +24,7 @@ The purpose of this repository is to review the activities of the previous week,
 List the things that went well during the project.
 - We shared our thoughts on the BC Cancer project during team meeting.
 - We drafted the high-level problem definition together.
+- We planned a team activity for National Day for Truth and Reconciliation.
 
 ---
 
@@ -52,15 +53,17 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - We have just started to comprehend the problem BC Cancer is facing. To help draft the proposal, we might need to reach an agreement on which solution to work on.
 
-### [Team Member 2]
+### Jiahuan He
 - **Achievements and Contributions:**
-  -
+  - Shared the transcript of BC Cancer's interview, analyzed problems and drafted one solution as information management system, with AI's help. 
 - **Challenges Faced:**
-  -
+  - I acknowledge that my little knowledge on web application has lead me to heavily relying on AI's help, which I should pay attention to.
+  - I am still struggling to understand the structure of a good web application.
 - **Areas for Improvement:**
-  -
+  - More communications with teammates.
+  - More learning on web application development.
 - **Feedback and Suggestions:**
-  -
+  - Keep on learning new things and communicating with my team.
 
 ### [Team Member 3]
 - **Achievements and Contributions:**
@@ -109,4 +112,4 @@ Reflect on the team’s performance as a whole.
 
 ## Additional Comments
 Add any additional comments or notes that may be relevant.
-- Keep doing our best! :D
+- Stay healthy and keep doing our best! :D
