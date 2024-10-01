@@ -65,15 +65,15 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Keep on learning new things and communicating with my team.
 
-### [Team Member 3]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Discussed the BC Cancer project with the team.
 - **Challenges Faced:**
-  -
+  - Know little about the BC Cancer project.
 - **Areas for Improvement:**
-  -
+  - Communication and understanding of the project.
 - **Feedback and Suggestions:**
-  -
+  - Stay engaged with the team and the project.
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
