@@ -80,24 +80,27 @@ Identify actionable steps that can be taken to improve future projects.
   - Discussed the problems BC Cancer is facing and explored possible solutions with teammates.
   - Collaborated on formulating questions to ask BC Cancer to better understand their needs.
 - **Challenges Faced:**
-  - As I've never solved a real-world industry-level problem, it's hard to know what an actual solution should look like.
+  - Hard to decide on the scope of the solution for BC Cancer
+  - easy scope vs something scalable that looks good for career and potentially has a bigger impact on BC Cancer
+- **Areas for Improvement:**
+  - Further research into possible solutions
+  - Continued learning about Javascript
+- **Feedback and Suggestions:**
+  - Further resources on Javascript
 
+
+### Yuxin Wang
+- **Achievements and Contributions:**
+  - Learned about BC Cancer and their painpoint with the CRM software and analyzing data efficiently.
+  - Brainstormed possible solutions within different scopes for BC Cancer Problem
+  - Team building activity via Truth and Reconcilliation Day Movie
+- **Challenges Faced:**
+  - As I've never solved a real-world industry-level problem, it's hard to know what an actual solution should look like.
 - **Areas for Improvement:**
   - Self-learning about TypeScript.
 
 - **Feedback and Suggestions:**
   - I would appreciate more guidance on approaching industry-level problems.
-
-
-### [Team Member 5]
-- **Achievements and Contributions:**
-  -
-- **Challenges Faced:**
-  -
-- **Areas for Improvement:**
-  -
-- **Feedback and Suggestions:**
-  -
 
 ---
 
