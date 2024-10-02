@@ -75,10 +75,11 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Stay engaged with the team and the project.
 
-### Yuxin Wang
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  - Discussed the problems BC Cancer is facing and explored possible solutions with teammates.
-  - Collaborated on formulating questions to ask BC Cancer to better understand their needs.
+  - Learned about BC Cancer and their painpoint with the CRM software and analyzing data efficiently.
+  - Brainstormed possible solutions within different scopes for BC Cancer Problem
+  - Team building activity via Truth and Reconcilliation Day Movie
 - **Challenges Faced:**
   - Hard to decide on the scope of the solution for BC Cancer
   - easy scope vs something scalable that looks good for career and potentially has a bigger impact on BC Cancer
@@ -91,9 +92,8 @@ Identify actionable steps that can be taken to improve future projects.
 
 ### Yuxin Wang
 - **Achievements and Contributions:**
-  - Learned about BC Cancer and their painpoint with the CRM software and analyzing data efficiently.
-  - Brainstormed possible solutions within different scopes for BC Cancer Problem
-  - Team building activity via Truth and Reconcilliation Day Movie
+  - Discussed the problems BC Cancer is facing and explored possible solutions with teammates.
+  - Collaborated on formulating questions to ask BC Cancer to better understand their needs.
 - **Challenges Faced:**
   - As I've never solved a real-world industry-level problem, it's hard to know what an actual solution should look like.
 - **Areas for Improvement:**
