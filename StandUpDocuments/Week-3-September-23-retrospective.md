@@ -75,15 +75,19 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Stay engaged with the team and the project.
 
-### [Team Member 4]
+### Yuxin Wang
 - **Achievements and Contributions:**
-  -
+  - Discussed the problems BC Cancer is facing and explored possible solutions with teammates.
+  - Collaborated on formulating questions to ask BC Cancer to better understand their needs.
 - **Challenges Faced:**
-  -
+  - As I've never solved a real-world industry-level problem, it's hard to know what an actual solution should look like.
+
 - **Areas for Improvement:**
-  -
+  - Self-learning about TypeScript.
+
 - **Feedback and Suggestions:**
-  -
+  - I would appreciate more guidance on approaching industry-level problems.
+
 
 ### [Team Member 5]
 - **Achievements and Contributions:**
