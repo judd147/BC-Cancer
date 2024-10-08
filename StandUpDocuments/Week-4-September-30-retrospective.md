@@ -1,46 +1,44 @@
 # Retrospective Document Template
 
 ## Team Name
-[Insert Team Name Here]
+ClientFirst Solutions
 
 ## Date
 Week 4 September 30
 
 ## Participants
-- [Team Member 1]
-- [Team Member 2]
-- [Team Member 3]
-- [Team Member 4]
-- [Team Member 5]
+- Tsz Wai Tam
+- Liyao Zhang
+- Jiahuan He
+- Yuxin Wang (Nora)
+- Harshil Chudasama
 
 ---
 
 ## Overview
-Briefly describe the purpose of this retrospective and what you aim to achieve.
+The purpose of this repository is to review the activities of the previous week, summarize the successes and failures, and thereby aspire to achieve more productive results in the current week.
 
 ---
 
 ## What Went Well
 List the things that went well during the project.
--
--
--
+- We did individual research on the BC Cancer project.
+- We checked BC Cancer's answers of clarifying questions.
+- We planned to set a weekly team meeting schedule.
 
 ---
 
 ## What Could Be Improved
 List the areas where there is room for improvement.
--
--
--
+- We might need to set a solid schedule on this project, and improve communication.
 
 ---
 
 ## Action Items
 Identify actionable steps that can be taken to improve future projects.
-1.
-2.
-3.
+1. Set weekly meeting schedule.
+2. Agree on an overview and set small tasks and roles.
+3. Check each week's work and adjust tasks or roles if necessary.
 
 ---
 
@@ -55,15 +53,18 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   -
 
-### [Team Member 2]
+### Jiahuan He
 - **Achievements and Contributions:**
-  -
+  - I spent some time on learning React and Express. Now I've had a better idea on web application development.
+  - I checked BC Cancer's answers on our questions, and feel more specific on the direction of our project.
 - **Challenges Faced:**
-  -
+  - Getting to know a new framework in a short period is exhausted, I need to try very hard to keep doing so.
+  - We didn't have an overall plan on our project, maybe we would talk about that on our team meeting.
 - **Areas for Improvement:**
-  -
+  - For myself, keep learning web application development related things.
+  - For my team, keep open and transparent communications.
 - **Feedback and Suggestions:**
-  -
+  - Same as areas for improvement.
 
 ### [Team Member 3]
 - **Achievements and Contributions:**
@@ -100,14 +101,16 @@ Identify actionable steps that can be taken to improve future projects.
 ## Overall Team Assessment
 Reflect on the team’s performance as a whole.
 - **Team Strengths:**
-  -
+  - Maintain open and transparent communication to cultivate a collaborative spirit.
+  - Take initiative and ownership when it comes to task splitting.
+  - Being flexible with each other's schedule.
 - **Areas for Improvement:**
-  -
+  - Communication.
 - **Suggestions for Future Projects:**
-  -
+  - We should setup regular weekly meetings among team members.
 
 ---
 
 ## Additional Comments
 Add any additional comments or notes that may be relevant.
--
+- Keep warm, healthy and doing our best! :D
