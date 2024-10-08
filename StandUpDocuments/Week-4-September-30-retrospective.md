@@ -43,15 +43,17 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Attended team event for Truth and Reconciliation Day.
+  - Went through BC Cancer demo and answers to our questions.
 - **Challenges Faced:**
-  -
+  - NA
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - Focus on the solutions to BC Cancer problems.
+  - Start working on the prototype and set up our future plan (tech stack, roles, timeline).
 
 ### Jiahuan He
 - **Achievements and Contributions:**
