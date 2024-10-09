@@ -68,15 +68,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Same as areas for improvement.
 
-### [Team Member 3]
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  -
+  - Further narrowed down onto possible solutions for BC Cancer.
+  - Attended Team Event
 - **Challenges Faced:**
-  -
+  - Not enough time spent on learning Javascript
 - **Areas for Improvement:**
-  -
+  - Spend more time on Javascript
 - **Feedback and Suggestions:**
-  -
+  - allocate time accordingly to improve on Javascript
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
