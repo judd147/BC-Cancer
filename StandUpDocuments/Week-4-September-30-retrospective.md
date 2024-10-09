@@ -79,15 +79,15 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - allocate time accordingly to improve on Javascript
 
-### [Team Member 4]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Checked the BC Cancer API
 - **Challenges Faced:**
-  -
+  - NA
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - Focus more on the project and try to contribute more.
 
 ### [Team Member 5]
 - **Achievements and Contributions:**
