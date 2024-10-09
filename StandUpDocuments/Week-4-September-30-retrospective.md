@@ -1,12 +1,15 @@
 # Retrospective Document Template
 
 ## Team Name
+
 ClientFirst Solutions
 
 ## Date
+
 Week 4 September 30
 
 ## Participants
+
 - Tsz Wai Tam
 - Liyao Zhang
 - Jiahuan He
@@ -16,12 +19,15 @@ Week 4 September 30
 ---
 
 ## Overview
+
 The purpose of this repository is to review the activities of the previous week, summarize the successes and failures, and thereby aspire to achieve more productive results in the current week.
 
 ---
 
 ## What Went Well
+
 List the things that went well during the project.
+
 - We did individual research on the BC Cancer project.
 - We checked BC Cancer's answers of clarifying questions.
 - We planned to set a weekly team meeting schedule.
@@ -29,13 +35,17 @@ List the things that went well during the project.
 ---
 
 ## What Could Be Improved
+
 List the areas where there is room for improvement.
+
 - We might need to set a solid schedule on this project, and improve communication.
 
 ---
 
 ## Action Items
+
 Identify actionable steps that can be taken to improve future projects.
+
 1. Set weekly meeting schedule.
 2. Agree on an overview and set small tasks and roles.
 3. Check each week's work and adjust tasks or roles if necessary.
@@ -43,7 +53,9 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
+
 ### Liyao Zhang
+
 - **Achievements and Contributions:**
   - Attended team event for Truth and Reconciliation Day.
   - Went through BC Cancer demo and answers to our questions.
@@ -56,6 +68,7 @@ Identify actionable steps that can be taken to improve future projects.
   - Start working on the prototype and set up our future plan (tech stack, roles, timeline).
 
 ### Jiahuan He
+
 - **Achievements and Contributions:**
   - I spent some time on learning React and Express. Now I've had a better idea on web application development.
   - I checked BC Cancer's answers on our questions, and feel more specific on the direction of our project.
@@ -69,6 +82,7 @@ Identify actionable steps that can be taken to improve future projects.
   - Same as areas for improvement.
 
 ### Harshil Chudasama
+
 - **Achievements and Contributions:**
   - Further narrowed down onto possible solutions for BC Cancer.
   - Attended Team Event
@@ -80,6 +94,7 @@ Identify actionable steps that can be taken to improve future projects.
   - allocate time accordingly to improve on Javascript
 
 ### Tsz Wai Tam
+
 - **Achievements and Contributions:**
   - Checked the BC Cancer API
 - **Challenges Faced:**
@@ -89,20 +104,28 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Focus more on the project and try to contribute more.
 
-### [Team Member 5]
+### Yuxin Wang
+
 - **Achievements and Contributions:**
-  -
+  - Verified BC Cancer's responses to our questions.
+  - Participated in the team’s movie watching for Truth and Reconciliation Day.
 - **Challenges Faced:**
-  -
+
+  - I feel my web development skills could be stronger.
+
 - **Areas for Improvement:**
-  -
+
+  - Strengthen knowledge in full stack web development.
+
 - **Feedback and Suggestions:**
-  -
+  - The demo codes have been really helpful, and I appreciate them.
 
 ---
 
 ## Overall Team Assessment
+
 Reflect on the team’s performance as a whole.
+
 - **Team Strengths:**
   - Maintain open and transparent communication to cultivate a collaborative spirit.
   - Take initiative and ownership when it comes to task splitting.
@@ -115,5 +138,7 @@ Reflect on the team’s performance as a whole.
 ---
 
 ## Additional Comments
+
 Add any additional comments or notes that may be relevant.
+
 - Keep warm, healthy and doing our best! :D
