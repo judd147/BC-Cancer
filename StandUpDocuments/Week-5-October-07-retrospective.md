@@ -65,15 +65,15 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - For me, I will check Youtube videos on web application development related APIs.
 
-### [Team Member 3]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Started working on the BC Cancer Project.
 - **Challenges Faced:**
-  -
+  - Hard to draw Wireframe if I don't have a clear idea of the project.
 - **Areas for Improvement:**
-  -
+  - Need to learn more about the project.
 - **Feedback and Suggestions:**
-  -
+  - Learn more about the project.
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
