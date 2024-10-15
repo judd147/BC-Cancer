@@ -43,15 +43,16 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Summarized the BC Cancer problem and identified main pain points.
+  - Explored potential solutions using the cutting-edge web application development technologies.
 - **Challenges Faced:**
-  -
+  - The solutions are still not clear enough as we are working on the specifics of the prototype.
 - **Areas for Improvement:**
-  -
+  - Communication
 - **Feedback and Suggestions:**
-  -
+  - Communicate more clearly with the team and start assigning tasks based on the skills of each member.
 
 ### Jiahuan He
 - **Achievements and Contributions:**
