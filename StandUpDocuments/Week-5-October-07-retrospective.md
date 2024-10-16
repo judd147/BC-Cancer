@@ -75,15 +75,15 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Learn more about the project.
 
-### [Team Member 4]
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  -
+  - Further work on BC Cancer proposal and presentation
 - **Challenges Faced:**
-  -
+  - align the BC Cancer solution's technologies with overall intended scope of the solution
 - **Areas for Improvement:**
-  -
+  - same as last week
 - **Feedback and Suggestions:**
-  -
+  - same as last week
 
 ### [Team Member 5]
 - **Achievements and Contributions:**
