@@ -102,24 +102,23 @@ Identify actionable steps that can be taken to improve future projects.
 
 ### Yuxin Wang
 
-#### Achievements and Contributions:
+- **Achievements and Contributions:**
 
-- Attended the group meeting and understood my role in the BC Cancer proposal and presentation.
-- Self-studied the example code provided by Juancho and completed some online courses on full-stack development.
+  - Attended the group meeting and understood my role in the BC Cancer proposal and presentation.
+  - Self-studied the example code provided by Juancho and completed some online courses on full-stack development.
 
-#### Challenges Faced:
+- **Challenges Faced:**
 
-- Did not fully understand the structure of our project.
-- Need to allocate more time to learn the technologies required for our project to contribute effectively to the team.
+  - Did not fully understand the structure of our project.
+  - Need to allocate more time to learn the technologies required for our project to contribute effectively to the team.
 
-#### Areas for Improvement:
+- **Areas for Improvement:**
 
-- Continue self-studying the necessary technical knowledge.
-- Increase communication with teammates.
+  - Continue self-studying the necessary technical knowledge.
+  - Increase communication with teammates.
 
-#### Feedback and Suggestions:
-
-- Keep learning and create detailed plans ahead for myself.
+- **Feedback and Suggestions:**
+  - Keep learning and create detailed plans ahead for myself.
 
 ---
 
