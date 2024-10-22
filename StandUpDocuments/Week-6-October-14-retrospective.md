@@ -42,15 +42,15 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Created the wireframe for the project.
 - **Challenges Faced:**
-  -
+  - NA
 - **Areas for Improvement:**
-  -
+  - More detailed wireframe.
 - **Feedback and Suggestions:**
-  -
+  - NA
 
 ### Jiahuan He
 - **Achievements and Contributions:**
