@@ -64,15 +64,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Keep sharing thoughts and start as soon as possible.
 
-### [Team Member 3]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Discussed our proposed solutions with the team.
+  - Helped finalize the details of the selected solution and technologies.
 - **Challenges Faced:**
-  -
+  - Narrow down the scope of the project and make sure we are on the right track.
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - Start working on the implementation and assign roles to each member.
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
