@@ -101,12 +101,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - With the support of my teammates, I now have a clearer understanding of what needs to be done in the near future.
 
-### [Team Member 5]
+### Harshil Chudasama
 
-- ## **Achievements and Contributions:**
-- ## **Challenges Faced:**
-- ## **Areas for Improvement:**
-- ## **Feedback and Suggestions:**
+- **Achievements and Contributions:**
+  - Worked on the technical part of the BC Cancer presentation
+- **Challenges Faced:**
+  - Pivot solution to cater to BC Cancer's requirements after the feedback from presentation 
+- **Areas for Improvement:**
+  - Time management and early preperation 
+- **Feedback and Suggestions:**
+  - N/A
 
 ---
 
