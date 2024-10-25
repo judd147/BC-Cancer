@@ -1,0 +1,21 @@
+{
+  "name": "bc-cancer",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.2.2",
+  "scripts": {
+    "start": "concurrently \"yarn workspace @bc-cancer/frontend dev\" \"yarn workspace @bc-cancer/backend start\"",
+    "build": "yarn workspace @bc-cancer/shared build && yarn workspace @bc-cancer/backend build && yarn workspace @bc-cancer/frontend build",
+    "start:dev": "concurrently \"yarn workspace @bc-cancer/frontend dev\" \"yarn workspace @bc-cancer/backend start:dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "globals": "^15.11.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "dev": "^0.1.3"
+  }
+}

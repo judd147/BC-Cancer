@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@bc-cancer/shared": ["packages/shared/dist"]
+    }
+  }
+}
