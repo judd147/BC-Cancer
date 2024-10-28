@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -13,12 +13,13 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     if (!id) {
-      return null;
+      throw new BadRequestException('ID is required');
     }
     return this.repo.findOne({ where: { id } });
   }
+  
 
   find(username: string) {
     return this.repo.find({ where: { username } });

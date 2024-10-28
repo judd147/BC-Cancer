@@ -21,14 +21,14 @@ const cookieSession = require('cookie-session');
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',  // Switch to PostgreSQL
+        type: 'postgres',
         host: configService.get('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [User, Event],  // Add User and Event entities
-        synchronize: true,  // Set this to true for development, false for production
+        synchronize: true,
       }),
     }),
     UsersModule,
