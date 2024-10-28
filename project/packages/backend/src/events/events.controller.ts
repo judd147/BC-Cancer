@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { EventService } from './events.service';
 
 @Controller('events')
 export class EventController {
-  constructor(private readonly eventService: EventsService) {}
+  constructor(private readonly eventService: EventService) {}
 
   @Get()
   getAllEvents() {
