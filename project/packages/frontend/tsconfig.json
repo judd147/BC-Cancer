@@ -7,9 +7,9 @@
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@bc-cancer/shared": ["../../shared/dist"]
+      "@/*": ["./src/*"]
     }
   }
 }
