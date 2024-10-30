@@ -70,15 +70,17 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Keep learning.
 
-### [Team Member 3]
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  -
+  - Implemented PostgreSQL for the database for BC Cancer Project
+  - Implemented events backend
+  - Improved user backend security with bcrypt and more password protection
 - **Challenges Faced:**
-  -
+  - A little difficult with everyone working on every feature
 - **Areas for Improvement:**
-  -
+  - Possible split into further groups for each feature with a person responsible for testing the integration
 - **Feedback and Suggestions:**
-  -
+  - N/A
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
