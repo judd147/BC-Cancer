@@ -1,6 +1,7 @@
 # Retrospective Document Template
 
 ## Team Name
+
 ClientFirst Solutions
 
 ## Date
@@ -26,6 +27,7 @@ The purpose of this repository is to review the activities of the previous week,
 ## What Went Well
 
 List the things that went well during the project.
+
 - We presented our proposal on BC Cancer's project.
 - We started working on the project.
 - We learned a lot of new tech stacks during above process.
@@ -35,6 +37,7 @@ List the things that went well during the project.
 ## What Could Be Improved
 
 List the areas where there is room for improvement.
+
 - Raise pull requests instead of editing directly on the main.
 - Check teammates' PR more often.
 
@@ -43,23 +46,23 @@ List the areas where there is room for improvement.
 ## Action Items
 
 Identify actionable steps that can be taken to improve future projects.
+
 1. Keep open communication and flexible schedule.
 2. Check each week's work and adjust tasks or roles if necessary.
 
 ---
 
 ## Individual Self-Assessments
+
 ### [Team Member 1]
-- **Achievements and Contributions:**
-  -
-- **Challenges Faced:**
-  -
-- **Areas for Improvement:**
-  -
-- **Feedback and Suggestions:**
-  -
+
+- ## **Achievements and Contributions:**
+- ## **Challenges Faced:**
+- ## **Areas for Improvement:**
+- ## **Feedback and Suggestions:**
 
 ### Jiahuan He
+
 - **Achievements and Contributions:**
   - Kept learning relative things.
   - Started contributing to the project with small features.
@@ -71,6 +74,7 @@ Identify actionable steps that can be taken to improve future projects.
   - Keep learning.
 
 ### Harshil Chudasama
+
 - **Achievements and Contributions:**
   - Implemented PostgreSQL for the database for BC Cancer Project
   - Implemented events backend
@@ -83,29 +87,30 @@ Identify actionable steps that can be taken to improve future projects.
   - N/A
 
 ### [Team Member 4]
-- **Achievements and Contributions:**
-  -
-- **Challenges Faced:**
-  -
-- **Areas for Improvement:**
-  -
-- **Feedback and Suggestions:**
-  -
 
-### [Team Member 5]
+- ## **Achievements and Contributions:**
+- ## **Challenges Faced:**
+- ## **Areas for Improvement:**
+- ## **Feedback and Suggestions:**
+
+### Yuxin Wang
+
 - **Achievements and Contributions:**
-  -
+  - Kept learning required technology.
+  - Read team members' code to learn what I can do in the near future.
 - **Challenges Faced:**
-  -
+  - Limited knowledge on certain aspect.
 - **Areas for Improvement:**
-  -
+  - Communite more with teammates to know what I can do to help.
 - **Feedback and Suggestions:**
-  -
+  - N/A
 
 ---
 
 ## Overall Team Assessment
+
 Reflect on the team’s performance as a whole.
+
 - **Team Strengths:**
   - Flexible schedule and optimistic mindset.
   - Willingness to help each other.
@@ -117,5 +122,5 @@ Reflect on the team’s performance as a whole.
 ---
 
 ## Additional Comments
-Add any additional comments or notes that may be relevant.
--
+
+## Add any additional comments or notes that may be relevant.
