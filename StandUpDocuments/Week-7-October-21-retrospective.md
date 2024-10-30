@@ -86,12 +86,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - N/A
 
-### [Team Member 4]
+### Tsz Wai Tam
 
 - ## **Achievements and Contributions:**
+  - Implemented the user backend.
 - ## **Challenges Faced:**
+  - Donor type are not clear.
 - ## **Areas for Improvement:**
+  - N/A
 - ## **Feedback and Suggestions:**
+  - N/A
 
 ### Yuxin Wang
 
