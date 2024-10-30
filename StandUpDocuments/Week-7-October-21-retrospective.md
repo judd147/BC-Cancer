@@ -54,12 +54,17 @@ Identify actionable steps that can be taken to improve future projects.
 
 ## Individual Self-Assessments
 
-### [Team Member 1]
+### Liyao Zhang
 
 - ## **Achievements and Contributions:**
+  - Presented the selected solution to BC Cancer stakeholders.
+  - Initialized the frontend part of the project.
 - ## **Challenges Faced:**
+  - Make technical decisions within the team.
 - ## **Areas for Improvement:**
+  - Communication.
 - ## **Feedback and Suggestions:**
+  - Be proactive and clear in communication with teammates.
 
 ### Jiahuan He
 
