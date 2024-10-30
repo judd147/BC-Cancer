@@ -1,46 +1,50 @@
 # Retrospective Document Template
 
 ## Team Name
-[Insert Team Name Here]
+ClientFirst Solutions
 
 ## Date
+
 Week 7 October 21
 
 ## Participants
-- [Team Member 1]
-- [Team Member 2]
-- [Team Member 3]
-- [Team Member 4]
-- [Team Member 5]
+
+- Tsz Wai Tam
+- Liyao Zhang
+- Jiahuan He
+- Yuxin Wang (Nora)
+- Harshil Chudasama
 
 ---
 
 ## Overview
-Briefly describe the purpose of this retrospective and what you aim to achieve.
+
+The purpose of this repository is to review the activities of the previous week, summarize the successes and failures, and thereby aspire to achieve more productive results in the current week.
 
 ---
 
 ## What Went Well
+
 List the things that went well during the project.
--
--
--
+- We presented our proposal on BC Cancer's project.
+- We started working on the project.
+- We learned a lot of new tech stacks during above process.
 
 ---
 
 ## What Could Be Improved
+
 List the areas where there is room for improvement.
--
--
--
+- Raise pull requests instead of editing directly on the main.
+- Check teammates' PR more often.
 
 ---
 
 ## Action Items
+
 Identify actionable steps that can be taken to improve future projects.
-1.
-2.
-3.
+1. Keep open communication and flexible schedule.
+2. Check each week's work and adjust tasks or roles if necessary.
 
 ---
 
@@ -55,15 +59,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   -
 
-### [Team Member 2]
+### Jiahuan He
 - **Achievements and Contributions:**
-  -
+  - Kept learning relative things.
+  - Started contributing to the project with small features.
 - **Challenges Faced:**
-  -
+  - Not clear what needs to be done.
 - **Areas for Improvement:**
-  -
+  - Concrete plans and communication.
 - **Feedback and Suggestions:**
-  -
+  - Keep learning.
 
 ### [Team Member 3]
 - **Achievements and Contributions:**
@@ -100,11 +105,12 @@ Identify actionable steps that can be taken to improve future projects.
 ## Overall Team Assessment
 Reflect on the team’s performance as a whole.
 - **Team Strengths:**
-  -
+  - Flexible schedule and optimistic mindset.
+  - Willingness to help each other.
 - **Areas for Improvement:**
-  -
+  - Not applicable.
 - **Suggestions for Future Projects:**
-  -
+  - Not applicable.
 
 ---
 

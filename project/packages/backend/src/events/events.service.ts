@@ -20,14 +20,23 @@ export class EventService {
     return this.eventsRepository.save(newEvent);
   }
 
-  async updateEvent(id: number, updateData: UpdateEventDto): Promise<Event> {
+  async updateEvent(id: number, updateData: Partial<UpdateEventDto>): Promise<Event> {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({ where: { id } });
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-
     Object.assign(event, updateData);
     return this.eventsRepository.save(event);
+  }
+
+  async deleteEvent(id: number): Promise<Event> {
+    // Find the event by ID
+    const event = await this.eventsRepository.findOne({ where: { id } });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    const result = await this.eventsRepository.remove(event);
+    return result;
   }
 }
