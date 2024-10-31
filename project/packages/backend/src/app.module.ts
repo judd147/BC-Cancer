@@ -6,9 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
-import { User } from './users/user.entity';
-import { Event } from './events/event.entity';
-
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const cookieSession = require('cookie-session');
 
 @Module({
@@ -17,19 +15,13 @@ const cookieSession = require('cookie-session');
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [User, Event],  // Add User and Event entities
-        synchronize: true,
-      }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: process.env.DB_NAME,
+      synchronize: true, // For test and dev purposes
+      migrations: ['migrations/*.js'],
+      entities: ['**/*.entity.js'],
+      migrationsRun: process.env.NODE_ENV == 'test',
     }),
     UsersModule,
     EventsModule,
