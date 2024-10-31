@@ -1,62 +1,127 @@
+// src/seeder/seeder.service.ts
+
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Donor } from '../donors/donor.entity';
+import { Donor } from '../donors/donor.entity'; // Adjust the path as necessary
 import { Repository } from 'typeorm';
+import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class SeederService implements OnModuleInit {
   private readonly logger = new Logger(SeederService.name);
-  constructor(@InjectRepository(Donor) private repo: Repository<Donor>) {}
+  private readonly TOTAL_DONORS = 500;
+
+  constructor(
+    @InjectRepository(Donor)
+    private readonly donorRepository: Repository<Donor>,
+  ) {}
 
   async onModuleInit() {
     await this.seedDonors();
   }
 
   private async seedDonors() {
-    const donorsCount = await this.repo.count();
-    if (donorsCount > 0) {
-      this.logger.log('Donors already seeded. Skipping...');
+    const donorsCount = await this.donorRepository.count();
+    if (donorsCount >= this.TOTAL_DONORS) {
+      this.logger.log(
+        `Donors already seeded with ${donorsCount} entries. Skipping seeding.`,
+      );
       return;
     }
 
-    const initialDonors: Partial<Donor>[] = [
-      {
-        pmm: 'PMM1',
-        smm: 'SMM1',
-        vmm: 'VMM1',
-        firstName: 'John',
-        lastName: 'Doe',
-        addressLine1: '123 Main St',
-        city: 'Anytown',
-        contactPhoneType: 'Mobile',
-        totalDonations: 1000.0,
-        totalPledge: 500.0,
-        largestGift: 300.0,
-        lastGiftAmount: 200.0,
-        addressLine2: 'Apt 4B',
-        // Add other required fields
-      },
-      {
-        pmm: 'PMM2',
-        smm: 'SMM2',
-        vmm: 'VMM2',
-        firstName: 'Jane',
-        lastName: 'Smith',
-        addressLine1: '456 Elm St',
-        city: 'Othertown',
-        contactPhoneType: 'Home',
-        totalDonations: 2000.0,
-        totalPledge: 1500.0,
-        largestGift: 800.0,
-        lastGiftAmount: 500.0,
-        // Add other required fields
-      },
-      // Add more initial donors as needed
-    ];
+    const donorsToCreate = this.TOTAL_DONORS - donorsCount;
+    this.logger.log(`Seeding ${donorsToCreate} donors...`);
+
+    const initialDonors: Partial<Donor>[] = [];
+
+    for (let i = 0; i < donorsToCreate; i++) {
+      const firstName = faker.person.firstName();
+      const lastName = faker.person.lastName();
+      const donor: Partial<Donor> = {
+        pmm: faker.person.fullName(),
+        smm: faker.person.fullName(),
+        vmm: faker.person.fullName(),
+        firstName: firstName,
+        lastName: lastName,
+        nickName: faker.helpers.arrayElement([faker.person.firstName(), null]),
+        exclude: faker.datatype.boolean(),
+        deceased: faker.datatype.boolean(),
+        organizationName: faker.datatype.boolean()
+          ? faker.company.name()
+          : null,
+        addressLine1: faker.location.streetAddress(),
+        addressLine2: faker.datatype.boolean()
+          ? faker.location.secondaryAddress()
+          : null,
+        city: faker.location.city(),
+        contactPhoneType: faker.helpers.arrayElement([
+          'Mobile',
+          'Home',
+          'Work',
+        ]),
+        phoneRestrictions: faker.helpers.arrayElement([
+          null,
+          'Do Not Call',
+          'No Surveys',
+          'No Mass Communications',
+          'No Mass Appeals',
+        ]),
+        emailRestrictions: faker.helpers.arrayElement([
+          null,
+          'Do Not Email',
+          'No Surveys',
+          'No Mass Communications',
+          'No Mass Appeals',
+        ]),
+        communicationRestrictions: faker.helpers.arrayElement([
+          null,
+          'No Mass Communications',
+          'No Survey',
+          'No Mass Appeals',
+        ]),
+        communicationPreference: faker.helpers.arrayElement([
+          'Event',
+          'Inspiration event',
+          'Appeal',
+          'Magazine',
+          'Survey',
+          'Holiday Card',
+          null,
+        ]),
+        subscriptionEventsInPerson: faker.datatype.boolean(),
+        subscriptionEventsMagazine: faker.datatype.boolean(),
+        totalDonations: parseFloat(
+          faker.finance.amount({ min: 0, max: 1000000 }),
+        ),
+        totalPledge: parseFloat(faker.finance.amount({ min: 0, max: 1000000 })),
+        largestGift: parseFloat(faker.finance.amount({ min: 0, max: 1000000 })),
+        lastGiftAmount: parseFloat(
+          faker.finance.amount({ min: 0, max: 1000000 }),
+        ),
+        largestGiftAppeal: faker.datatype.boolean()
+          ? faker.lorem.sentence()
+          : null,
+        firstGiftDate: faker.date.past({ years: 10 }),
+        lastGiftDate: faker.date.past({ years: 1 }),
+        lastGiftRequest: faker.datatype.boolean() ? faker.date.future() : null,
+        lastGiftAppeal: faker.datatype.boolean()
+          ? faker.lorem.sentence()
+          : null,
+      };
+
+      initialDonors.push(donor);
+    }
 
     try {
-      await this.repo.save(initialDonors);
-      this.logger.log('Initial donors have been seeded successfully.');
+      // Insert donors in batches to improve performance
+      const BATCH_SIZE = 100;
+      for (let i = 0; i < initialDonors.length; i += BATCH_SIZE) {
+        const batch = initialDonors.slice(i, i + BATCH_SIZE);
+        await this.donorRepository.save(batch);
+        this.logger.log(`Inserted batch ${Math.floor(i / BATCH_SIZE) + 1}`);
+      }
+
+      this.logger.log(`Successfully seeded ${initialDonors.length} donors.`);
     } catch (error) {
       this.logger.error('Error seeding donors:', error);
     }
