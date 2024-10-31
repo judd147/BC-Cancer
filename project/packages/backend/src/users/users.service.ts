@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -19,7 +23,6 @@ export class UsersService {
     }
     return this.repo.findOne({ where: { id } });
   }
-  
 
   find(username: string) {
     return this.repo.find({ where: { username } });
