@@ -1,0 +1,2 @@
+### Get all donors
+GET http://localhost:3000/donors
