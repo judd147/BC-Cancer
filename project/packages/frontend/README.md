@@ -6,8 +6,8 @@
   - [x] React Router setup
   - [ ] breadcrumbs
 - [ ] Scaffold basic UI for each page
-  - [ ] Login
-  - [ ] Event
+  - [x] Login
+  - [x] Event
   - [ ] Create Event
   - [ ] Event Detail
 - [ ] Fetch data from backend

@@ -1,4 +1,4 @@
-import { Payment, columns } from "@/components/event-columns"
+import { Event, columns } from "@/components/event-columns"
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
@@ -8,30 +8,24 @@ export default function Events() {
 
   const data = [
     {
-      id: "1",
-      amount: 100,
-      status: "pending",
-      email: "test@gmail.com",
+      id: 1,
+      name: "Event 1",
+      location: "New York",
+      date: "2023-01-01",
     },
     {
-      id: "2",
-      amount: 200,
-      status: "processing",
-      email: "test@gmail.com",
+      id: 2,
+      name: "Event 2",
+      location: "Los Angeles",
+      date: "2023-01-02",
     },
     {
-      id: "3",
-      amount: 300,
-      status: "success",
-      email: "test@gmail.com",
+      id: 3,
+      name: "Event 3",
+      location: "Chicago",
+      date: "2023-01-03",
     },
-    {
-      id: "4",
-      amount: 400,
-      status: "failed",
-      email: "test@gmail.com",
-    },
-  ] as Payment[]
+  ] satisfies Event[]
 
   return (
     <div className="container mx-auto py-10">

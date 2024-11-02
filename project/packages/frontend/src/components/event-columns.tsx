@@ -1,25 +1,31 @@
 import { ColumnDef } from "@tanstack/react-table"
+import { Link } from "react-router-dom";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+export type Event = {
+  id: number
+  name: string
+  location: string
+  date: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Event>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => (
+      <Link to={`/events/${row.original.id}`} className="hover:underline">
+        {row.getValue("name")}
+      </Link>
+    ),
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "location",
+    header: "Location",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "date",
+    header: "Date",
   },
 ]

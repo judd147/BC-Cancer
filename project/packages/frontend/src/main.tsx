@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import Events from "./pages/events";
 import CreateEvent from "./pages/create-event";
+import EventDetail from "./pages/event-detail";
 
 import {
   createBrowserRouter,
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />} />
       <Route path="events" element={<Events />} />
       <Route path="create-event" element={<CreateEvent />} />
+      <Route path="/events/:eventId" element={<EventDetail />} />
     </>,
   ),
 );
