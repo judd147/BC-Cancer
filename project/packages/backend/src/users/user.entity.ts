@@ -19,12 +19,17 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ name: 'is_admin' })
+  @Column({ name: 'is_admin', default: false })
   admin: boolean;
 
   @AfterInsert()
   logInsert() {
-    console.log('Inserted User with id', this.id, 'and username', this.username);
+    console.log(
+      'Inserted User with id',
+      this.id,
+      'and username',
+      this.username,
+    );
   }
 
   @AfterUpdate()
