@@ -69,6 +69,12 @@ export class Donor {
   city: string;
 
   @Column()
+  latitude: number;
+
+  @Column()
+  longitude: number;
+
+  @Column()
   contactPhoneType: string;
 
   @Column({ nullable: true })
