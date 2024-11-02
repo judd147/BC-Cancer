@@ -11,6 +11,15 @@ export class Event {
   @Column()
   location: string;
 
+  @Column()
+  latitude: number;
+
+  @Column()
+  longitude: number;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
   @Column({ type: 'date' })
   date: Date;
 }
