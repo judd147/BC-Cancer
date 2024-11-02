@@ -17,7 +17,7 @@ export class Event {
   @Column()
   longitude: number;
 
-  @Column()
+  @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({ type: 'date' })

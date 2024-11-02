@@ -1,19 +1,28 @@
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const getCoordinates = async (address: string) => {
-    const url = `https://geocode.maps.co/search?q=${address}&api_key=6725c228d97dd083516407vpk4a8592`;
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
-  
-      const json = await response.json();
-      return { lat: parseFloat(json[0].lat), lon: parseFloat(json[0].lon) };
-    } catch (error) {
-      console.error(error.message);
-      throw new Error("Failed to get coordinates");
+  const url = `https://geocode.maps.co/search?q=${encodeURIComponent(address)}&api_key=6725c228d97dd083516407vpk4a8592`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
     }
+
+    const json = await response.json();
+    if (!json || json.length === 0) {
+      throw new Error(`No coordinates found for the given address: ${address}`);
+    }
+
+    // Pause for 1 second
+    await delay(1000);
+
+    return { lat: parseFloat(json[0].lat), lon: parseFloat(json[0].lon) };
+  } catch (error) {
+    console.error(`Error fetching coordinates for address "${address}": ${error.message}`);
+    throw new Error('Failed to get coordinates');
   }
-  
+};
+
 export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number ) => {
     const R = 6371e3; // metres
     const φ1 = lat1 * Math.PI/180; // φ, λ in radians

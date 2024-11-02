@@ -68,10 +68,10 @@ export class Donor {
   @Column()
   city: string;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   latitude: number;
 
-  @Column()
+  @Column({ type: 'float', nullable: true })
   longitude: number;
 
   @Column()

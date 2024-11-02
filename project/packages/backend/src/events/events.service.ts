@@ -19,7 +19,8 @@ export class EventService {
   async createEvent(eventData: CreateEventDto): Promise<Event> {
     const newEvent = this.eventsRepository.create(eventData);
     // Get the coordinates from the location
-    const coordinates = await getCoordinates(eventData.location);
+    // const coordinates = await getCoordinates(event.location);
+    const coordinates = { lat: 100, lon: 100 }; // Default coordinates
     newEvent.latitude = coordinates.lat;
     newEvent.longitude = coordinates.lon;
     return this.eventsRepository.save(newEvent);
@@ -34,7 +35,8 @@ export class EventService {
     Object.assign(event, updateData);
     if (updateData.location) {
       // Get the coordinates from the location
-      const coordinates = await getCoordinates(event.location);
+      // const coordinates = await getCoordinates(event.location);
+      const coordinates = { lat: 100, lon: 100 }; // Default coordinates
       event.latitude = coordinates.lat;
       event.longitude = coordinates.lon;
     }
