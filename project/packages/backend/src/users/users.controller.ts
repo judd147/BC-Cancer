@@ -3,8 +3,8 @@ import {
   Controller,
   Post,
   Get,
-  Patch,
-  Delete,
+  // Patch,
+  // Delete,
   Param,
   Query,
   NotFoundException,
@@ -54,7 +54,7 @@ export class UsersController {
     return user;
   }
 
-  @Get('/:id')
+  // @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
     if (!user) {
@@ -63,17 +63,17 @@ export class UsersController {
     return user;
   }
 
-  @Get()
+  // @Get()
   findAllUsers(@Query('username') username: string) {
     return this.usersService.find(username);
   }
 
-  @Delete('/:id')
+  // @Delete('/:id')
   removeUser(@Param('id') id: string) {
     return this.usersService.remove(parseInt(id));
   }
 
-  @Patch('/:id')
+  // @Patch('/:id')
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(parseInt(id), body);
   }

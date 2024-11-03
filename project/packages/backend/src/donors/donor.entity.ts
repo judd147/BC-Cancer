@@ -1,7 +1,8 @@
+import { Donor as DonorInterface } from '@bc-cancer/shared/src/types';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Donor {
+export class Donor implements DonorInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

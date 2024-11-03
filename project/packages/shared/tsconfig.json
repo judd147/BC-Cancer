@@ -5,7 +5,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "composite": true
   },
   "include": ["src"]
 }

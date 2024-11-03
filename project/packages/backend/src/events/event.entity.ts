@@ -1,7 +1,8 @@
+import { Event as EventInterface } from '@bc-cancer/shared/src/types';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Event {
+export class Event implements EventInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
