@@ -1,10 +1,12 @@
 import { Event, columns } from "@/components/event-columns"
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Events() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { username } = location.state;
 
   const data = [
     {
@@ -31,6 +33,7 @@ export default function Events() {
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold py-4">Events</h1>
+        {username && <p>Welcome, {username}!</p>}
         <Button onClick={() => navigate('/create-event')}>
           Create Event
         </Button>
