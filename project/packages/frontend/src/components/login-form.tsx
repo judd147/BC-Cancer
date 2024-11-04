@@ -31,13 +31,36 @@ export function LoginForm() {
     password?: string;
   }>({});
 
-  const handleSubmit = () => {
+  const handleLogin = async () => {
     try {
-      // Validate the form data
+      // validation
       loginSchema.parse({ username, password });
-
-      // If validation passes, navigate to the events page
-      navigate("/events");
+      // send request to backend
+      const response = await fetch('http://localhost:3000/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      // error handling
+      if (!response.ok) {
+        if (response.status === 404) {
+          setErrors({
+            username: 'username not found',
+          });
+        } else if (response.status === 400) {
+          setErrors({
+            password: 'password does not match our records',
+          });
+        }
+        throw new Error('Failed to sign in');
+      } else {
+        const data = await response.json();
+        console.log('Signed in successfully:', data);
+        navigate("/events");
+      }
+  
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -94,7 +117,7 @@ export function LoginForm() {
               </span>
             )}
           </div>
-          <Button type="button" className="w-full" onClick={handleSubmit}>
+          <Button type="button" className="w-full" onClick={handleLogin}>
             Login
           </Button>
         </div>
