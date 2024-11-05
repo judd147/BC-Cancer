@@ -11,19 +11,29 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { z } from "zod";
+import { useAuth } from "../AuthContext";
 
 // Define the Zod schema
 const loginSchema = z.object({
-  username: z.string()
+  username: z
+    .string()
     .min(6, { message: "Username must be at least 6 characters" })
     .max(20, { message: "Username must not exceed 20 characters" }),
-  password: z.string()
+  password: z
+    .string()
     .min(6, { message: "Password must be at least 6 characters" })
     .max(20, { message: "Password must not exceed 20 characters" }),
 });
 
-export function LoginForm() {
+export function LoginForm({
+  isSignup,
+  toggleMode,
+}: {
+  isSignup: boolean;
+  toggleMode: () => void;
+}) {
   const navigate = useNavigate();
+  const { setIsAuthed } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -31,15 +41,51 @@ export function LoginForm() {
     password?: string;
   }>({});
 
+  const handleSignup = async () => {
+    try {
+      // validation
+      loginSchema.parse({ username, password });
+      // send request to backend
+      const response = await fetch("http://localhost:3000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      // error handling
+      if (!response.ok) {
+        if (response.status === 400) {
+          setErrors({
+            username: "username already exists",
+          });
+        }
+      } else {
+        const data = await response.json();
+        // console.log("Signed up successfully:", data);
+        setIsAuthed(true);
+        navigate("/events", { state: { username: data.username } });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = error.flatten().fieldErrors;
+        setErrors({
+          username: fieldErrors.username?.[0],
+          password: fieldErrors.password?.[0],
+        });
+      }
+    }
+  };
+
   const handleLogin = async () => {
     try {
       // validation
       loginSchema.parse({ username, password });
       // send request to backend
-      const response = await fetch('http://localhost:3000/auth/signin', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/auth/signin", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
       });
@@ -47,20 +93,19 @@ export function LoginForm() {
       if (!response.ok) {
         if (response.status === 404) {
           setErrors({
-            username: 'username not found',
+            username: "username not found",
           });
         } else if (response.status === 400) {
           setErrors({
-            password: 'password does not match our records',
+            password: "password does not match our records",
           });
         }
-        throw new Error('Failed to sign in');
       } else {
         const data = await response.json();
-        console.log('Signed in successfully:', data);
-        navigate("/events");
+        //console.log("Logged in successfully:", data);
+        setIsAuthed(true);
+        navigate("/events", { state: { username: data.username } });
       }
-  
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -73,11 +118,15 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto w-96">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">
+          {isSignup ? "Login" : "Sign Up"}
+        </CardTitle>
         <CardDescription>
-          Enter your username below to login to your account
+          {isSignup
+            ? "Enter your username below to login to your account"
+            : "Enter your username and password below to start"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -117,15 +166,32 @@ export function LoginForm() {
               </span>
             )}
           </div>
-          <Button type="button" className="w-full" onClick={handleLogin}>
-            Login
-          </Button>
+          {isSignup ? (
+            <Button type="button" className="w-full" onClick={handleLogin}>
+              Login
+            </Button>
+          ) : (
+            <Button type="button" className="w-full" onClick={handleSignup}>
+              Register
+            </Button>
+          )}
         </div>
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <a href="#" className="underline">
-            Sign up
-          </a>
+          {isSignup ? (
+            <>
+              Don't have an account?{" "}
+              <a href="#" className="underline" onClick={toggleMode}>
+                Sign up
+              </a>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <a href="#" className="underline" onClick={toggleMode}>
+                Login
+              </a>
+            </>
+          )}
         </div>
       </CardContent>
     </Card>

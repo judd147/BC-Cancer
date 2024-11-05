@@ -2,18 +2,18 @@
 
 ## TODO
 - [x] Setup Tailwind & shadcn UI
-- [ ] Routing
+- [x] Routing
   - [x] React Router setup
-  - [ ] breadcrumbs
-- [ ] Scaffold basic UI for each page
+  - [x] separate auth stack and app stack (display username after login)
+- [x] Scaffold basic UI for each page
   - [x] Login
   - [x] Event
   - [ ] Create Event
   - [ ] Event Detail
-- [ ] Fetch data from backend
+- [ ] Communicate with backend
   - [ ] React Query
 - [ ] Implement functionality
-  - [ ] Login with username/password
+  - [x] Login with username/password
   - [ ] List all events
   - [ ] Create new event
   - [ ] Event detail donor table
