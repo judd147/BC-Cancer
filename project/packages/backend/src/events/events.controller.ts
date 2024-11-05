@@ -7,6 +7,11 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
+  @Get('/:id')
+  getEvent(@Param('id') id: string) {
+    return this.eventService.getEvent(parseInt(id));
+  }
+
   @Get()
   getAllEvents() {
     // Fetch all events via the service

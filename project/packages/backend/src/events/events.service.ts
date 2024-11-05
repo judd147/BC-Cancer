@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Event } from './event.entity';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
-import { getCoordinates } from '../utils/coordinates.utils';
 
 @Injectable()
 export class EventService {
@@ -12,17 +11,20 @@ export class EventService {
     @InjectRepository(Event) private eventsRepository: Repository<Event>,
   ) {}
 
+  async getEvent(id: number): Promise<Event> {
+    const event = await this.eventsRepository.findOne({ where: { id } });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    return event;
+  }
+
   async getAllEvents(): Promise<Event[]> {
     return this.eventsRepository.find();
   }
 
   async createEvent(eventData: CreateEventDto): Promise<Event> {
     const newEvent = this.eventsRepository.create(eventData);
-    // Get the coordinates from the location
-    // const coordinates = await getCoordinates(event.location);
-    const coordinates = { lat: 100, lon: 100 }; // Default coordinates
-    newEvent.latitude = coordinates.lat;
-    newEvent.longitude = coordinates.lon;
     return this.eventsRepository.save(newEvent);
   }
 
@@ -33,13 +35,6 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
     Object.assign(event, updateData);
-    if (updateData.location) {
-      // Get the coordinates from the location
-      // const coordinates = await getCoordinates(event.location);
-      const coordinates = { lat: 100, lon: 100 }; // Default coordinates
-      event.latitude = coordinates.lat;
-      event.longitude = coordinates.lon;
-    }
     return this.eventsRepository.save(event);
   }
 

@@ -2,15 +2,31 @@ import { UpdateEventDto as UpdateEvent } from '@bc-cancer/shared/src/types';
 import { IsString, IsDateString, IsOptional } from 'class-validator';
 
 export class UpdateEventDto implements UpdateEvent {
-  @IsString()
   @IsOptional()
+  @IsString()
   name: string;
 
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  location: string;
+  addressLine1: string;
 
-  @IsDateString()
   @IsOptional()
+  @IsString()
+  addressLine2?: string;
+
+  @IsOptional()
+  @IsString()
+  city: string;
+
+  @IsOptional()
+  @IsDateString()
   date: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  donorsList?: string;
 }

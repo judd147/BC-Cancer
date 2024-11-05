@@ -69,12 +69,6 @@ export class Donor implements DonorInterface {
   @Column()
   city: string;
 
-  @Column({ type: 'float', nullable: true })
-  latitude: number;
-
-  @Column({ type: 'float', nullable: true })
-  longitude: number;
-
   @Column()
   contactPhoneType: string;
 

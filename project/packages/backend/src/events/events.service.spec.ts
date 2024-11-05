@@ -41,7 +41,7 @@ describe('EventService', () => {
 
   describe('createEvent', () => {
     it('should create and return a new event', async () => {
-      const eventData: CreateEventDto = { name: 'Test Event', date: new Date().toISOString(), location: 'Test Location' };
+      const eventData: CreateEventDto = { name: 'Test Event', date: new Date().toISOString(), addressLine1: '123 Test St', city: 'Test City' };
       const newEvent: DeepPartial<Event> = { id: 1, ...eventData };
       jest.spyOn(repository, 'create').mockReturnValue(newEvent as Event);
       jest.spyOn(repository, 'save').mockResolvedValue(newEvent as Event);

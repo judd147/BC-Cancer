@@ -10,17 +10,20 @@ export class Event implements EventInterface {
   name: string;
 
   @Column()
-  location: string;
+  addressLine1: string;
+
+  @Column({ nullable: true })
+  addressLine2?: string;
 
   @Column()
-  latitude: number;
-
-  @Column()
-  longitude: number;
+  city: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({ type: 'date' })
   date: Date;
+
+  @Column({ nullable: true })
+  donorsList?: string;
 }

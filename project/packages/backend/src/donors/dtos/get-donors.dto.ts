@@ -26,6 +26,10 @@ export class GetDonorsDto implements GetDonorsParams {
   deceased?: boolean;
 
   @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
   @IsNumber()
   minTotalDonations?: number;
 
