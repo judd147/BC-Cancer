@@ -22,7 +22,7 @@ export class EventService {
   }
 
   async getAllEvents(): Promise<Event[]> {
-    return this.eventsRepository.find();
+    return this.eventsRepository.find({ relations: ['donorsList'] });
   }
 
   async createEvent(eventData: CreateEventDto): Promise<Event> {
