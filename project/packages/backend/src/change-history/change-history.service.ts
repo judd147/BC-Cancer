@@ -4,6 +4,7 @@ import { EventChangeHistory } from './event-change-history.entity';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Event } from '../events/event.entity';
+import { ActionType } from './event-change-history.entity';
 
 @Injectable()
 export class ChangeHistoryService {
@@ -22,7 +23,7 @@ export class ChangeHistoryService {
   async logChange(
     event: Event,
     user: User,
-    action: string,
+    action: ActionType,
     changes?: Record<string, { old: any; new: any }>,
   ): Promise<EventChangeHistory> {
     const history = this.repo.create({ event, user, action, changes });

@@ -5,8 +5,9 @@ import { Event } from './event.entity';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { Donor } from '../donors/donor.entity';
-import { ChangeHistoryService } from 'src/change-history/change-history.service';
-import { User } from 'src/users/user.entity';
+import { ChangeHistoryService } from '../change-history/change-history.service';
+import { User } from '../users/user.entity';
+import { ActionType } from '../change-history/event-change-history.entity';
 
 const user: User = { id: 1, username: 'snjmfgr', password: 'password' } as User;
 
@@ -45,7 +46,11 @@ export class EventService {
     const newEvent = this.eventsRepository.create({ ...eventData, donorsList });
     const savedEvent = await this.eventsRepository.save(newEvent);
 
-    await this.changeHistoryService.logChange(savedEvent, user, 'created');
+    await this.changeHistoryService.logChange(
+      savedEvent,
+      user,
+      ActionType.CREATED,
+    );
 
     return this.eventsRepository.save(newEvent);
   }
@@ -107,7 +112,7 @@ export class EventService {
     await this.changeHistoryService.logChange(
       updatedEvent,
       user,
-      'updated',
+      ActionType.UPDATED,
       changes,
     );
 
@@ -121,7 +126,7 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
     const result = await this.eventsRepository.remove(event);
-    await this.changeHistoryService.logChange(event, user, 'deleted');
+    await this.changeHistoryService.logChange(event, user, ActionType.DELETED);
     return result;
   }
 }

@@ -4,7 +4,7 @@ import { EventController } from './events.controller';
 import { EventService } from './events.service';
 import { Event } from './event.entity';
 import { Donor } from '../donors/donor.entity';
-import { ChangeHistoryModule } from 'src/change-history/change-history.module';
+import { ChangeHistoryModule } from '../change-history/change-history.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, Donor]), ChangeHistoryModule],

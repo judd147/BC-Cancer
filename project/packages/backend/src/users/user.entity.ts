@@ -1,4 +1,4 @@
-import { EventChangeHistory } from 'src/change-history/event-change-history.entity';
+import { EventChangeHistory } from '../change-history/event-change-history.entity';
 import {
   AfterInsert,
   AfterRemove,

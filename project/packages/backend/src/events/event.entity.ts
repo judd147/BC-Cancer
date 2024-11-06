@@ -8,7 +8,7 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { EventChangeHistory } from 'src/change-history/event-change-history.entity';
+import { EventChangeHistory } from '../change-history/event-change-history.entity';
 
 @Entity()
 export class Event implements EventInterface {
