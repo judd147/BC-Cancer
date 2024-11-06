@@ -41,15 +41,15 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Backend: Finished main functions of donor and user.
 - **Challenges Faced:**
-  -
+  - importing files from other Yarn Workspaces is hard
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - NA
 
 ### Jiahuan He
 - **Achievements and Contributions:**
