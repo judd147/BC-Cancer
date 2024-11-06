@@ -1,3 +1,4 @@
+import { EventChangeHistory } from 'src/change-history/event-change-history.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -5,6 +6,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
   // OneToMany,
 } from 'typeorm';
 
@@ -21,6 +23,9 @@ export class User {
 
   @Column({ name: 'is_admin', default: false })
   admin: boolean;
+
+  @OneToMany(() => EventChangeHistory, (changeHistory) => changeHistory.user)
+  changeHistories: EventChangeHistory[];
 
   @AfterInsert()
   logInsert() {
