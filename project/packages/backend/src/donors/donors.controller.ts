@@ -1,7 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { DonorsService } from './donors.service';
 import { GetDonorsDto } from './dtos/get-donors.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('donors')
 export class DonorsController {

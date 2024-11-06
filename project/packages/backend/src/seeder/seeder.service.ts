@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Donor } from '../donors/donor.entity'; // Adjust the path as necessary
 import { Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
-import { getCoordinates } from '../utils/coordinates.utils';
 
 @Injectable()
 export class SeederService implements OnModuleInit {
@@ -55,9 +54,6 @@ export class SeederService implements OnModuleInit {
           ? faker.location.secondaryAddress()
           : null,
         city: faker.location.city(),
-        // Add dummy latitude and longitude
-        latitude: 100,
-        longitude: 100,
         contactPhoneType: faker.helpers.arrayElement([
           'Mobile',
           'Home',

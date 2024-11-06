@@ -1,28 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Event } from './event.entity';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
-import { getCoordinates } from '../utils/coordinates.utils';
+import { Donor } from '../donors/donor.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event) private eventsRepository: Repository<Event>,
+    @InjectRepository(Donor) private donorsRepository: Repository<Donor>,
   ) {}
+
+  async getEvent(id: number): Promise<Event> {
+    const event = await this.eventsRepository.findOne({ where: { id }, relations: ['donorsList'] });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    return event;
+  }
 
   async getAllEvents(): Promise<Event[]> {
     return this.eventsRepository.find();
   }
 
   async createEvent(eventData: CreateEventDto): Promise<Event> {
-    const newEvent = this.eventsRepository.create(eventData);
-    // Get the coordinates from the location
-    // const coordinates = await getCoordinates(event.location);
-    const coordinates = { lat: 100, lon: 100 }; // Default coordinates
-    newEvent.latitude = coordinates.lat;
-    newEvent.longitude = coordinates.lon;
+    const donorsList: Donor[] = [];
+    if (eventData.donorsList) {
+      donorsList.push(...await this.donorsRepository.find({ where: { id: In(eventData.donorsList) }}));
+    }
+    const newEvent = this.eventsRepository.create({ ...eventData, donorsList });
     return this.eventsRepository.save(newEvent);
   }
 
@@ -32,14 +40,11 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    Object.assign(event, updateData);
-    if (updateData.location) {
-      // Get the coordinates from the location
-      // const coordinates = await getCoordinates(event.location);
-      const coordinates = { lat: 100, lon: 100 }; // Default coordinates
-      event.latitude = coordinates.lat;
-      event.longitude = coordinates.lon;
+    const donorsList: Donor[] = [];
+    if (updateData.donorsList) {
+      donorsList.push(...await this.donorsRepository.find({ where: { id: In(updateData.donorsList) }}));
     }
+    Object.assign(event, updateData, { donorsList });
     return this.eventsRepository.save(event);
   }
 

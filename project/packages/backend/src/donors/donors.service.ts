@@ -14,6 +14,7 @@ export class DonorsService {
       lastName,
       exclude,
       deceased,
+      city,
       minTotalDonations,
       maxTotalDonations,
       firstGiftDateFrom,
@@ -44,6 +45,12 @@ export class DonorsService {
 
     if (deceased !== undefined) {
       query.andWhere('donor.deceased = :deceased', { deceased });
+    }
+
+    if (city !== undefined) {
+      query.andWhere('donor.city LIKE :city', {
+        city: `%${city}%`,
+      });
     }
 
     if (minTotalDonations !== undefined) {

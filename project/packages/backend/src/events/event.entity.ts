@@ -1,5 +1,6 @@
 import { Event as EventInterface } from '@bc-cancer/shared/src/types';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Donor } from '../donors/donor.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class Event implements EventInterface {
@@ -10,17 +11,21 @@ export class Event implements EventInterface {
   name: string;
 
   @Column()
-  location: string;
+  addressLine1: string;
+
+  @Column({ nullable: true })
+  addressLine2?: string;
 
   @Column()
-  latitude: number;
-
-  @Column()
-  longitude: number;
+  city: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({ type: 'date' })
   date: Date;
+
+  @ManyToMany(() => Donor, {cascade: true})
+  @JoinTable()
+  donorsList?: Donor[];
 }

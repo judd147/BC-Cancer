@@ -26,6 +26,7 @@ export interface GetDonorsParams {
   lastName?: string;
   exclude?: boolean;
   deceased?: boolean;
+  city?: string;
   minTotalDonations?: number;
   maxTotalDonations?: number;
   firstGiftDateFrom?: Date;
