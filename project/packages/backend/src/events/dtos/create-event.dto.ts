@@ -1,10 +1,10 @@
 import { CreateEventDto as CreateEvent } from '@bc-cancer/shared/src/types';
 import {
+  IsArray,
   IsDateString,
   IsOptional,
   IsString,
 } from 'class-validator';
-
 export class CreateEventDto implements CreateEvent {
   @IsString()
   name: string;
@@ -27,6 +27,6 @@ export class CreateEventDto implements CreateEvent {
   description?: string;
 
   @IsOptional()
-  @IsString()
-  donorsList?: string;
+  @IsArray()
+  donorsList?: string[];
 }
