@@ -14,11 +14,6 @@ export interface EventChangeHistory {
   id: number;
 
   /**
-   * The event associated with this change history.
-   */
-  event: Event;
-
-  /**
    * The user who made the change.
    */
   user: User | null;
