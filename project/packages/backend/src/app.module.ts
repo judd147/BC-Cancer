@@ -7,8 +7,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
 import { DonorsModule } from './donors/donors.module';
-import { SeederService } from './seeder/seeder.service';
 import { SeederModule } from './seeder/seeder.module';
+import { ChangeHistoryModule } from './change-history/change-history.module';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const cookieSession = require('cookie-session');
 
@@ -30,6 +30,7 @@ const cookieSession = require('cookie-session');
     EventsModule,
     DonorsModule,
     SeederModule,
+    ChangeHistoryModule,
   ],
   controllers: [AppController],
   providers: [
