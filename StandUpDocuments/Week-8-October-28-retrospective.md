@@ -75,12 +75,17 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Keep working on tasks I can think of, and write unit tests at the same time.
 
-### [Team Member 3]
+### Harshil Chudasama
 
-- ## **Achievements and Contributions:**
-- ## **Challenges Faced:**
-- ## **Areas for Improvement:**
-- ## **Feedback and Suggestions:**
+- **Achievements and Contributions:**
+  - Continue working on BC Cancer project
+- **Challenges Faced:**
+  - a lot of competing deadlines with other courses. 
+- **Areas for Improvement:**
+  - better time management
+  - write tests for backend routes
+- **Feedback and Suggestions:**
+  - N/A
 
 ### [Team Member 4]
 
