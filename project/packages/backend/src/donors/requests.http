@@ -1,2 +1,5 @@
 ### Get all donors
 GET http://localhost:3000/donors
+
+### Get donor by using query parameter
+GET http://localhost:3000/donors?page=2&limit=50

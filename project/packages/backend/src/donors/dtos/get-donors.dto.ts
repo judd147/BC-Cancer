@@ -48,10 +48,12 @@ export class GetDonorsDto implements GetDonorsParams {
   firstGiftDateTo?: Date;
 
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   page?: number;
 
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   limit?: number;
 
