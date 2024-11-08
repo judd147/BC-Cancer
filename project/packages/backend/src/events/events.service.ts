@@ -50,7 +50,7 @@ export class EventService {
       ActionType.CREATED,
     );
 
-    return this.eventsRepository.save(newEvent);
+    return savedEvent;
   }
 
   async updateEvent(
@@ -124,8 +124,7 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    const result = await this.eventsRepository.remove(event);
     await this.changeHistoryService.logChange(event, user, ActionType.DELETED);
-    return result;
+    return await this.eventsRepository.remove(event);
   }
 }

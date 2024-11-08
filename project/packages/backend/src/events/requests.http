@@ -23,5 +23,8 @@ content-type: application/json
   "city": "new city"
 }
 
+### DELETE an event
+DELETE http://localhost:3000/events/1
+
 ### GET change history of an event
 GET http://localhost:3000/events/1/history
