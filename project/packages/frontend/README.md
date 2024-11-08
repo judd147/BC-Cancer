@@ -1,6 +1,7 @@
 # BC Cancer Frontend
 
 ## TODO
+
 - [x] Setup Tailwind & shadcn UI
 - [x] Routing
   - [x] React Router setup
@@ -8,7 +9,7 @@
 - [x] Scaffold basic UI for each page
   - [x] Login
   - [x] Event
-  - [ ] Create Event
+  - [x] Create Event
   - [ ] Event Detail
 - [ ] Communicate with backend
   - [ ] React Query
@@ -23,3 +24,9 @@
     - [ ] Sorting
     - [ ] Filtering
     - [ ] Column visibility
+
+## Components for Future Reusability
+
+- User Avatar
+
+  - `./src/pages/creat-event.tsx`: Right side of the header on the create-event page
