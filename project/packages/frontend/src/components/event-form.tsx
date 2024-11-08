@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,7 +28,9 @@ const formSchema = z.object({
   addressLine2: z.string().optional(),
   city: z.string().min(1, { message: "City is required." }),
   description: z.string().optional(),
-  date: z.date({ required_error: "Event date is required." }),
+  date: z
+    .string()
+    .datetime({ message: "Date is required" }),
 });
 
 export function EventForm() {
@@ -43,7 +45,7 @@ export function EventForm() {
       addressLine2: "",
       city: "",
       description: "",
-      date: undefined,
+      date: "",
     },
   });
 
@@ -107,7 +109,9 @@ export function EventForm() {
               <FormField
                 control={form.control}
                 name="date"
-                render={({ field }) => (
+                render={({ field }) => {
+                  const dateValue = field.value ? parseISO(field.value) : undefined;
+                  return (
                   <FormItem className="flex flex-col">
                     <FormLabel>Event Date *</FormLabel>
                     <Popover>
@@ -132,8 +136,11 @@ export function EventForm() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
+                          selected={dateValue}
+                          onSelect={
+                            (date) => 
+                              field.onChange(date ? date.toISOString() : "")
+                            }
                           disabled={(date) =>
                             date < new Date() // Disables dates in the past
                           }
@@ -146,7 +153,8 @@ export function EventForm() {
                     </FormDescription> */}
                     <FormMessage />
                   </FormItem>
-                )}
+                );
+                }}
               />
             </CardContent>
           </Card>
