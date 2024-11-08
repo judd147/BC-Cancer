@@ -40,6 +40,7 @@ export class ChangeHistoryService {
     return this.repo.find({
       where: { event: { id: eventId } },
       relations: ['user'],
+      select: { user: { id: true, username: true } },
       order: { timestamp: 'DESC' },
     });
   }

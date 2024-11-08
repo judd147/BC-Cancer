@@ -1,3 +1,5 @@
+import { Donor } from "./donor";
+
 export interface Event {
   id: number;
   name: string;
@@ -6,6 +8,7 @@ export interface Event {
   city: string;
   description?: string;
   date: Date;
+  donorsList?: Donor[];
 }
 
 export interface CreateEventDto {
@@ -16,14 +19,16 @@ export interface CreateEventDto {
   description?: string;
   // ISO8601 Format
   date: string;
+  donorsList?: string[]; // Donor IDs
 }
 
 export interface UpdateEventDto {
-  name: string;
-  addressLine1: string;
+  name?: string;
+  addressLine1?: string;
   addressLine2?: string;
-  city: string;
+  city?: string;
   description?: string;
   // ISO8601 Format
-  date: string;
+  date?: string;
+  donorsList?: string[];
 }

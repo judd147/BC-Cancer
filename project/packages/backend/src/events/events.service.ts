@@ -9,8 +9,6 @@ import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import { ActionType } from '../change-history/event-change-history.entity';
 
-const user: User = { id: 1, username: 'snjmfgr', password: 'password' } as User;
-
 @Injectable()
 export class EventService {
   constructor(
@@ -34,7 +32,7 @@ export class EventService {
     return this.eventsRepository.find({ relations: ['donorsList'] });
   }
 
-  async createEvent(eventData: CreateEventDto): Promise<Event> {
+  async createEvent(eventData: CreateEventDto, user: User): Promise<Event> {
     const donorsList: Donor[] = [];
     if (eventData.donorsList) {
       donorsList.push(
@@ -58,6 +56,7 @@ export class EventService {
   async updateEvent(
     id: number,
     updateData: Partial<UpdateEventDto>,
+    user: User,
   ): Promise<Event> {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({
@@ -119,7 +118,7 @@ export class EventService {
     return updatedEvent;
   }
 
-  async deleteEvent(id: number): Promise<Event> {
+  async deleteEvent(id: number, user: User): Promise<Event> {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({ where: { id } });
     if (!event) {
