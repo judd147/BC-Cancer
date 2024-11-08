@@ -1,11 +1,18 @@
 import { User } from "./user";
-import { Event } from "./event";
+import type { Event, CreateEventDto } from "./event";
 
 export enum ActionType {
   CREATED = "created",
   UPDATED = "updated",
   DELETED = "deleted",
 }
+
+export type PropertyChangeMap = {
+  [K in keyof CreateEventDto]?: {
+    previous: CreateEventDto[K];
+    current: CreateEventDto[K];
+  };
+};
 
 export interface EventChangeHistory {
   /**
@@ -15,6 +22,7 @@ export interface EventChangeHistory {
 
   /**
    * The user who made the change.
+   * Null if user's account was deleted.
    */
   user: User | null;
 
@@ -26,13 +34,13 @@ export interface EventChangeHistory {
 
   /**
    * The timestamp when the change was made.
+   * e.g. "2024-11-08T08:42:10.000Z"
    */
   timestamp: Date;
 
   /**
    * A record of the changes made.
    * Each key represents a property that was changed, with its old and new values.
-   * This field is nullable, indicating that there might be no changes recorded.
    */
-  changes: Record<string, { old: any; new: any }> | null;
+  changes?: PropertyChangeMap;
 }
