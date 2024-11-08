@@ -7,7 +7,7 @@ export interface Event {
   addressLine2?: string;
   city: string;
   description?: string;
-  date: Date;
+  date: Date | string;
   donorsList?: Donor[];
 }
 

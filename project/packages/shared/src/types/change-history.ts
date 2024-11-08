@@ -36,7 +36,7 @@ export interface EventChangeHistory {
    * The timestamp when the change was made.
    * e.g. "2024-11-08T08:42:10.000Z"
    */
-  timestamp: Date;
+  timestamp: Date | string;
 
   /**
    * A record of the changes made.

@@ -13,11 +13,21 @@ export interface Donor {
   totalPledge: number;
   largestGift: number;
   largestGiftAppeal?: string;
-  firstGiftDate?: Date;
-  lastGiftDate?: Date;
+  firstGiftDate?: Date | string;
+  lastGiftDate?: Date | string;
   lastGiftAmount: number;
-  lastGiftRequest?: Date;
+  lastGiftRequest?: Date | string;
   lastGiftAppeal?: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  contactPhoneType: string;
+  phoneRestrictions?: string;
+  emailRestrictions?: string;
+  communicationRestrictions?: string;
+  subscriptionEventsInPerson: boolean;
+  subscriptionEventsMagazine: boolean;
+  communicationPreference?: string;
 }
 
 // Query parameters for getting donors
