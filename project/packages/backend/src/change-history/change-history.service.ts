@@ -41,6 +41,7 @@ export class ChangeHistoryService {
       where: { event: { id: eventId } },
       relations: ['user'],
       select: { user: { id: true, username: true } },
+      withDeleted: true,
       order: { timestamp: 'DESC' },
     });
   }
