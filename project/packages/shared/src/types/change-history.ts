@@ -41,6 +41,7 @@ export interface EventChangeHistory {
   /**
    * A record of the changes made.
    * Each key represents a property that was changed, with its old and new values.
+   * Null if the action is 'created' or 'deleted'.
    */
-  changes?: PropertyChangeMap;
+  changes: PropertyChangeMap | null;
 }

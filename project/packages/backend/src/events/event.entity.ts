@@ -7,6 +7,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 import { EventChangeHistory } from '../change-history/event-change-history.entity';
 
@@ -39,4 +40,7 @@ export class Event implements EventInterface {
 
   @OneToMany(() => EventChangeHistory, (changeHistory) => changeHistory.event)
   changeHistories: EventChangeHistory[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
