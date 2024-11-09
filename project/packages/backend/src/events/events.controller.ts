@@ -37,7 +37,7 @@ export class EventController {
     @Body() createEventDto: CreateEventDto,
     @CurrentUser() user: User,
   ) {
-    const admins = createEventDto.admins ?? [user.id];
+    const admins = createEventDto.admins ?? [];
     createEventDto.admins = [...new Set(admins)];
     return this.eventService.createEvent(createEventDto, user);
   }

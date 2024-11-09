@@ -44,6 +44,7 @@ export class Event implements EventInterface {
   createdBy: User;
 
   @ManyToMany(() => User, { cascade: true })
+  @JoinTable()
   admins: User[];
 
   @OneToMany(() => EventChangeHistory, (changeHistory) => changeHistory.event)

@@ -25,7 +25,7 @@ export class EventService {
   async getEvent(id: number): Promise<Event> {
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'changeHistories', 'admins'],
+      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
     });
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -35,7 +35,7 @@ export class EventService {
 
   async getAllEvents(): Promise<Event[]> {
     return this.eventsRepository.find({
-      relations: ['donorsList', 'changeHistories', 'admins'],
+      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
     });
   }
 
@@ -101,7 +101,7 @@ export class EventService {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'admins'],
+      relations: ['donorsList', 'admins', 'createdBy'],
     });
     if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
