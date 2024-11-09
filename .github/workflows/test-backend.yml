@@ -13,14 +13,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: project/packages/backend
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -39,3 +35,4 @@ jobs:
       uses: borales/actions-yarn@v4
       with:
         cmd: test
+        dir: project/packages/backend
