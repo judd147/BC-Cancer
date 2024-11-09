@@ -5,12 +5,12 @@ let res, json;
 //         'Content-Type': 'application/json',
 //     },
 //     body: JSON.stringify({
-//         username: 'test66666',
-//         password: 'test66666',
+//         username: 'unauthorized',
+//         password: 'unauthorized',
 //     }),
 // });
 
-// let json = await res.json();
+// json = await res.json();
 // console.log(json);
 
 res = await fetch('http://localhost:3000/auth/signin', {
@@ -23,23 +23,46 @@ res = await fetch('http://localhost:3000/auth/signin', {
     password: 'test66666',
   }),
 });
-const session = res.headers.get('set-cookie');
-console.log(session);
 
-res = await fetch('http://localhost:3000/events', {
-  method: 'POST',
+if (!res.ok) {
+  console.error('Sign-in failed:', await res.json());
+}
+
+const session = res.headers.get('set-cookie');
+// console.log('Session:', session);
+
+// Extract the session cookie value
+const sessionCookie = session.split(',').map(cookie => cookie.split(';')[0]).join('; ');
+
+// const events = await fetch('http://localhost:3000/events', {
+//   headers: {
+//     'Cookie': sessionCookie,
+//   },
+// });
+
+// const eventsBody = await events.json();
+// console.log('Events:', eventsBody);
+
+const requestBody = {
+  name: 'Change back to initial name',
+  city: 'Change to another city',
+};
+
+// console.log('Request Body:', requestBody);
+
+const eventRes = await fetch('http://localhost:3000/events/1', {
+  method: 'PATCH',
   headers: {
     'Content-Type': 'application/json',
-    cookie: session,
+    'Cookie': sessionCookie,
   },
-  body: JSON.stringify({
-    name: 'Event',
-    date: new Date().toISOString(),
-    addressLine1: 'test address',
-    city: 'test city',
-    donorsList: [1, 5, 6],
-  }),
+  body: JSON.stringify(requestBody),
 });
 
-json = await res.json();
-console.log(json);
+const eventResBody = await eventRes.json();
+
+if (!eventRes.ok) {
+  console.error('Event creation failed:', eventResBody);
+} else {
+  console.log('Event created successfully:', eventResBody);
+}
