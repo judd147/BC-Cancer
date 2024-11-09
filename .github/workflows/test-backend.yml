@@ -23,6 +23,9 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+    - name: Enable corepack
+      run: corepack enable
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
@@ -32,10 +35,16 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: yarn install
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: yarn install
 
     - name: Build packages
-      run: yarn workspace @bc-cancer/shared build && yarn workspace @bc-cancer/backend build && yarn workspace @bc-cancer/frontend build
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: yarn workspace @bc-cancer/shared build && yarn workspace @bc-cancer/backend build && yarn workspace @bc-cancer/frontend build
 
     - name: Run yarn tests for backend
-      run: yarn workspace @bc-cancer/backend test
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: yarn workspace @bc-cancer/backend test
