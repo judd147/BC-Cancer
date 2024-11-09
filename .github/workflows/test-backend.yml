@@ -13,6 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: project
 
     strategy:
       matrix:
@@ -22,17 +25,17 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Run yarn install
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: install
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build packages
+      run: yarn workspace @bc-cancer/shared build && yarn workspace @bc-cancer/backend build && yarn workspace @bc-cancer/frontend build
+
     - name: Run yarn tests for backend
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: test
-        dir: project/packages/backend
+      run: yarn workspace @bc-cancer/backend test
