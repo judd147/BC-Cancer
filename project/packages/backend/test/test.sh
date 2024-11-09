@@ -14,7 +14,7 @@
 
 # curl -X GET http://localhost:3000/events | jq
 
-curl -X GET http://localhost:3000/events/12 | jq
+curl -s -X GET http://localhost:3000/events/12 | jq
 
 # curl -X PATCH http://localhost:3000/events/6 \
 #       -H "Content-Type: application/json" \

@@ -52,13 +52,13 @@ describe('UsersController', () => {
   });
 
   it('findUser returns a single user with the given id', async () => {
-    const user = await controller.findUser('1');
+    const user = await controller.findUser(1);
     expect(user).toBeDefined();
   });
 
   it('findUser throws an error if user with given id is not found', async () => {
     fakeUsersService.findOne = () => null;
-    await expect(controller.findUser('1')).rejects.toThrow();
+    await expect(controller.findUser(1)).rejects.toThrow();
   });
 
   it('signin updates session object and returns user', async () => {

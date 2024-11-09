@@ -10,6 +10,7 @@ import {
   NotFoundException,
   Session,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -55,8 +56,8 @@ export class UsersController {
   }
 
   // @Get('/:id')
-  async findUser(@Param('id') id: string) {
-    const user = await this.usersService.findOne(parseInt(id));
+  async findUser(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');
     }
@@ -69,12 +70,12 @@ export class UsersController {
   }
 
   // @Delete('/:id')
-  removeUser(@Param('id') id: string) {
-    return this.usersService.remove(parseInt(id));
+  removeUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.remove(id);
   }
 
   // @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.usersService.update(parseInt(id), body);
+  updateUser(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
+    return this.usersService.update(id, body);
   }
 }

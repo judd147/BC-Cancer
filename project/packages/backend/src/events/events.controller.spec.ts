@@ -5,6 +5,7 @@ import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
 import { Event } from './event.entity';
 import { DeepPartial } from 'typeorm';
+import { User } from '../users/user.entity';
 
 describe('EventController', () => {
   let controller: EventController;
@@ -45,21 +46,37 @@ describe('EventController', () => {
 
   describe('createEvent', () => {
     it('should create and return a new event', async () => {
-      const createEventDto: CreateEventDto = { name: 'Test Event', date: new Date().toISOString(), addressLine1: '123 Test St', city: 'Test City', description: 'Test Description', donorsList: ['1', '2'] };
-      const result: DeepPartial<Event> = { id: 1, ...createEventDto, donorsList: [] };
+      const createEventDto: CreateEventDto = {
+        name: 'Test Event',
+        date: new Date().toISOString(),
+        addressLine1: '123 Test St',
+        city: 'Test City',
+        description: 'Test Description',
+        donorsList: [1, 2],
+      };
+      const result: DeepPartial<Event> = {
+        id: 1,
+        ...createEventDto,
+        donorsList: [],
+        admins: [],
+      };
       jest.spyOn(service, 'createEvent').mockResolvedValue(result as Event);
 
-      expect(await controller.createEvent(createEventDto)).toBe(result);
+      expect(await controller.createEvent(createEventDto, { id: 1 } as User)).toBe(result);
     });
   });
 
   describe('updateEvent', () => {
     it('should update and return the event', async () => {
       const updateEventDto: Partial<UpdateEventDto> = { name: 'Updated Event' };
-      const result: DeepPartial<Event> = { id: 1, name: 'Updated Event', date: new Date() };
+      const result: DeepPartial<Event> = {
+        id: 1,
+        name: 'Updated Event',
+        date: new Date(),
+      };
       jest.spyOn(service, 'updateEvent').mockResolvedValue(result as Event);
 
-      expect(await controller.updateEvent('1', updateEventDto)).toBe(result);
+      expect(await controller.updateEvent(1, updateEventDto, { id: 1 } as User)).toBe(result);
     });
   });
 
@@ -67,7 +84,9 @@ describe('EventController', () => {
     it('should delete and return the event', async () => {
       jest.spyOn(service, 'deleteEvent').mockResolvedValue({ id: 1 } as Event);
 
-      expect(await controller.deleteEvent('1')).toMatchObject({ result: 'Event deleted' });
+      expect(await controller.deleteEvent(1, { id: 1 } as User)).toMatchObject({
+        result: 'Event deleted',
+      });
     });
   });
 });
