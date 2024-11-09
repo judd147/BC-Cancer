@@ -22,7 +22,8 @@ export class EventChangeHistory implements IEventChangeHistory {
   id: number;
 
   @ManyToOne(() => Event, (event) => event.changeHistories, {
-    onDelete: 'CASCADE',
+    nullable: true,
+    onDelete: 'SET NULL',
   })
   event: Event;
 

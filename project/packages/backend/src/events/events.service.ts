@@ -50,7 +50,7 @@ export class EventService {
       ActionType.CREATED,
     );
 
-    return this.eventsRepository.save(newEvent);
+    return savedEvent;
   }
 
   async updateEvent(
@@ -63,9 +63,10 @@ export class EventService {
       where: { id },
       relations: ['donorsList'],
     });
-    if (!event) {
+    if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
     }
+
     const donorsList: Donor[] = [];
     if (updateData.donorsList) {
       donorsList.push(
@@ -124,8 +125,8 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    const result = await this.eventsRepository.remove(event);
     await this.changeHistoryService.logChange(event, user, ActionType.DELETED);
-    return result;
+    await this.eventsRepository.softRemove(event);
+    return event;
   }
 }
