@@ -8,6 +8,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { columns } from "@/components/donor-columns"
+import { DataTable } from "@/components/data-table"
 
 export default function EventDetail() {
   const location = useLocation();
@@ -52,10 +54,7 @@ export default function EventDetail() {
 
       {/* Separator and Footer Section */}
       <Separator />
-      <div className="text-center">
-        <p className="text-lg font-semibold">Thank you for your interest!</p>
-        <p className="text-sm text-gray-500">For inquiries, please contact the event organizers.</p>
-      </div>
+      <DataTable columns={columns} data={event.donorsList} />
     </div>
   )
 }
