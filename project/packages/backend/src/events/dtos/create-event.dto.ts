@@ -28,5 +28,9 @@ export class CreateEventDto implements CreateEvent {
 
   @IsOptional()
   @IsArray()
-  donorsList?: string[];
+  donorsList?: number[];
+
+  @IsOptional()
+  @IsArray()
+  admins?: number[];
 }

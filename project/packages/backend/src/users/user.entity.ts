@@ -1,4 +1,6 @@
+import { Exclude } from 'class-transformer';
 import { EventChangeHistory } from '../change-history/event-change-history.entity';
+import { Event } from '../events/event.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -18,9 +20,11 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @Exclude()
   @Column()
   password: string;
 
+  @Exclude()
   @Column({ name: 'is_admin', default: false })
   admin: boolean;
 

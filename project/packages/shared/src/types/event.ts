@@ -1,4 +1,5 @@
 import { Donor } from "./donor";
+import { User } from "./user";
 
 export interface Event {
   id: number;
@@ -9,6 +10,8 @@ export interface Event {
   description?: string;
   date: Date | string;
   donorsList?: Donor[];
+  createdBy: User;
+  admins: User[];
 }
 
 export interface CreateEventDto {
@@ -19,7 +22,8 @@ export interface CreateEventDto {
   description?: string;
   // ISO8601 Format
   date: string;
-  donorsList?: string[]; // Donor IDs
+  donorsList?: number[]; // Donor IDs
+  admins?: number[]; // User IDs
 }
 
 export interface UpdateEventDto {
@@ -30,5 +34,6 @@ export interface UpdateEventDto {
   description?: string;
   // ISO8601 Format
   date?: string;
-  donorsList?: string[];
+  donorsList?: number[];
+  admins?: number[];
 }

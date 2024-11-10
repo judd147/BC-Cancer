@@ -7,22 +7,26 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dtos/create-event.dto';
 import { UpdateEventDto } from './dtos/update-event.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { CurrentUser } from 'src/users/decorators/current-user.decorator';
-import { User } from 'src/users/user.entity';
+import { AuthGuard } from '../guards/auth.guard';
+import { CurrentUser } from '../users/decorators/current-user.decorator';
+import { User } from '../users/user.entity';
 
 @Controller('events')
 @UseGuards(AuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get('/:id')
-  getEvent(@Param('id') id: string) {
-    return this.eventService.getEvent(parseInt(id));
+  getEvent(@Param('id', ParseIntPipe) id: number) {
+    return this.eventService.getEvent(id);
   }
 
   @Get()
@@ -36,21 +40,23 @@ export class EventController {
     @Body() createEventDto: CreateEventDto,
     @CurrentUser() user: User,
   ) {
+    const admins = createEventDto.admins ?? [];
+    createEventDto.admins = [...new Set(admins)];
     return this.eventService.createEvent(createEventDto, user);
   }
 
   @Patch('/:id')
   updateEvent(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateEventDto: Partial<UpdateEventDto>,
     @CurrentUser() user: User,
   ) {
-    return this.eventService.updateEvent(parseInt(id), updateEventDto, user);
+    return this.eventService.updateEvent(id, updateEventDto, user);
   }
 
   @Delete('/:id')
-  async deleteEvent(@Param('id') id: string, @CurrentUser() user: User) {
-    await this.eventService.deleteEvent(parseInt(id), user);
+  async deleteEvent(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
+    await this.eventService.deleteEvent(id, user);
     return { result: 'Event deleted' };
   }
 }

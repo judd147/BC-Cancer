@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Event } from './event.entity';
@@ -14,13 +18,14 @@ export class EventService {
   constructor(
     @InjectRepository(Event) private eventsRepository: Repository<Event>,
     @InjectRepository(Donor) private donorsRepository: Repository<Donor>,
+    @InjectRepository(User) private usersRepository: Repository<User>,
     private readonly changeHistoryService: ChangeHistoryService,
   ) {}
 
   async getEvent(id: number): Promise<Event> {
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList'],
+      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
     });
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -29,19 +34,30 @@ export class EventService {
   }
 
   async getAllEvents(): Promise<Event[]> {
-    return this.eventsRepository.find({ relations: ['donorsList'] });
+    return this.eventsRepository.find({
+      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
+    });
   }
 
   async createEvent(eventData: CreateEventDto, user: User): Promise<Event> {
     const donorsList: Donor[] = [];
-    if (eventData.donorsList) {
-      donorsList.push(
-        ...(await this.donorsRepository.find({
-          where: { id: In(eventData.donorsList) },
-        })),
-      );
-    }
-    const newEvent = this.eventsRepository.create({ ...eventData, donorsList });
+    const admins: User[] = [];
+    admins.push(
+      ...(await this.usersRepository.find({
+        where: { id: In([...(eventData.admins ?? [])]) },
+      })),
+    );
+    donorsList.push(
+      ...(await this.donorsRepository.find({
+        where: { id: In([...(eventData.donorsList ?? [])]) },
+      })),
+    );
+    const newEvent = this.eventsRepository.create({
+      ...eventData,
+      donorsList,
+      createdBy: user,
+      admins,
+    });
     const savedEvent = await this.eventsRepository.save(newEvent);
 
     await this.changeHistoryService.logChange(
@@ -53,6 +69,30 @@ export class EventService {
     return savedEvent;
   }
 
+  recordDiff<T extends Donor | User>(
+    oldListOfData: T[] = [],
+    newListOfData: T[] = [],
+    key: string,
+    changes: Record<string, { old: any; new: any }>,
+  ) {
+    const oldDataList = oldListOfData.map((el) => el.id);
+    const newDataList = newListOfData.map((el) => el.id);
+    const addedItems = newDataList.filter((id) => !oldDataList.includes(id));
+    const removedItems = oldDataList.filter((id) => !newDataList.includes(id));
+
+    if (addedItems.length > 0 || removedItems.length > 0) {
+      changes[key] = {
+        old: oldDataList,
+        new: newDataList,
+      };
+    }
+  }
+
+  userCanEditEvent = (event: Event, user: User): boolean =>
+    user.id !== event.createdBy.id &&
+    !event.admins.some((admin) => admin.id === user.id) &&
+    !user.admin;
+
   async updateEvent(
     id: number,
     updateData: Partial<UpdateEventDto>,
@@ -61,25 +101,34 @@ export class EventService {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList'],
+      relations: ['donorsList', 'admins', 'createdBy'],
     });
     if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
     }
 
-    const donorsList: Donor[] = [];
-    if (updateData.donorsList) {
-      donorsList.push(
-        ...(await this.donorsRepository.find({
-          where: { id: In(updateData.donorsList) },
-        })),
+    // Check if the user can edit the event
+    if (this.userCanEditEvent(event, user)) {
+      throw new ForbiddenException(
+        `${user.username} is not allowed to edit this event`,
       );
     }
 
+    const donorsList: Donor[] = [
+      ...(await this.donorsRepository.find({
+        where: { id: In([...(updateData.donorsList ?? [])]) },
+      })),
+    ];
+    const admins: User[] = [
+      ...(await this.usersRepository.find({
+        where: { id: In([...(updateData.admins ?? [])]) },
+      })),
+    ];
+
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (key === 'donorsList') {
-        // handle donorsList separately
+      if (['donorsList', 'admins'].includes(key)) {
+        // handle donorsList and admins separately
         continue;
       }
       // Compare the old and new values
@@ -92,18 +141,14 @@ export class EventService {
 
     // Handle donorsList changes
     if (updateData.donorsList) {
-      const oldDonors = event.donorsList.map((donor) => donor.id);
-      const newDonors = donorsList.map((donor) => donor.id);
-      const addedDonors = newDonors.filter((id) => !oldDonors.includes(id));
-      const removedDonors = oldDonors.filter((id) => !newDonors.includes(id));
+      this.recordDiff(event.donorsList, donorsList, 'donorsList', changes);
+      event.donorsList = donorsList;
+    }
 
-      if (addedDonors.length > 0 || removedDonors.length > 0) {
-        changes['donorsList'] = {
-          old: oldDonors,
-          new: newDonors,
-        };
-        event.donorsList = donorsList;
-      }
+    // Handle admins changes
+    if (updateData.admins) {
+      this.recordDiff(event.admins, admins, 'admins', changes);
+      event.admins = admins;
     }
 
     const updatedEvent = await this.eventsRepository.save(event);
@@ -121,10 +166,21 @@ export class EventService {
 
   async deleteEvent(id: number, user: User): Promise<Event> {
     // Find the event by ID
-    const event = await this.eventsRepository.findOne({ where: { id } });
+    const event = await this.eventsRepository.findOne({
+      where: { id },
+      relations: ['admins', 'createdBy'],
+    });
     if (!event) {
       throw new NotFoundException('Event not found');
     }
+
+    // Check if the user can edit the event
+    if (this.userCanEditEvent(event, user)) {
+      throw new ForbiddenException(
+        `${user.username} is not allowed to delete this event`,
+      );
+    }
+
     await this.changeHistoryService.logChange(event, user, ActionType.DELETED);
     await this.eventsRepository.softRemove(event);
     return event;
