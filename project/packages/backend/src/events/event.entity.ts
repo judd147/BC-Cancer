@@ -36,14 +36,14 @@ export class Event implements EventInterface {
   @Column({ type: 'date' })
   date: Date;
 
-  @ManyToMany(() => Donor, { cascade: true })
+  @ManyToMany(() => Donor)
   @JoinTable()
   donorsList?: Donor[];
 
-  @ManyToOne(() => User, { cascade: true })
+  @ManyToOne(() => User, { eager: true })
   createdBy: User;
 
-  @ManyToMany(() => User, { cascade: true })
+  @ManyToMany(() => User, { eager: true })
   @JoinTable()
   admins: User[];
 

@@ -1,5 +1,5 @@
-import { Module, ValidationPipe, MiddlewareConsumer } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { Module, ValidationPipe, MiddlewareConsumer, ClassSerializerInterceptor } from '@nestjs/common';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -40,6 +40,10 @@ const cookieSession = require('cookie-session');
       useValue: new ValidationPipe({
         whitelist: true,
       }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })

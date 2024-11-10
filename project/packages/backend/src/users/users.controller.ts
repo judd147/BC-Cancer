@@ -11,6 +11,8 @@ import {
   Session,
   UseGuards,
   ParseIntPipe,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -32,6 +34,7 @@ export class UsersController {
 
   @Get('/whoami')
   @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   whoAmI(@CurrentUser() user: User) {
     return user;
   }

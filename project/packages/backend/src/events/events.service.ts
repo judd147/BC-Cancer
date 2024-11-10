@@ -44,12 +44,12 @@ export class EventService {
     const admins: User[] = [];
     admins.push(
       ...(await this.usersRepository.find({
-        where: { id: In([...eventData.admins ?? []]) },
+        where: { id: In([...(eventData.admins ?? [])]) },
       })),
     );
     donorsList.push(
       ...(await this.donorsRepository.find({
-        where: { id: In([...eventData.donorsList ?? []]) },
+        where: { id: In([...(eventData.donorsList ?? [])]) },
       })),
     );
     const newEvent = this.eventsRepository.create({
@@ -109,17 +109,19 @@ export class EventService {
 
     // Check if the user can edit the event
     if (this.userCanEditEvent(event, user)) {
-      throw new ForbiddenException(`${user.username} is not allowed to edit this event`);
+      throw new ForbiddenException(
+        `${user.username} is not allowed to edit this event`,
+      );
     }
 
     const donorsList: Donor[] = [
       ...(await this.donorsRepository.find({
-        where: { id: In([...updateData.donorsList ?? []]) },
+        where: { id: In([...(updateData.donorsList ?? [])]) },
       })),
     ];
     const admins: User[] = [
       ...(await this.usersRepository.find({
-        where: { id: In([...updateData.admins ?? []]) },
+        where: { id: In([...(updateData.admins ?? [])]) },
       })),
     ];
 
@@ -164,14 +166,19 @@ export class EventService {
 
   async deleteEvent(id: number, user: User): Promise<Event> {
     // Find the event by ID
-    const event = await this.eventsRepository.findOne({ where: { id } });
+    const event = await this.eventsRepository.findOne({
+      where: { id },
+      relations: ['admins', 'createdBy'],
+    });
     if (!event) {
       throw new NotFoundException('Event not found');
     }
 
     // Check if the user can edit the event
     if (this.userCanEditEvent(event, user)) {
-      throw new ForbiddenException(`${user.username} is not allowed to delete this event`);
+      throw new ForbiddenException(
+        `${user.username} is not allowed to delete this event`,
+      );
     }
 
     await this.changeHistoryService.logChange(event, user, ActionType.DELETED);

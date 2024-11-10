@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { EventService } from './events.service';
 import { CreateEventDto } from './dtos/create-event.dto';
@@ -18,6 +20,7 @@ import { User } from '../users/user.entity';
 
 @Controller('events')
 @UseGuards(AuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 

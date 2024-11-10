@@ -13,7 +13,7 @@ export class ChangeHistoryController {
   @Get()
   async getHistory(
     @Param('eventId', ParseIntPipe) eventId: number,
-    @Query('userId', ParseIntPipe) userId?: number,
+    @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
   ) {
     return this.changeHistoryService.getChangeHistoryForEvent(eventId, userId);
   }
