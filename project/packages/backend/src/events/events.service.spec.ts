@@ -83,6 +83,7 @@ describe('EventService', () => {
         donorsList,
         admins,
         createdBy: user,
+        excludedDonors: [],
       };
       jest.spyOn(eventsRepository, 'create').mockReturnValue(newEvent as Event);
       jest.spyOn(donorsRepository, 'find').mockResolvedValue(donorsList);
@@ -111,6 +112,7 @@ describe('EventService', () => {
         ...updateData,
         donorsList: [],
         admins: [],
+        excludedDonors: [],
       };
 
       jest

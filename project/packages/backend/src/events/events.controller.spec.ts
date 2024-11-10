@@ -59,10 +59,13 @@ describe('EventController', () => {
         ...createEventDto,
         donorsList: [],
         admins: [],
+        excludedDonors: [],
       };
       jest.spyOn(service, 'createEvent').mockResolvedValue(result as Event);
 
-      expect(await controller.createEvent(createEventDto, { id: 1 } as User)).toBe(result);
+      expect(
+        await controller.createEvent(createEventDto, { id: 1 } as User),
+      ).toBe(result);
     });
   });
 
@@ -76,7 +79,9 @@ describe('EventController', () => {
       };
       jest.spyOn(service, 'updateEvent').mockResolvedValue(result as Event);
 
-      expect(await controller.updateEvent(1, updateEventDto, { id: 1 } as User)).toBe(result);
+      expect(
+        await controller.updateEvent(1, updateEventDto, { id: 1 } as User),
+      ).toBe(result);
     });
   });
 
