@@ -9,7 +9,8 @@ export interface Event {
   city: string;
   description?: string;
   date: Date | string;
-  donorsList?: Donor[];
+  donorsList: Donor[];
+  excludedDonors: Donor[];
   createdBy: User;
   admins: User[];
 }
@@ -23,6 +24,7 @@ export interface CreateEventDto {
   // ISO8601 Format
   date: string;
   donorsList?: number[]; // Donor IDs
+  excludedDonors?: number[]; // Donor IDs
   admins?: number[]; // User IDs
 }
 
@@ -35,5 +37,6 @@ export interface UpdateEventDto {
   // ISO8601 Format
   date?: string;
   donorsList?: number[];
+  excludedDonors?: number[];
   admins?: number[];
 }

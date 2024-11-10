@@ -25,7 +25,13 @@ export class EventService {
   async getEvent(id: number): Promise<Event> {
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
+      relations: [
+        'donorsList',
+        'changeHistories',
+        'admins',
+        'createdBy',
+        'excludedDonors',
+      ],
     });
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -35,12 +41,19 @@ export class EventService {
 
   async getAllEvents(): Promise<Event[]> {
     return this.eventsRepository.find({
-      relations: ['donorsList', 'changeHistories', 'admins', 'createdBy'],
+      relations: [
+        'donorsList',
+        'changeHistories',
+        'admins',
+        'createdBy',
+        'excludedDonors',
+      ],
     });
   }
 
   async createEvent(eventData: CreateEventDto, user: User): Promise<Event> {
     const donorsList: Donor[] = [];
+    const excludedDonors: Donor[] = [];
     const admins: User[] = [];
     admins.push(
       ...(await this.usersRepository.find({
@@ -52,9 +65,15 @@ export class EventService {
         where: { id: In([...(eventData.donorsList ?? [])]) },
       })),
     );
+    excludedDonors.push(
+      ...(await this.donorsRepository.find({
+        where: { id: In([...(eventData.excludedDonors ?? [])]) },
+      })),
+    );
     const newEvent = this.eventsRepository.create({
       ...eventData,
       donorsList,
+      excludedDonors,
       createdBy: user,
       admins,
     });
@@ -101,7 +120,7 @@ export class EventService {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'admins', 'createdBy'],
+      relations: ['donorsList', 'admins', 'createdBy', 'excludedDonors'],
     });
     if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
@@ -119,6 +138,11 @@ export class EventService {
         where: { id: In([...(updateData.donorsList ?? [])]) },
       })),
     ];
+    const excludedDonors: Donor[] = [
+      ...(await this.donorsRepository.find({
+        where: { id: In([...(updateData.excludedDonors ?? [])]) },
+      })),
+    ];
     const admins: User[] = [
       ...(await this.usersRepository.find({
         where: { id: In([...(updateData.admins ?? [])]) },
@@ -127,7 +151,7 @@ export class EventService {
 
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (['donorsList', 'admins'].includes(key)) {
+      if (['donorsList', 'admins', 'excludedDonors'].includes(key)) {
         // handle donorsList and admins separately
         continue;
       }
@@ -143,6 +167,17 @@ export class EventService {
     if (updateData.donorsList) {
       this.recordDiff(event.donorsList, donorsList, 'donorsList', changes);
       event.donorsList = donorsList;
+    }
+
+    // Handle excludedDonors changes
+    if (updateData.excludedDonors) {
+      this.recordDiff(
+        event.excludedDonors,
+        excludedDonors,
+        'excludedDonors',
+        changes,
+      );
+      event.excludedDonors = excludedDonors;
     }
 
     // Handle admins changes

@@ -1,4 +1,4 @@
-import { Event as EventInterface} from '@bc-cancer/shared/src/types';
+import { Event as EventInterface } from '@bc-cancer/shared/src/types';
 import { Donor } from '../donors/donor.entity';
 import { User } from '../users/user.entity';
 import {
@@ -38,7 +38,11 @@ export class Event implements EventInterface {
 
   @ManyToMany(() => Donor)
   @JoinTable()
-  donorsList?: Donor[];
+  donorsList: Donor[];
+
+  @ManyToMany(() => Donor)
+  @JoinTable()
+  excludedDonors: Donor[];
 
   @ManyToOne(() => User, { eager: true })
   createdBy: User;
