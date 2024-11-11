@@ -20,6 +20,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 //import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+import { CreateEventDto } from "../../../shared/src/types/event";
+import { User } from "../../../shared/src/types/user";
 
 // Define validation schema
 const formSchema = z.object({
@@ -35,6 +40,19 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Fetch user data from the API
+    axios
+      .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
+      .then((response) => {
+        setUserId(response.data.id);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,13 +68,38 @@ export function EventForm() {
   });
 
   // Handle form submission
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // For now, logs the form values
-    // In the future, it will need to send a request to the API
-    console.log(values); 
-    // For now, navigate to events page after submission
-    // In the future, it will need to navigate to the event detail page
-    navigate("/events"); 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (userId === null) {
+      console.error("User is not logged in or failed to fetch user data");
+      return;
+    }
+    // log the form values
+    console.log("Form values:", values);
+    // Create the event data object following the CreateEventDto structure
+    const eventData: CreateEventDto = {
+      name: values.name,
+      addressLine1: values.addressLine1,
+      addressLine2: values.addressLine2,
+      city: values.city,
+      description: values.description,
+      date: new Date(values.date).toISOString(), 
+      donorsList: [], // TODO: get all donors id from the API
+      excludedDonors: [], // Initial as empty array
+      admins: [userId], 
+    };
+
+    // Send the event data to the API
+    try {
+      // Make a POST request to create the event
+      await axios.post("http://localhost:3000/events", eventData, {
+        withCredentials: true, // Send cookies if using session-based auth
+      });
+      console.log("Event created successfully:", eventData);
+      navigate("/events"); // Navigate to the events page after successful creation
+    } catch (error) {
+      console.error("Error creating event:", error);
+      alert("Failed to create event. Please try again.");
+    }
   }
 
   return (
