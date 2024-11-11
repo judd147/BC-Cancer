@@ -13,7 +13,10 @@ import { Donor } from '../donors/donor.entity';
 import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import { ActionType } from '../change-history/event-change-history.entity';
-import { DonorsStatus, UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
+import {
+  DonorsStatus,
+  UpdateDonorsStatusDto,
+} from '@bc-cancer/shared/src/types';
 
 @Injectable()
 export class EventService {
