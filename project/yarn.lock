@@ -460,7 +460,7 @@ __metadata:
   dependencies:
     "@bc-cancer/shared": "workspace:^"
     "@faker-js/faker": "npm:^9.1.0"
-    "@nestjs/cli": "npm:^10.0.0"
+    "@nestjs/cli": "npm:^10.4.7"
     "@nestjs/common": "npm:^10.0.0"
     "@nestjs/config": "npm:^3.3.0"
     "@nestjs/core": "npm:^10.0.0"
@@ -1328,7 +1328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/cli@npm:^10.0.0":
+"@nestjs/cli@npm:^10.4.7":
   version: 10.4.7
   resolution: "@nestjs/cli@npm:10.4.7"
   dependencies:

@@ -1,14 +1,32 @@
 import { columns } from "@/components/event-columns"
-import { Donor } from "../../../shared/src/types/donor";
-import { Event } from "../../../shared/src/types/event";
+import { Donor } from "@bc-cancer/shared/src/types/donor";
+import { Event } from "@bc-cancer/shared/src/types/event";
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Events() {
   const navigate = useNavigate();
   const location = useLocation();
   const { username } = location.state;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:3000/donors", {
+        method: "GET",
+        credentials: "include"
+      });
+      const data = await response.json();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
+  const user = {
+    id: 1,
+    username: "username",
+  }
 
   const donors = [
     {
@@ -333,6 +351,9 @@ export default function Events() {
       description: "Join us for an evening of live music, dinner, and fundraising to support local non-profits.",
       date: new Date(2024, 10, 1).toLocaleString(),
       donorsList: donors,
+      excludedDonors: [],
+      createdBy: user,
+      admins: [],
     },
     {
       id: 2,
@@ -343,6 +364,9 @@ export default function Events() {
       description: "A summit bringing together technology leaders and social innovators to discuss solutions for a better world.",
       date: new Date(2024, 10, 2).toLocaleString(),
       donorsList: donors,
+      excludedDonors: [],
+      createdBy: user,
+      admins: [],
     },
     {
       id: 3,
@@ -353,6 +377,9 @@ export default function Events() {
       description: "An event focused on sustainable practices and initiatives to combat climate change.",
       date: new Date(2024, 10, 3).toLocaleString(),
       donorsList: donors,
+      excludedDonors: [],
+      createdBy: user,
+      admins: [],
     },
   ] satisfies Event[];
 
@@ -369,3 +396,4 @@ export default function Events() {
     </div>
   )
 }
+

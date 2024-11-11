@@ -6,10 +6,8 @@ import App from "./App.tsx";
 import Events from "./pages/events";
 import CreateEvent from "./pages/create-event";
 import EventDetail from "./pages/event-detail";
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -17,7 +15,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-const PrivateRoute = () => {
+export const PrivateRoute = () => {
   const { isAuthed } = useAuth();
   return isAuthed ? <Outlet /> : <Navigate to="/" />;
 };
