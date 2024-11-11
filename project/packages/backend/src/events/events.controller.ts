@@ -17,6 +17,7 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
+import { UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
 
 @Controller('events')
 @UseGuards(AuthGuard)
@@ -55,8 +56,24 @@ export class EventController {
   }
 
   @Delete('/:id')
-  async deleteEvent(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
+  async deleteEvent(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: User,
+  ) {
     await this.eventService.deleteEvent(id, user);
     return { result: 'Event deleted' };
+  }
+
+  @Patch('/:id/donors')
+  updateDonorsStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDonorsStatusDto: UpdateDonorsStatusDto,
+    @CurrentUser() user: User,
+  ) {
+    return this.eventService.updateDonorsStatus(
+      id,
+      updateDonorsStatusDto,
+      user,
+    );
   }
 }
