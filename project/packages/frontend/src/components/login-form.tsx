@@ -87,6 +87,7 @@ export function LoginForm({
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include cookies in the request
         body: JSON.stringify({ username, password }),
       });
       // error handling
