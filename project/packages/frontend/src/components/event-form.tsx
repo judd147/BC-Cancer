@@ -17,9 +17,15 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+//import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+import { CreateEventDto } from "../../../shared/src/types/event";
+import { User } from "../../../shared/src/types/user";
+import { Donor } from "../../../shared/src/types/donor";
 
 // Define validation schema
 const formSchema = z.object({
@@ -35,6 +41,20 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Fetch user data from the API
+    axios
+      .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
+      .then((response) => {
+        setUserId(response.data.id);
+        console.log("User data:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,168 +70,173 @@ export function EventForm() {
   });
 
   // Handle form submission
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // For now, logs the form values
-    // In the future, it will need to send a request to the API
-    console.log(values); 
-    // For now, navigate to events page after submission
-    // In the future, it will need to navigate to the event detail page
-    navigate("/events"); 
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (userId === null) {
+      console.error("User is not logged in or failed to fetch user data");
+      return;
+    }
+    // log the form values
+    console.log("Form values:", values);
+
+    // Send the event data to the API
+    try {
+      // Fetch all donors and retrieve their IDs
+      const donorResponse = await axios.get<Donor[]>("http://localhost:3000/donors", {
+        withCredentials: true,
+      });
+      const donorIds = donorResponse.data.map((donor) => donor.id);
+
+      // Create the event data object following the CreateEventDto structure
+      const eventData: CreateEventDto = {
+        name: values.name,
+        addressLine1: values.addressLine1,
+        addressLine2: values.addressLine2,
+        city: values.city,
+        description: values.description,
+        date: new Date(values.date).toISOString(), 
+        donorsList: donorIds, // Initial as 10 donors' id from the API
+        excludedDonors: [], // Initial as empty array
+        admins: [userId], 
+      };
+
+      // Make a POST request to create the event
+      await axios.post("http://localhost:3000/events", eventData, {
+        withCredentials: true, 
+      });
+      console.log("Event created successfully:", eventData);
+      navigate("/events"); // Navigate to the events page after successful creation
+    } catch (error) {
+      console.error("Error creating event:", error);
+      alert("Failed to create event. Please try again.");
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        
-        {/* Row for Event Details and Event Address Cards */}
-        <div className="flex space-x-4">
-          {/* Event Details Card */}
-          <Card className="flex-1 space-y-4">
-            <CardHeader>
-              <CardTitle>Event Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* Name field */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Event Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Event name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              {/* Description field */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Description of the event"
-                        {...field}
-                        className="h-24 resize-y" // Allows resizing vertically
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        {/* Name field */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Event Name *</FormLabel>
+              <FormControl>
+                <Input placeholder="Event name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              {/* Date field */}
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => {
-                  const dateValue = field.value ? parseISO(field.value) : undefined;
-                  return (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Event Date *</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={dateValue}
-                          onSelect={
-                            (date) => 
-                              field.onChange(date ? date.toISOString() : "")
-                            }
-                          disabled={(date) =>
-                            date < new Date() // Disables dates in the past
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {/* <FormDescription>
-                      Select the date for the event.
-                    </FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                );
-                }}
-              />
-            </CardContent>
-          </Card>
+        {/* Description field */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Description of the event"
+                  {...field}
+                  className="h-24 resize-y" // Allows resizing vertically
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          {/* Event Address Card */}
-          <Card className="flex-1 space-y-4">
-            <CardHeader>
-              <CardTitle>Event Address</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* Address Line 1 field */}
-              <FormField
-                control={form.control}
-                name="addressLine1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 1 *</FormLabel>
+        {/* Date field */}
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => {
+            const dateValue = field.value ? parseISO(field.value) : undefined;
+            return (
+              <FormItem className="flex flex-col">
+                <FormLabel>Event Date *</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
                     <FormControl>
-                      <Input placeholder="123 Main St" {...field} />
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(parseISO(field.value), "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={dateValue}
+                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
 
-              {/* Address Line 2 field (optional) */}
-              <FormField
-                control={form.control}
-                name="addressLine2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 2</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Apt 4B" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        {/* Address Line 1 field */}
+        <FormField
+          control={form.control}
+          name="addressLine1"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address Line 1 *</FormLabel>
+              <FormControl>
+                <Input placeholder="123 Main St" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-              {/* City field */}
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="City" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-        </div>
+        {/* Address Line 2 field (optional) */}
+        <FormField
+          control={form.control}
+          name="addressLine2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address Line 2</FormLabel>
+              <FormControl>
+                <Input placeholder="Apt 4B" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* City field */}
+        <FormField
+          control={form.control}
+          name="city"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>City *</FormLabel>
+              <FormControl>
+                <Input placeholder="City" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Submit Button */}
         <div className="flex justify-center">
