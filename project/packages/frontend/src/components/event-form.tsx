@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 
 import { CreateEventDto } from "../../../shared/src/types/event";
 import { User } from "../../../shared/src/types/user";
+import { Donor } from "../../../shared/src/types/donor";
 
 // Define validation schema
 const formSchema = z.object({
@@ -48,6 +49,7 @@ export function EventForm() {
       .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
       .then((response) => {
         setUserId(response.data.id);
+        console.log("User data:", response.data);
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
@@ -75,24 +77,31 @@ export function EventForm() {
     }
     // log the form values
     console.log("Form values:", values);
-    // Create the event data object following the CreateEventDto structure
-    const eventData: CreateEventDto = {
-      name: values.name,
-      addressLine1: values.addressLine1,
-      addressLine2: values.addressLine2,
-      city: values.city,
-      description: values.description,
-      date: new Date(values.date).toISOString(), 
-      donorsList: [], // TODO: get all donors id from the API
-      excludedDonors: [], // Initial as empty array
-      admins: [userId], 
-    };
 
     // Send the event data to the API
     try {
+      // Fetch all donors and retrieve their IDs
+      const donorResponse = await axios.get<Donor[]>("http://localhost:3000/donors", {
+        withCredentials: true,
+      });
+      const donorIds = donorResponse.data.map((donor) => donor.id);
+
+      // Create the event data object following the CreateEventDto structure
+      const eventData: CreateEventDto = {
+        name: values.name,
+        addressLine1: values.addressLine1,
+        addressLine2: values.addressLine2,
+        city: values.city,
+        description: values.description,
+        date: new Date(values.date).toISOString(), 
+        donorsList: donorIds, // Initial as 10 donors' id from the API
+        excludedDonors: [], // Initial as empty array
+        admins: [userId], 
+      };
+
       // Make a POST request to create the event
       await axios.post("http://localhost:3000/events", eventData, {
-        withCredentials: true, // Send cookies if using session-based auth
+        withCredentials: true, 
       });
       console.log("Event created successfully:", eventData);
       navigate("/events"); // Navigate to the events page after successful creation
