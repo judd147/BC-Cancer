@@ -34,6 +34,15 @@ export class SeederService implements OnModuleInit {
 
     const initialDonors: Partial<Donor>[] = [];
 
+    const bcCites = [
+      'Vancouver',
+      'Victoria',
+      'Surrey',
+      'Burnaby',
+      'Kelowna',
+      'Nanaimo',
+    ];
+
     for (let i = 0; i < donorsToCreate; i++) {
       const firstName = faker.person.firstName();
       const lastName = faker.person.lastName();
@@ -53,7 +62,7 @@ export class SeederService implements OnModuleInit {
         addressLine2: faker.datatype.boolean()
           ? faker.location.secondaryAddress()
           : null,
-        city: faker.location.city(),
+        city: faker.helpers.arrayElement(bcCites),
         contactPhoneType: faker.helpers.arrayElement([
           'Mobile',
           'Home',
