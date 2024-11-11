@@ -40,3 +40,12 @@ export interface UpdateEventDto {
   excludedDonors?: number[];
   admins?: number[];
 }
+
+export interface UpdateDonorsStatusDto {
+  donorIds: number[];
+  newStatus: "excluded" | "invited" | "preview";
+}
+
+export type DonorsStatus = (Donor & {
+  status: "excluded" | "invited" | "preview";
+})[];

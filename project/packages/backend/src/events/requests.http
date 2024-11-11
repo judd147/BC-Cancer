@@ -28,3 +28,15 @@ DELETE http://localhost:3000/events/1
 
 ### GET change history of an event
 GET http://localhost:3000/events/1/history
+
+### UPDATE status of donors in an event
+PATCH http://localhost:3000/events/1/donors
+content-type: application/json
+
+{
+  "donorIds": [1,2,3],
+  "newStatus": "invited"
+}
+
+### GET all donors of an event
+GET http://localhost:3000/events/1/donors
