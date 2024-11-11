@@ -13,7 +13,7 @@ import { Donor } from '../donors/donor.entity';
 import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import { ActionType } from '../change-history/event-change-history.entity';
-import { UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
+import { DonorsStatus, UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
 
 @Injectable()
 export class EventService {
@@ -380,5 +380,37 @@ export class EventService {
     );
 
     return updatedEvent;
+  }
+
+  async getEventDonors(id: number): Promise<DonorsStatus> {
+    const event = await this.eventsRepository.findOne({
+      where: { id },
+      relations: ['donorsList', 'excludedDonors'],
+    });
+
+    if (!event || event.deletedAt) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const allDonors = await this.donorsRepository.find();
+
+    const donorsListIds = new Set(event.donorsList.map((donor) => donor.id));
+    const excludedDonorsIds = new Set(
+      event.excludedDonors.map((donor) => donor.id),
+    );
+
+    const donorsWithStatus: DonorsStatus = allDonors.map((donor) => {
+      let status: 'preview' | 'invited' | 'excluded' = 'preview';
+
+      if (donorsListIds.has(donor.id)) {
+        status = 'invited';
+      } else if (excludedDonorsIds.has(donor.id)) {
+        status = 'excluded';
+      }
+
+      return { ...donor, status };
+    });
+
+    return donorsWithStatus;
   }
 }

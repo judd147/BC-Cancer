@@ -37,3 +37,6 @@ content-type: application/json
   "donorIds": [1,2,3],
   "newStatus": "invited"
 }
+
+### GET all donors of an event
+GET http://localhost:3000/events/1/donors

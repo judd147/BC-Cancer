@@ -17,7 +17,7 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
-import { UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
+import { DonorsStatus, UpdateDonorsStatusDto } from '@bc-cancer/shared/types';
 
 @Controller('events')
 @UseGuards(AuthGuard)
@@ -75,5 +75,10 @@ export class EventController {
       updateDonorsStatusDto,
       user,
     );
+  }
+
+  @Get('/:id/donors')
+  getEventDonors(@Param('id', ParseIntPipe) id: number): Promise<DonorsStatus> {
+    return this.eventService.getEventDonors(id);
   }
 }
