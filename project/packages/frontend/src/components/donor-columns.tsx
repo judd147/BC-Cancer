@@ -11,12 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-const options: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
-};
+import { options } from "@/lib/utils";
 
 export const columns: ColumnDef<Donor>[] = [
   {
@@ -58,6 +53,10 @@ export const columns: ColumnDef<Donor>[] = [
   {
     accessorKey: "lastName",
     header: "Last Name",
+  },
+  {
+    accessorKey: "city",
+    header: "City",
   },
   {
     accessorKey: "totalDonations",

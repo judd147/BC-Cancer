@@ -20,10 +20,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 //import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import axios from "axios";
-
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
-import { Donor } from "@bc-cancer/shared/src/types/donor";
+import { getDonors, createEvent } from "@/api/queries";
 
 // Define validation schema
 const formSchema = z.object({
@@ -39,6 +38,23 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
+  // define react query/mutation
+  const queryClient = useQueryClient()
+  const donorsQuery = useQuery({
+    queryKey: ["donors"],
+    queryFn: getDonors,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  const eventMutation = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+      navigate("/events");
+    },
+  });
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,16 +71,10 @@ export function EventForm() {
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // log the form values
     // console.log("Form values:", values);
-
-    // Send the event data to the API
     try {
       // Fetch all donors and retrieve their IDs
-      const donorResponse = await axios.get<Donor[]>("http://localhost:3000/donors", {
-        withCredentials: true,
-      });
-      const donorIds = donorResponse.data.map((donor) => donor.id);
+      const donorIds = donorsQuery.data?.map((donor) => donor.id);
 
       // Create the event data object following the CreateEventDto structure
       const eventData: CreateEventDto = {
@@ -78,11 +88,7 @@ export function EventForm() {
       };
 
       // Make a POST request to create the event
-      await axios.post("http://localhost:3000/events", eventData, {
-        withCredentials: true, 
-      });
-      console.log("Event created successfully:", eventData);
-      navigate("/events"); // Navigate to the events page after successful creation
+      eventMutation.mutate(eventData);
     } catch (error) {
       console.error("Error creating event:", error);
       alert("Failed to create event. Please try again.");
@@ -217,9 +223,12 @@ export function EventForm() {
         />
 
         {/* Submit Button */}
-        <div className="flex justify-center">
+        <div className="space-x-4">
           <Button type="submit" className="mt-4">
-            Create Event
+            Create
+          </Button>
+          <Button variant="outline" className="mt-4" onClick={() => navigate("/events")}>
+            Cancel
           </Button>
         </div>
       </form>
