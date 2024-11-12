@@ -62,15 +62,17 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Go through the project despite of backend or frontend.
 
-### [Team Member 3]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Implemented the event and event detail page
+  - Attached UI with data from the backend
+  - Discussed with the backend team about the API design
 - **Challenges Faced:**
-  -
+  - NA
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - Prepare for the MVP presentation
 
 ### [Team Member 4]
 - **Achievements and Contributions:**

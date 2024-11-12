@@ -4,15 +4,32 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem,
-  FormLabel, FormMessage,} from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel,
-  SelectTrigger, SelectValue} from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -20,12 +37,12 @@ import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { getDonors, createEvent } from "@/api/queries";
 
 const bcCites = [
-  'Vancouver',
-  'Victoria',
-  'Surrey',
-  'Burnaby',
-  'Kelowna',
-  'Nanaimo',
+  "Vancouver",
+  "Victoria",
+  "Surrey",
+  "Burnaby",
+  "Kelowna",
+  "Nanaimo",
 ] as const;
 
 // Define validation schema
@@ -36,30 +53,15 @@ const formSchema = z.object({
   city: z.enum(bcCites, { message: "Please select a valid city." }),
   description: z.string().optional(),
   date: z.string().datetime({ message: "Date is required" }),
-  donorLimit: z.number().min(1, { message: "Must be at least 1" }).max(99, { message: "Must be less than 100" }), // Limit to 1-99 donors
+  donorLimit: z
+    .number()
+    .min(1, { message: "Must be at least 1" })
+    .max(99, { message: "Must be less than 100" }), // Limit to 1-99 donors
   eventCityOnly: z.boolean().optional(),
 });
 
 export function EventForm() {
   const navigate = useNavigate();
-  // define react query/mutation
-  const queryClient = useQueryClient()
-  // const donorsQuery = useQuery({
-  //   queryKey: ["donors"],
-  //   queryFn: getDonors,
-  //   refetchOnMount: false,
-  //   refetchOnWindowFocus: false,
-  //   refetchOnReconnect: false,
-  // });
-
-  const eventMutation = useMutation({
-    mutationFn: createEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['events'] });
-      navigate("/events");
-    },
-  });
-
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,20 +76,32 @@ export function EventForm() {
       eventCityOnly: false, // Default to not filtering by city
     },
   });
-
+  const donorQueryParams = {
+    limit: form.watch("donorLimit"),
+    ...(form.watch("eventCityOnly") && { city: form.watch("city") }),
+  };
+  // define react query/mutation
+  const queryClient = useQueryClient();
+  const donorsQuery = useQuery({
+    queryKey: ["donors", donorQueryParams],
+    queryFn: () => getDonors(donorQueryParams),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+  const eventMutation = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      navigate("/events");
+    },
+  });
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log("Form values:", values);
     try {
-      // Set query parameters based on form values
-      const donorQueryParams = {
-        limit: values.donorLimit,
-        ...(values.eventCityOnly && { city: values.city }), // Include city filter only if eventCityOnly is true
-      };
-
       // Fetch donors with query params based on user input
-      const donors = await getDonors(donorQueryParams);
-      const donorIds = donors.map((donor) => donor.id);
+      const donorIds = donorsQuery.data?.map((donor) => donor.id);
 
       // Create the event data object following the CreateEventDto structure
       const eventData: CreateEventDto = {
@@ -96,7 +110,7 @@ export function EventForm() {
         addressLine2: values.addressLine2,
         city: values.city,
         description: values.description,
-        date: new Date(values.date).toISOString(), 
+        date: new Date(values.date).toISOString(),
         donorsList: donorIds, // Initial as 10 donors' id from the API
       };
 
@@ -111,7 +125,6 @@ export function EventForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-
         {/* Name field */}
         <FormField
           control={form.control}
@@ -162,7 +175,7 @@ export function EventForm() {
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value ? (
@@ -178,7 +191,9 @@ export function EventForm() {
                     <Calendar
                       mode="single"
                       selected={dateValue}
-                      onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                      onSelect={(date) =>
+                        field.onChange(date ? date.toISOString() : "")
+                      }
                       disabled={(date) => date < new Date()}
                       initialFocus
                     />
@@ -228,10 +243,7 @@ export function EventForm() {
             <FormItem>
               <FormLabel>City *</FormLabel>
               <FormControl>
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                >
+                <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a city" />
                   </SelectTrigger>
@@ -251,36 +263,46 @@ export function EventForm() {
             </FormItem>
           )}
         />
-         
-         {/* Donor Limit field */}
-         <FormField
-            control={form.control}
-            name="donorLimit"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Donor Limit *</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter limit (1-99)"
-                    value={field.value ?? ""} 
-                    onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)} 
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
+        {/* Donor Limit field */}
+        <FormField
+          control={form.control}
+          name="donorLimit"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Donor Limit *</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Enter limit (1-99)"
+                  value={field.value ?? ""}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value ? Number(e.target.value) : undefined,
+                    )
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Switch for filtering by city */}
         <FormField
           control={form.control}
           name="eventCityOnly"
           render={({ field }) => (
-            <FormItem className="flex items-center space-x-2">
-              <FormLabel>Only Invite Donors from Event City</FormLabel>
+            <FormItem className="flex place-items-center space-x-4">
+              <FormLabel className="mr-2">
+                Invite Donors from Event City Only
+              </FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="!m-0"
+                />
               </FormControl>
             </FormItem>
           )}
@@ -291,7 +313,11 @@ export function EventForm() {
           <Button type="submit" className="mt-4">
             Create
           </Button>
-          <Button variant="outline" className="mt-4" onClick={() => navigate("/events")}>
+          <Button
+            variant="outline"
+            className="mt-4"
+            onClick={() => navigate("/events")}
+          >
             Cancel
           </Button>
         </div>
