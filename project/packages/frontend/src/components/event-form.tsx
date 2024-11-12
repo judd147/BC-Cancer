@@ -19,17 +19,28 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 //import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel,
+  SelectTrigger, SelectValue} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { getDonors, createEvent } from "@/api/queries";
+
+const bcCites = [
+  'Vancouver',
+  'Victoria',
+  'Surrey',
+  'Burnaby',
+  'Kelowna',
+  'Nanaimo',
+] as const;
 
 // Define validation schema
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   addressLine1: z.string().min(1, { message: "Address Line 1 is required." }),
   addressLine2: z.string().optional(),
-  city: z.string().min(1, { message: "City is required." }),
+  city: z.enum(bcCites, { message: "Please select a valid city." }),
   description: z.string().optional(),
   date: z
     .string()
@@ -63,7 +74,7 @@ export function EventForm() {
       name: "",
       addressLine1: "",
       addressLine2: "",
-      city: "",
+      city: undefined,
       description: "",
       date: "",
     },
@@ -207,20 +218,37 @@ export function EventForm() {
           )}
         />
 
-        {/* City field */}
+        {/* City field as Select */}
         <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>City *</FormLabel>
-              <FormControl>
-                <Input placeholder="City" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City *</FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Cities</SelectLabel>
+                              {bcCites.map((city) => (
+                                <SelectItem key={city} value={city}>
+                                  {city}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
         {/* Submit Button */}
         <div className="space-x-4">
