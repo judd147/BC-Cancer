@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 import { Event } from "@bc-cancer/shared/src/types/event";
+import { options } from "@/lib/utils";
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -27,5 +28,13 @@ export const columns: ColumnDef<Event>[] = [
   {
     accessorKey: "date",
     header: "Date",
+    cell: ({ row }) => {
+      const dateStr: string = row.getValue("date");
+      return (
+        <div>
+          {new Date(dateStr).toLocaleString("en-CA", options)}
+        </div>
+      );
+    },
   },
 ];

@@ -217,9 +217,12 @@ export function EventForm() {
         />
 
         {/* Submit Button */}
-        <div className="flex justify-center">
+        <div className="space-x-4">
           <Button type="submit" className="mt-4">
-            Create Event
+            Create
+          </Button>
+          <Button variant="outline" className="mt-4" onClick={() => navigate("/events")}>
+            Cancel
           </Button>
         </div>
       </form>

@@ -10,6 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { columns } from "@/components/donor-columns"
 import { DonorDataTable } from "@/components/data-table"
+import { options } from "@/lib/utils";
 
 export default function EventDetail() {
   const location = useLocation();
@@ -30,7 +31,7 @@ export default function EventDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="space-y-2">
-              <p>Date: {event.date}</p>
+              <p>Date: {new Date(event.date).toLocaleString("en-CA", options)}</p>
             </div>
           </div>
         </CardContent>
@@ -46,7 +47,7 @@ export default function EventDetail() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <p>Address: {event.addressLine1}, {event.addressLine2}</p>
+            <p>Address: {event.addressLine1} {event.addressLine2 && `, ${event.addressLine2}`}</p>
             <p>City: {event.city}</p>
           </div>
         </CardContent>
