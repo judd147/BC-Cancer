@@ -51,15 +51,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - NA
 
-### [Team Member 2]
+### Jiahuan He
 - **Achievements and Contributions:**
-  -
+  - Added more features of event obj.
+  - Tried GitHub actions and figured out how to add a workflow.
 - **Challenges Faced:**
-  -
+  - Little knowledge on actions so it took me a long time to debug why dependency installing always fails.
 - **Areas for Improvement:**
-  -
+  - Keep learning database related things and get to know frontend as well.
 - **Feedback and Suggestions:**
-  -
+  - Go through the project despite of backend or frontend.
 
 ### [Team Member 3]
 - **Achievements and Contributions:**
