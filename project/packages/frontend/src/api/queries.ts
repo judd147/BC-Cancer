@@ -1,6 +1,20 @@
 import { Event } from "@bc-cancer/shared/src/types/event";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
+import { GetDonorsParams } from "@bc-cancer/shared/src/types/donor";
+
+// Function to build query string from params
+function buildQueryString(params: GetDonorsParams): string {
+  const query = new URLSearchParams();
+  
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      query.append(key, String(value));
+    }
+  });
+
+  return query.toString();
+}
 
 export const getEvents = async () => {
   const response = await fetch("http://localhost:3000/events", {
@@ -13,9 +27,10 @@ export const getEvents = async () => {
   return response.json() as Promise<Event[]>;
 };
 
-// TODO: add filter as query params
-export const getDonors = async () => {
-  const response = await fetch("http://localhost:3000/donors", {
+// Add filter as query params
+export const getDonors = async (params: GetDonorsParams = {}) => {
+  const queryString = buildQueryString(params);
+  const response = await fetch(`http://localhost:3000/donors?${queryString}`, {
     method: "GET",
     credentials: "include",
   });
