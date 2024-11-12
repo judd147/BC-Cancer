@@ -1,15 +1,12 @@
 import { columns } from "@/components/event-columns"
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { Event } from "@bc-cancer/shared/src/types/event";
-import { DataTable } from "@/components/data-table"
-import { Button } from "@/components/ui/button"
+import { EventDataTable } from "@/components/data-table"
 import { UserAvatar } from "@/components/user-avatar";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 //import { useEffect } from "react";
 
 export default function Events() {
-  const navigate = useNavigate();
   const { user } = useAuth();
 
   // useEffect(() => {
@@ -384,12 +381,9 @@ export default function Events() {
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold py-4">Events</h1>
         {user && <p>Welcome, {user.username}!</p>}
-        <Button onClick={() => navigate('/create-event')}>
-          Create Event
-        </Button>
         <UserAvatar />
       </div>
-      <DataTable columns={columns} data={events} />
+      <EventDataTable columns={columns} data={events} />
     </div>
   )
 }
