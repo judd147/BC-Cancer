@@ -10,13 +10,20 @@
   - [x] Login
   - [x] Event
   - [x] Create Event
-  - [ ] Event Detail
+  - [x] Event Detail
 - [ ] Communicate with backend
   - [ ] React Query
 - [ ] Implement functionality
   - [x] Login with username/password
-  - [ ] List all events
-  - [ ] Create new event
+  - [ ] Event table
+    - [ ] Row actions
+    - [ ] Pagination
+    - [ ] Sorting
+    - [ ] Filtering
+  - [x] Create new event
+    - [ ] filter by city & limit
+    - [ ] reuse for updating event
+    - [ ] add admins
   - [ ] Event detail donor table
     - [ ] Status management
     - [ ] Row actions

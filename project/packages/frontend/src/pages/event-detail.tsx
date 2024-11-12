@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { columns } from "@/components/donor-columns"
-import { DataTable } from "@/components/data-table"
+import { DonorDataTable } from "@/components/data-table"
 
 export default function EventDetail() {
   const location = useLocation();
@@ -54,7 +54,7 @@ export default function EventDetail() {
 
       {/* Separator and Footer Section */}
       <Separator />
-      <DataTable columns={columns} data={event.donorsList} />
+      <DonorDataTable columns={columns} data={event.donorsList} />
     </div>
   )
 }
