@@ -21,6 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 
@@ -38,6 +39,20 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Fetch user data from the API
+    axios
+      .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
+      .then((response) => {
+        setUserId(response.data.id);
+        console.log("User data:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
