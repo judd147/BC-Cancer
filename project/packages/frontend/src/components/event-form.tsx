@@ -39,20 +39,6 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Fetch user data from the API
-    axios
-      .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
-      .then((response) => {
-        setUserId(response.data.id);
-        console.log("User data:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []);
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -89,7 +75,6 @@ export function EventForm() {
         description: values.description,
         date: new Date(values.date).toISOString(), 
         donorsList: donorIds, // Initial as 10 donors' id from the API
-        excludedDonors: [], // Initial as empty array
       };
 
       // Make a POST request to create the event
