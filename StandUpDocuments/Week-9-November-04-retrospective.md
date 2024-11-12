@@ -1,28 +1,28 @@
 # Retrospective Document Template
 
 ## Team Name
-[Insert Team Name Here]
+ClientFirst Solutions
 
 ## Date
 Week 9 November 04
 
 ## Participants
-- [Team Member 1]
-- [Team Member 2]
-- [Team Member 3]
-- [Team Member 4]
-- [Team Member 5]
+- Tsz Wai Tam
+- Liyao Zhang
+- Jiahuan He
+- Yuxin Wang (Nora)
+- Harshil Chudasama
 
 ---
 
 ## Overview
-Briefly describe the purpose of this retrospective and what you aim to achieve.
+The purpose of this repository is to review the activities of the previous week, summarize the successes and failures, and thereby aspire to achieve more productive results in the current week.
 
 ---
 
 ## What Went Well
 List the things that went well during the project.
--
+- BC cancer project is almost done.
 -
 -
 
@@ -30,30 +30,26 @@ List the things that went well during the project.
 
 ## What Could Be Improved
 List the areas where there is room for improvement.
--
--
--
+- More communications on to-do list.
 
 ---
 
 ## Action Items
 Identify actionable steps that can be taken to improve future projects.
-1.
-2.
-3.
+1. More communication.
 
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - BC cancer backend
 - **Challenges Faced:**
-  -
+  - NA
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - NA
 
 ### [Team Member 2]
 - **Achievements and Contributions:**
