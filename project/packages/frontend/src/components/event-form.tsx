@@ -4,23 +4,16 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  //FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem,
+  FormLabel, FormMessage,} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-//import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel,
   SelectTrigger, SelectValue} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
@@ -42,22 +35,22 @@ const formSchema = z.object({
   addressLine2: z.string().optional(),
   city: z.enum(bcCites, { message: "Please select a valid city." }),
   description: z.string().optional(),
-  date: z
-    .string()
-    .datetime({ message: "Date is required" }),
+  date: z.string().datetime({ message: "Date is required" }),
+  donorLimit: z.number().min(1, { message: "Must be at least 1" }).max(99, { message: "Must be less than 100" }), // Limit to 1-99 donors
+  eventCityOnly: z.boolean().optional(),
 });
 
 export function EventForm() {
   const navigate = useNavigate();
   // define react query/mutation
   const queryClient = useQueryClient()
-  const donorsQuery = useQuery({
-    queryKey: ["donors"],
-    queryFn: getDonors,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  });
+  // const donorsQuery = useQuery({
+  //   queryKey: ["donors"],
+  //   queryFn: getDonors,
+  //   refetchOnMount: false,
+  //   refetchOnWindowFocus: false,
+  //   refetchOnReconnect: false,
+  // });
 
   const eventMutation = useMutation({
     mutationFn: createEvent,
@@ -77,6 +70,8 @@ export function EventForm() {
       city: undefined,
       description: "",
       date: "",
+      donorLimit: undefined,
+      eventCityOnly: false, // Default to not filtering by city
     },
   });
 
@@ -84,8 +79,15 @@ export function EventForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // console.log("Form values:", values);
     try {
-      // Fetch all donors and retrieve their IDs
-      const donorIds = donorsQuery.data?.map((donor) => donor.id);
+      // Set query parameters based on form values
+      const donorQueryParams = {
+        limit: values.donorLimit,
+        ...(values.eventCityOnly && { city: values.city }), // Include city filter only if eventCityOnly is true
+      };
+
+      // Fetch donors with query params based on user input
+      const donors = await getDonors(donorQueryParams);
+      const donorIds = donors.map((donor) => donor.id);
 
       // Create the event data object following the CreateEventDto structure
       const eventData: CreateEventDto = {
@@ -220,35 +222,69 @@ export function EventForm() {
 
         {/* City field as Select */}
         <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City *</FormLabel>
-                      <FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectLabel>Cities</SelectLabel>
-                              {bcCites.map((city) => (
-                                <SelectItem key={city} value={city}>
-                                  {city}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          control={form.control}
+          name="city"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>City *</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a city" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Cities</SelectLabel>
+                      {bcCites.map((city) => (
+                        <SelectItem key={city} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         
+         {/* Donor Limit field */}
+         <FormField
+            control={form.control}
+            name="donorLimit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Donor Limit *</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Enter limit (1-99)"
+                    value={field.value ?? ""} 
+                    onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+        {/* Switch for filtering by city */}
+        <FormField
+          control={form.control}
+          name="eventCityOnly"
+          render={({ field }) => (
+            <FormItem className="flex items-center space-x-2">
+              <FormLabel>Only Invite Donors from Event City</FormLabel>
+              <FormControl>
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         {/* Submit Button */}
         <div className="space-x-4">
