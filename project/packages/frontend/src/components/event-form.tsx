@@ -21,11 +21,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import axios from "axios";
-import { useEffect, useState } from "react";
-
-import { CreateEventDto } from "../../../shared/src/types/event";
-import { User } from "../../../shared/src/types/user";
-import { Donor } from "../../../shared/src/types/donor";
+import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
+import { Donor } from "@bc-cancer/shared/src/types/donor";
 
 // Define validation schema
 const formSchema = z.object({
@@ -41,20 +38,6 @@ const formSchema = z.object({
 
 export function EventForm() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Fetch user data from the API
-    axios
-      .get<User>("http://localhost:3000/auth/whoami", { withCredentials: true })
-      .then((response) => {
-        setUserId(response.data.id);
-        console.log("User data:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []);
 
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,12 +54,8 @@ export function EventForm() {
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (userId === null) {
-      console.error("User is not logged in or failed to fetch user data");
-      return;
-    }
     // log the form values
-    console.log("Form values:", values);
+    // console.log("Form values:", values);
 
     // Send the event data to the API
     try {
@@ -96,7 +75,6 @@ export function EventForm() {
         date: new Date(values.date).toISOString(), 
         donorsList: donorIds, // Initial as 10 donors' id from the API
         excludedDonors: [], // Initial as empty array
-        admins: [userId], 
       };
 
       // Make a POST request to create the event

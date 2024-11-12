@@ -3,30 +3,26 @@ import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { Event } from "@bc-cancer/shared/src/types/event";
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { UserAvatar } from "@/components/user-avatar";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../AuthContext";
+//import { useEffect } from "react";
 
 export default function Events() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { username } = location.state;
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:3000/donors", {
-        method: "GET",
-        credentials: "include"
-      });
-      const data = await response.json();
-      console.log(data);
-    };
-    fetchData();
-  }, []);
-
-  const user = {
-    id: 1,
-    username: "username",
-  }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch("http://localhost:3000/donors", {
+  //       method: "GET",
+  //       credentials: "include"
+  //     });
+  //     const data = await response.json();
+  //     console.log(data);
+  //   };
+  //   fetchData();
+  // }, []);
 
   const donors = [
     {
@@ -387,10 +383,11 @@ export default function Events() {
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center">
         <h1 className="text-4xl font-bold py-4">Events</h1>
-        {username && <p>Welcome, {username}!</p>}
+        {user && <p>Welcome, {user.username}!</p>}
         <Button onClick={() => navigate('/create-event')}>
           Create Event
         </Button>
+        <UserAvatar />
       </div>
       <DataTable columns={columns} data={events} />
     </div>

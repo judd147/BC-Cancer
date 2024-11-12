@@ -33,7 +33,7 @@ export function LoginForm({
   toggleMode: () => void;
 }) {
   const navigate = useNavigate();
-  const { setIsAuthed } = useAuth();
+  const { setIsAuthed, setUser } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{
@@ -65,7 +65,8 @@ export function LoginForm({
         const data = await response.json();
         // console.log("Signed up successfully:", data);
         setIsAuthed(true);
-        navigate("/events", { state: { username: data.username } });
+        setUser({ id: data.id, username: data.username });
+        navigate("/events");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -106,7 +107,8 @@ export function LoginForm({
         const data = await response.json();
         //console.log("Logged in successfully:", data);
         setIsAuthed(true);
-        navigate("/events", { state: { username: data.username } });
+        setUser({ id: data.id, username: data.username });
+        navigate("/events");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {

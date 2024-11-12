@@ -10,7 +10,7 @@
   - [x] Login
   - [x] Event
   - [x] Create Event
-  - [ ] Event Detail
+  - [x] Event Detail
 - [ ] Communicate with backend
   - [ ] React Query
 - [ ] Implement functionality
