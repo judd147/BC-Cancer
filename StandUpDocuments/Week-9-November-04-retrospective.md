@@ -74,15 +74,15 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Prepare for the MVP presentation
 
-### [Team Member 4]
+### Harshil Chudasama
 - **Achievements and Contributions:**
-  -
+  - Added 2 servers to the REST in 5 langauges 
 - **Challenges Faced:**
-  -
+  - N/A
 - **Areas for Improvement:**
-  -
+  - N/A
 - **Feedback and Suggestions:**
-  -
+  - N/A
 
 ### [Team Member 5]
 - **Achievements and Contributions:**
