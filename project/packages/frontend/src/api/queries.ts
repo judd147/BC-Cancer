@@ -27,6 +27,17 @@ export const getEvents = async () => {
   return response.json() as Promise<Event[]>;
 };
 
+export const deleteEvent = async (eventId: number) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete event");
+  }
+  return response.json() as Promise<Event>;
+};
+
 // Add filter as query params
 export const getDonors = async (params: GetDonorsParams = {}) => {
   const queryString = buildQueryString(params);

@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 import { Event } from "@bc-cancer/shared/src/types/event";
 import { options } from "@/lib/utils";
-import { MoreHorizontal } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
+import { MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,8 +13,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import { ColumnHeader } from "./column-header";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteEvent } from "@/api/queries";
+
+const handleEditEvent = async (event: Event) => {
+  console.log("Edit event:", event);
+};
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -40,9 +47,7 @@ export const columns: ColumnDef<Event>[] = [
   },
   {
     accessorKey: "name",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Name" />
-    ),
+    header: ({ column }) => <ColumnHeader column={column} title="Name" />,
     cell: ({ row }) => (
       <Link
         to={`/events/${row.original.id}`}
@@ -55,9 +60,7 @@ export const columns: ColumnDef<Event>[] = [
   },
   {
     accessorKey: "city",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="City" />
-    ),
+    header: ({ column }) => <ColumnHeader column={column} title="City" />,
   },
   {
     accessorKey: "description",
@@ -67,21 +70,38 @@ export const columns: ColumnDef<Event>[] = [
   },
   {
     accessorKey: "date",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Date" />
-    ),
+    header: ({ column }) => <ColumnHeader column={column} title="Date" />,
     cell: ({ row }) => {
       const dateStr: string = row.getValue("date");
-      return (
-        <div>
-          {new Date(dateStr).toLocaleString("en-CA", options)}
-        </div>
-      );
+      return <div>{new Date(dateStr).toLocaleString("en-CA", options)}</div>;
     },
   },
   {
     id: "actions",
-    cell: () => {
+    header: ({ table }) => {
+      const queryClient = useQueryClient();
+      const eventMutation = useMutation({
+        mutationFn: deleteEvent,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["events"] });
+          table.toggleAllPageRowsSelected(false);
+        },
+      });
+
+      const handleDeleteSelected = () => {
+        const selectedRows = table.getSelectedRowModel().rows;
+        selectedRows.forEach((row) => {
+          eventMutation.mutate(row.original.id)
+        });
+      };
+
+      const handleDeleteAll = () => {
+        const allRows = table.getRowModel().rows;
+        allRows.forEach((row) => {
+          eventMutation.mutate(row.original.id)
+        });
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -93,11 +113,46 @@ export const columns: ColumnDef<Event>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Invite</DropdownMenuItem>
-            <DropdownMenuItem>Exclude</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleDeleteSelected}>
+              Delete Selected
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleDeleteAll}>
+              Delete All
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
+    },
+    cell: ({ row }) => {
+      const queryClient = useQueryClient();
+      const eventMutation = useMutation({
+        mutationFn: deleteEvent,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["events"] });
+        },
+      });
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => handleEditEvent(row.original)}>
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={() => eventMutation.mutate(row.original.id)}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
     enableSorting: false,
     enableHiding: false,

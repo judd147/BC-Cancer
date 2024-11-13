@@ -13,10 +13,12 @@
   - [x] Event Detail
 - [x] Communicate with backend
   - [x] React Query
-- [ ] Implement functionality
+- [x] Implement functionality
   - [x] Login with username/password
-  - [ ] Event table
-    - [ ] Row actions
+  - [x] Event table
+    - [x] Row actions
+      - [ ] Edit
+      - [x] Delete
     - [x] Pagination
     - [x] Sorting
     - [x] Filtering
@@ -24,13 +26,17 @@
     - [x] filter by city & limit
     - [ ] reuse for updating event
     - [ ] add admins
-  - [ ] Event detail donor table
-    - [ ] Status management
-    - [ ] Row actions
-    - [x] Pagination
-    - [x] Sorting
-    - [x] Filtering
-    - [x] Column visibility
+  - [x] Event detail
+    - [ ] Donor table
+      - [ ] Status tab
+      - [ ] Row actions
+        - [ ] Exclude
+        - [ ] Invite
+      - [x] Pagination
+      - [x] Sorting
+      - [x] Filtering
+      - [x] Column visibility
+    - [ ] Change history
 
 ## Components for Future Reusability
 
