@@ -8,13 +8,12 @@ import {
 import { Event } from '../events/event.entity';
 import { User } from '../users/user.entity';
 
-import { EventChangeHistory as IEventChangeHistory } from '@bc-cancer/shared/src/types';
+import {
+  EventChangeHistory as IEventChangeHistory,
+  ActionType,
+} from '@bc-cancer/shared/src/types';
 
-export enum ActionType {
-  CREATED = 'created',
-  UPDATED = 'updated',
-  DELETED = 'deleted',
-}
+export { ActionType };
 
 @Entity()
 export class EventChangeHistory implements IEventChangeHistory {

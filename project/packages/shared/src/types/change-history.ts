@@ -1,7 +1,7 @@
 import { User } from "./user";
-import type { Event, CreateEventDto } from "./event";
+import type { CreateEventDto } from "./event";
 
-export enum ActionType {
+export const enum ActionType {
   CREATED = "created",
   UPDATED = "updated",
   DELETED = "deleted",
