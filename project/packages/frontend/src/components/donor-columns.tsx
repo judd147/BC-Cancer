@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Donor } from "../../../shared/src/types/donor";
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
+import { Donor } from "@bc-cancer/shared/src/types/donor";
+import { MoreHorizontal } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { options } from "@/lib/utils";
+import { ColumnHeader } from "./column-header";
 
 export const columns: ColumnDef<Donor>[] = [
   {
@@ -38,25 +39,21 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "firstName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          First Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="First Name" />
+    ),
   },
   {
     accessorKey: "lastName",
-    header: "Last Name",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Last Name" />
+    ),
   },
   {
     accessorKey: "city",
-    header: "City",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="City" />
+    ),
   },
   {
     accessorKey: "totalDonations",

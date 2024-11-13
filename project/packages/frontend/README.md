@@ -11,26 +11,26 @@
   - [x] Event
   - [x] Create Event
   - [x] Event Detail
-- [ ] Communicate with backend
-  - [ ] React Query
+- [x] Communicate with backend
+  - [x] React Query
 - [ ] Implement functionality
   - [x] Login with username/password
   - [ ] Event table
     - [ ] Row actions
-    - [ ] Pagination
-    - [ ] Sorting
-    - [ ] Filtering
+    - [x] Pagination
+    - [x] Sorting
+    - [x] Filtering
   - [x] Create new event
-    - [ ] filter by city & limit
+    - [x] filter by city & limit
     - [ ] reuse for updating event
     - [ ] add admins
   - [ ] Event detail donor table
     - [ ] Status management
     - [ ] Row actions
-    - [ ] Pagination
-    - [ ] Sorting
-    - [ ] Filtering
-    - [ ] Column visibility
+    - [x] Pagination
+    - [x] Sorting
+    - [x] Filtering
+    - [x] Column visibility
 
 ## Components for Future Reusability
 
