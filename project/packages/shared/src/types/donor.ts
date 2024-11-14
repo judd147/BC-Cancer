@@ -28,6 +28,7 @@ export interface Donor {
   subscriptionEventsInPerson: boolean;
   subscriptionEventsMagazine: boolean;
   communicationPreference?: string;
+  status?: string;
 }
 
 // Query parameters for getting donors
