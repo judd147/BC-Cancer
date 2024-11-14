@@ -143,6 +143,65 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     id: "actions",
+    header: ({ table }) => {
+      const { updateDonorStatus } = useDonorStore();
+
+      const handleInviteSelected = () => {
+        const selectedRows = table.getSelectedRowModel().rows;
+        selectedRows.forEach((row) => {
+          updateDonorStatus(row.original.id, "invited");
+        });
+      };
+
+      const handleExcludeSelected = () => {
+        const selectedRows = table.getSelectedRowModel().rows;
+        selectedRows.forEach((row) => {
+          updateDonorStatus(row.original.id, "excluded");
+        });
+      };
+
+      const handleInviteAll = () => {
+        const allRows = table.getRowModel().rows;
+        allRows.forEach((row) => {
+          updateDonorStatus(row.original.id, "invited");
+        });
+      };
+
+      const handleExcludeAll = () => {
+        const allRows = table.getRowModel().rows;
+        allRows.forEach((row) => {
+          updateDonorStatus(row.original.id, "excluded");
+        });
+      };
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={handleInviteSelected}>
+              Invite Selected
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleExcludeSelected}>
+              Exclude Selected
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={handleInviteAll}>
+              Invite All
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleExcludeAll}>
+              Exclude All
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
     cell: ({ row }) => {
       const donor = row.original
       const { updateDonorStatus } = useDonorStore();
