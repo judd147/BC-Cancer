@@ -28,10 +28,11 @@
     - [ ] add admins
   - [x] Event detail
     - [ ] Donor table
-      - [ ] Status tab
-      - [ ] Row actions
-        - [ ] Exclude
-        - [ ] Invite
+      - [x] Status tab
+      - [x] Row actions
+        - [x] Exclude
+        - [x] Invite
+        - [ ] Patch status
       - [x] Pagination
       - [x] Sorting
       - [x] Filtering

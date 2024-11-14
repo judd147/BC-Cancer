@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { ColumnDef } from "@tanstack/react-table";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { MoreHorizontal } from "lucide-react"
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { options } from "@/lib/utils";
 import { ColumnHeader } from "./column-header";
+import { useDonorStore } from "@/DonorStore";
 
 export const columns: ColumnDef<Donor>[] = [
   {
@@ -57,7 +59,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "totalDonations",
-    header: "Total Donations",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Total Donations" />
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("totalDonations"));
       const formatted = new Intl.NumberFormat("en-US", {
@@ -69,7 +73,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "totalPledge",
-    header: "Total Pledge",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Total Pledge" />
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("totalPledge"));
       const formatted = new Intl.NumberFormat("en-US", {
@@ -81,7 +87,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "largestGift",
-    header: "Largest Gift",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Largest Gift" />
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("largestGift"));
       const formatted = new Intl.NumberFormat("en-US", {
@@ -93,7 +101,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "firstGiftDate",
-    header: "First Gift Date",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="First Gift Date" />
+    ),
     cell: ({ row }) => {
       const dateStr: string = row.getValue("firstGiftDate");
       return (
@@ -105,7 +115,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "lastGiftDate",
-    header: "Last Gift Date",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Last Gift Date" />
+    ),
     cell: ({ row }) => {
       const dateStr: string = row.getValue("lastGiftDate");
       return (
@@ -117,7 +129,9 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     accessorKey: "lastGiftAmount",
-    header: "Last Gift Amount",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Last Gift Amount" />
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("lastGiftAmount"));
       const formatted = new Intl.NumberFormat("en-US", {
@@ -131,6 +145,7 @@ export const columns: ColumnDef<Donor>[] = [
     id: "actions",
     cell: ({ row }) => {
       const donor = row.original
+      const { updateDonorStatus } = useDonorStore();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -147,8 +162,12 @@ export const columns: ColumnDef<Donor>[] = [
               Copy donor name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Invite</DropdownMenuItem>
-            <DropdownMenuItem>Exclude</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "invited")}>
+              Invite
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "excluded")}>
+              Exclude
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
