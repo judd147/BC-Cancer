@@ -235,6 +235,18 @@ export class EventService {
 
     // Determine donors to update and donors to add
     const existingDonorIds = existingEventDonors.map((ed) => ed.donor.id);
+
+    // Identify donorIds that are not associated with the event
+    const invalidDonorIds = donorIds.filter(
+      (donorId) => !existingDonorIds.includes(donorId),
+    );
+
+    if (invalidDonorIds.length > 0) {
+      throw new BadRequestException(
+        `Donors with IDs [${invalidDonorIds.join(', ')}] are not associated with this event`,
+      );
+    }
+
     const donorsToUpdate = existingEventDonors;
     const donorsToAdd = donors.filter(
       (donor) => !existingDonorIds.includes(donor.id),
