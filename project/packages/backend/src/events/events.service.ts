@@ -14,9 +14,15 @@ import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import { ActionType } from '../change-history/event-change-history.entity';
 import {
-  DonorsStatus,
   UpdateDonorsStatusDto,
+  Event as EventResponse,
+  // donorStatuses, // BUG: import this will cause MODULE_NOT_FOUND error
+  DonorsList,
+  DonorStatus,
 } from '@bc-cancer/shared/src/types';
+import { EventDonor } from './event-donor.entity';
+
+export const donorStatuses = ['preview', 'invited', 'excluded'] as const;
 
 @Injectable()
 export class EventService {
@@ -24,19 +30,15 @@ export class EventService {
     @InjectRepository(Event) private eventsRepository: Repository<Event>,
     @InjectRepository(Donor) private donorsRepository: Repository<Donor>,
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(EventDonor)
+    private eventDonorRepository: Repository<EventDonor>,
     private readonly changeHistoryService: ChangeHistoryService,
   ) {}
 
-  async getEvent(id: number): Promise<Event> {
+  async getEvent(id: number): Promise<EventResponse> {
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: [
-        'donorsList',
-        'changeHistories',
-        'admins',
-        'createdBy',
-        'excludedDonors',
-      ],
+      relations: ['admins', 'createdBy'],
     });
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -44,44 +46,36 @@ export class EventService {
     return event;
   }
 
-  async getAllEvents(): Promise<Event[]> {
-    return this.eventsRepository.find({
-      relations: [
-        'donorsList',
-        'changeHistories',
-        'admins',
-        'createdBy',
-        'excludedDonors',
-      ],
-    });
+  async getAllEvents(): Promise<EventResponse[]> {
+    return this.eventsRepository.find({ relations: ['admins', 'createdBy'] });
   }
 
-  async createEvent(eventData: CreateEventDto, user: User): Promise<Event> {
-    const donorsList: Donor[] = [];
-    const excludedDonors: Donor[] = [];
-    const admins: User[] = [];
-    admins.push(
-      ...(await this.usersRepository.find({
-        where: { id: In([...(eventData.admins ?? [])]) },
-      })),
-    );
-    donorsList.push(
-      ...(await this.donorsRepository.find({
-        where: { id: In([...(eventData.donorsList ?? [])]) },
-      })),
-    );
-    excludedDonors.push(
-      ...(await this.donorsRepository.find({
-        where: { id: In([...(eventData.excludedDonors ?? [])]) },
-      })),
-    );
+  async createEvent(
+    eventData: CreateEventDto,
+    user: User,
+  ): Promise<EventResponse> {
+    const admins = await this.usersRepository.find({
+      where: { id: In(eventData.admins ?? []) },
+    });
+
+    const invitedDonors = await this.donorsRepository.find({
+      where: { id: In(eventData.donorIds) },
+    });
+
+    const eventDonors: EventDonor[] = invitedDonors.map((donor) => {
+      return this.eventDonorRepository.create({
+        donor,
+        status: 'preview',
+      });
+    });
+
     const newEvent = this.eventsRepository.create({
       ...eventData,
-      donorsList,
-      excludedDonors,
+      eventDonors,
       createdBy: user,
       admins,
     });
+
     const savedEvent = await this.eventsRepository.save(newEvent);
 
     await this.changeHistoryService.logChange(
@@ -121,11 +115,11 @@ export class EventService {
     id: number,
     updateData: Partial<UpdateEventDto>,
     user: User,
-  ): Promise<Event> {
+  ): Promise<EventResponse> {
     // Find the event by ID
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'admins', 'createdBy', 'excludedDonors'],
+      relations: ['admins', 'createdBy'],
     });
     if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
@@ -138,16 +132,6 @@ export class EventService {
       );
     }
 
-    const donorsList: Donor[] = [
-      ...(await this.donorsRepository.find({
-        where: { id: In([...(updateData.donorsList ?? [])]) },
-      })),
-    ];
-    const excludedDonors: Donor[] = [
-      ...(await this.donorsRepository.find({
-        where: { id: In([...(updateData.excludedDonors ?? [])]) },
-      })),
-    ];
     const admins: User[] = [
       ...(await this.usersRepository.find({
         where: { id: In([...(updateData.admins ?? [])]) },
@@ -156,7 +140,7 @@ export class EventService {
 
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (['donorsList', 'admins', 'excludedDonors'].includes(key)) {
+      if (['admins'].includes(key)) {
         // handle donorsList and admins separately
         continue;
       }
@@ -166,23 +150,6 @@ export class EventService {
         changes[key] = { old: event[key], new: updateData[key] };
         event[key] = updateData[key];
       }
-    }
-
-    // Handle donorsList changes
-    if (updateData.donorsList) {
-      this.recordDiff(event.donorsList, donorsList, 'donorsList', changes);
-      event.donorsList = donorsList;
-    }
-
-    // Handle excludedDonors changes
-    if (updateData.excludedDonors) {
-      this.recordDiff(
-        event.excludedDonors,
-        excludedDonors,
-        'excludedDonors',
-        changes,
-      );
-      event.excludedDonors = excludedDonors;
     }
 
     // Handle admins changes
@@ -233,19 +200,25 @@ export class EventService {
   ) {
     const { donorIds, newStatus } = updateDonorsStatusDto;
 
+    // Validate newStatus
+    if (!Object.values(donorStatuses).includes(newStatus)) {
+      throw new BadRequestException('Invalid status provided');
+    }
+
+    // Find the event with related EventDonor entries and donors
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'excludedDonors', 'admins', 'createdBy'],
+      relations: ['admins', 'createdBy', 'eventDonors', 'eventDonors.donor'],
     });
+
+    if (!event || event.deletedAt) {
+      throw new NotFoundException('Event not found');
+    }
 
     if (this.userCanEditEvent(event, user)) {
       throw new ForbiddenException(
         `${user.username} is not allowed to edit this event`,
       );
-    }
-
-    if (!event || event.deletedAt) {
-      throw new NotFoundException('Event not found');
     }
 
     const donors = await this.donorsRepository.findBy({
@@ -256,164 +229,138 @@ export class EventService {
       throw new NotFoundException('Some donors not found');
     }
 
-    const changes: Record<string, { old: any; new: any }> = {};
+    // Fetch existing EventDonor entries for these donors
+    const existingEventDonors = await this.eventDonorRepository.find({
+      where: {
+        event: { id },
+        donor: In(donorIds),
+      },
+      relations: ['donor'],
+    });
 
-    const recordChange = (
-      key: string,
-      oldList: number[],
-      newList: number[],
-    ) => {
-      if (JSON.stringify(oldList.sort()) !== JSON.stringify(newList.sort())) {
-        changes[key] = { old: oldList, new: newList };
-      }
-    };
-
-    const currentDonorsListIds = event.donorsList.map((donor) => donor.id);
-    const currentExcludedDonorsIds = event.excludedDonors.map(
-      (donor) => donor.id,
+    // Determine donors to update and donors to add
+    const existingDonorIds = existingEventDonors.map((ed) => ed.donor.id);
+    const donorsToUpdate = existingEventDonors;
+    const donorsToAdd = donors.filter(
+      (donor) => !existingDonorIds.includes(donor.id),
     );
 
-    switch (newStatus) {
-      case 'excluded':
-        {
-          const updatedExcludedDonors = [
-            ...event.excludedDonors,
-            ...donors.filter(
-              (donor) => !currentExcludedDonorsIds.includes(donor.id),
-            ),
-          ];
+    const changes: { [key in DonorStatus]?: { old: number[]; new: number[] } } =
+      {};
 
-          // Remove from donorsList
-          const updatedDonorsList = event.donorsList.filter(
-            (donor) => !donorIds.includes(donor.id),
-          );
+    // Capture the current donors categorized by status
+    const oldDonorsList = {
+      preview: [],
+      invited: [],
+      excluded: [],
+    };
 
-          recordChange(
-            'excludedDonors',
-            currentExcludedDonorsIds,
-            updatedExcludedDonors.map((donor) => donor.id),
-          );
-          recordChange(
-            'donorsList',
-            currentDonorsListIds,
-            updatedDonorsList.map((donor) => donor.id),
-          );
+    event.eventDonors.forEach((ed) => {
+      if (Object.values(donorStatuses).includes(ed.status)) {
+        oldDonorsList[ed.status].push(ed.donor.id);
+      }
+    });
 
-          event.excludedDonors = updatedExcludedDonors;
-          event.donorsList = updatedDonorsList;
-        }
-        break;
-
-      case 'invited':
-        {
-          const updatedDonorsList = [
-            ...event.donorsList,
-            ...donors.filter(
-              (donor) => !currentDonorsListIds.includes(donor.id),
-            ),
-          ];
-
-          // Remove from excludedDonors
-          const updatedExcludedDonors = event.excludedDonors.filter(
-            (donor) => !donorIds.includes(donor.id),
-          );
-
-          // Record changes
-          recordChange(
-            'donorsList',
-            currentDonorsListIds,
-            updatedDonorsList.map((donor) => donor.id),
-          );
-          recordChange(
-            'excludedDonors',
-            currentExcludedDonorsIds,
-            updatedExcludedDonors.map((donor) => donor.id),
-          );
-
-          // Update event relations
-          event.donorsList = updatedDonorsList;
-          event.excludedDonors = updatedExcludedDonors;
-        }
-        break;
-
-      case 'preview':
-        {
-          // Remove from both donorsList and excludedDonors
-          const updatedDonorsList = event.donorsList.filter(
-            (donor) => !donorIds.includes(donor.id),
-          );
-          const updatedExcludedDonors = event.excludedDonors.filter(
-            (donor) => !donorIds.includes(donor.id),
-          );
-
-          // Record changes
-          recordChange(
-            'donorsList',
-            currentDonorsListIds,
-            updatedDonorsList.map((donor) => donor.id),
-          );
-          recordChange(
-            'excludedDonors',
-            currentExcludedDonorsIds,
-            updatedExcludedDonors.map((donor) => donor.id),
-          );
-
-          // Update event relations
-          event.donorsList = updatedDonorsList;
-          event.excludedDonors = updatedExcludedDonors;
-        }
-        break;
-
-      default:
-        throw new BadRequestException('Invalid status provided');
+    // Update existing donors' status
+    const updatedDonorIds: number[] = [];
+    for (const eventDonor of donorsToUpdate) {
+      if (eventDonor.status !== newStatus) {
+        eventDonor.status = newStatus;
+        await this.eventDonorRepository.save(eventDonor);
+        updatedDonorIds.push(eventDonor.donor.id);
+      }
     }
 
-    // If no changes detected, return the event as is
-    if (Object.keys(changes).length === 0) {
+    // Add new EventDonor entries for donors not previously associated
+    if (donorsToAdd.length > 0) {
+      const newEventDonors = donorsToAdd.map((donor) =>
+        this.eventDonorRepository.create({
+          event,
+          donor,
+          status: newStatus,
+        }),
+      );
+      await this.eventDonorRepository.save(newEventDonors);
+      updatedDonorIds.push(...donorsToAdd.map((donor) => donor.id));
+    }
+
+    // If no donors were updated or added, return the event as is
+    if (updatedDonorIds.length === 0) {
       return event;
     }
 
-    const updatedEvent = await this.eventsRepository.save(event);
+    // Fetch the updated donors categorized by status
+    const updatedEventDonors = await this.eventDonorRepository.find({
+      where: { event: { id } },
+      relations: ['donor'],
+    });
 
-    await this.changeHistoryService.logChange(
-      updatedEvent,
+    const newDonorsList = {
+      preview: [],
+      invited: [],
+      excluded: [],
+    };
+
+    updatedEventDonors.forEach((ed) => {
+      if (Object.values(donorStatuses).includes(ed.status)) {
+        newDonorsList[ed.status].push(ed.donor.id);
+      }
+    });
+
+    // Compare old and new donors lists to populate changes
+    for (const status of Object.values(donorStatuses)) {
+      const oldList = oldDonorsList[status].sort((a, b) => a - b);
+      const newList = newDonorsList[status].sort((a, b) => a - b);
+
+      const oldSet = new Set(oldList);
+      const newSet = new Set(newList);
+
+      const added = newList.filter((id) => !oldSet.has(id));
+      const removed = oldList.filter((id) => !newSet.has(id));
+
+      if (added.length > 0 || removed.length > 0) {
+        changes[status] = {
+          old: oldList,
+          new: newList,
+        };
+      }
+    }
+
+    // Log the update action with categorized changes
+    this.changeHistoryService.logChange(
+      event,
       user,
       ActionType.UPDATED,
       changes,
     );
-
-    return updatedEvent;
   }
 
-  async getEventDonors(id: number): Promise<DonorsStatus> {
+  async getEventDonors(id: number): Promise<DonorsList> {
+    // Fetch the event with related EventDonors and Donors
     const event = await this.eventsRepository.findOne({
       where: { id },
-      relations: ['donorsList', 'excludedDonors'],
+      relations: ['eventDonors', 'eventDonors.donor'],
     });
 
     if (!event || event.deletedAt) {
       throw new NotFoundException('Event not found');
     }
 
-    const allDonors = await this.donorsRepository.find();
+    // Initialize the DonorsList with empty arrays for each status
+    const donorsList: DonorsList = {
+      preview: [],
+      invited: [],
+      excluded: [],
+    };
 
-    const donorsListIds = new Set(event.donorsList.map((donor) => donor.id));
-    const excludedDonorsIds = new Set(
-      event.excludedDonors.map((donor) => donor.id),
-    );
-
-    const donorsWithStatus: DonorsStatus = allDonors.map((donor) => {
-      let status: 'preview' | 'invited' | 'excluded' = 'preview';
-
-      if (donorsListIds.has(donor.id)) {
-        status = 'invited';
-      } else if (excludedDonorsIds.has(donor.id)) {
-        status = 'excluded';
+    // Iterate over each EventDonor and categorize the donors
+    for (const eventDonor of event.eventDonors) {
+      // Ensure the status is valid
+      if (Object.values(donorStatuses).includes(eventDonor.status)) {
+        donorsList[eventDonor.status].push(eventDonor.donor);
       }
+    }
 
-      return { ...donor, status };
-    });
-
-    return donorsWithStatus;
+    return donorsList;
   }
 }
