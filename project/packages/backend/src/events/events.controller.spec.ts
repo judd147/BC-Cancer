@@ -52,14 +52,13 @@ describe('EventController', () => {
         addressLine1: '123 Test St',
         city: 'Test City',
         description: 'Test Description',
-        donorsList: [1, 2],
+        donorIds: [1, 2],
       };
       const result: DeepPartial<Event> = {
         id: 1,
         ...createEventDto,
-        donorsList: [],
+        eventDonors: [],
         admins: [],
-        excludedDonors: [],
       };
       jest.spyOn(service, 'createEvent').mockResolvedValue(result as Event);
 

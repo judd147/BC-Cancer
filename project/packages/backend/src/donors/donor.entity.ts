@@ -1,5 +1,5 @@
 import { Donor as DonorInterface } from '@bc-cancer/shared/src/types';
-import { EventDonor } from 'src/events/event-donor.entity';
+import { EventDonor } from '../events/event-donor.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()

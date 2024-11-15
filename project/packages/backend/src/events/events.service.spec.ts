@@ -9,12 +9,14 @@ import { NotFoundException } from '@nestjs/common';
 import { Donor } from '../donors/donor.entity';
 import { User } from '../users/user.entity';
 import { ChangeHistoryService } from '../change-history/change-history.service';
+import { EventDonor } from './event-donor.entity';
 
 describe('EventService', () => {
   let service: EventService;
   let eventsRepository: Repository<Event>;
   let donorsRepository: Repository<Donor>;
   let usersRepository: Repository<User>;
+  let eventDonorRepository: Repository<EventDonor>;
   let changeHistoryService: ChangeHistoryService;
 
   beforeEach(async () => {
@@ -31,6 +33,10 @@ describe('EventService', () => {
         },
         {
           provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(EventDonor),
           useClass: Repository,
         },
         {
@@ -72,7 +78,7 @@ describe('EventService', () => {
         addressLine1: '123 Test St',
         city: 'Test City',
         description: 'Test Description',
-        donorsList: [1, 2],
+        donorIds: [1, 2],
       };
       const user: User = { id: 1 } as User;
       const donorsList: Donor[] = [];
@@ -80,10 +86,9 @@ describe('EventService', () => {
       const newEvent: DeepPartial<Event> = {
         id: 1,
         ...eventData,
-        donorsList,
+        eventDonors: [],
         admins,
         createdBy: user,
-        excludedDonors: [],
       };
       jest.spyOn(eventsRepository, 'create').mockReturnValue(newEvent as Event);
       jest.spyOn(donorsRepository, 'find').mockResolvedValue(donorsList);
@@ -99,7 +104,6 @@ describe('EventService', () => {
       const user: User = { id: 1 } as User;
       const updateData: Partial<UpdateEventDto> = {
         name: 'Updated Event',
-        donorsList: [1, 2],
       };
       const existingEvent: DeepPartial<Event> = {
         id: 1,
@@ -110,9 +114,7 @@ describe('EventService', () => {
       const updatedEvent: DeepPartial<Event> = {
         ...existingEvent,
         ...updateData,
-        donorsList: [],
         admins: [],
-        excludedDonors: [],
       };
 
       jest
