@@ -2,14 +2,6 @@ import { User } from "./user";
 import type { UpdateEventDto } from "./event";
 import { DonorStatus } from "./donor";
 
-export const enum ActionType {
-  CREATED = "created",
-  UPDATED = "updated",
-  DELETED = "deleted",
-}
-
-type ChangeKey = keyof UpdateEventDto | DonorStatus;
-
 /**
  * Type representing the structure of changes for event properties.
  * Each key corresponds to a property from UpdateEventDto with its old and new values.
@@ -23,7 +15,7 @@ type EventPropertyChangeMap = {
 
 /**
  * Type representing the structure of changes for donor statuses.
- * Each key corresponds to a DonorStatus with its old and new arrays of Donor objects.
+ * Each key corresponds to a DonorStatus with its old and new arrays of Donor IDs.
  */
 type DonorStatusChangeMap = {
   [K in DonorStatus]?: {
@@ -34,6 +26,10 @@ type DonorStatusChangeMap = {
 
 export type PropertyChangeMap = EventPropertyChangeMap & DonorStatusChangeMap;
 
+/**
+ * Represents a change history record for an event.
+ * The response from "GET /events/:id/history" endpoint.
+ */
 export interface EventChangeHistory {
   /**
    * Unique identifier for the change history record.
@@ -50,7 +46,7 @@ export interface EventChangeHistory {
    * The type of action performed.
    * Examples include 'created', 'updated', etc.
    */
-  action: ActionType;
+  action: "created" | "updated" | "deleted";
 
   /**
    * The timestamp when the change was made.

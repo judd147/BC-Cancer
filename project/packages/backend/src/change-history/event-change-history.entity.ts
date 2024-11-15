@@ -8,15 +8,8 @@ import {
 import { Event } from '../events/event.entity';
 import { User } from '../users/user.entity';
 
-import {
-  EventChangeHistory as IEventChangeHistory,
-  ActionType,
-} from '@bc-cancer/shared/src/types';
-
-export { ActionType };
-
 @Entity()
-export class EventChangeHistory implements IEventChangeHistory {
+export class EventChangeHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,7 +26,7 @@ export class EventChangeHistory implements IEventChangeHistory {
   user: User;
 
   @Column()
-  action: ActionType;
+  action: 'created' | 'updated' | 'deleted';
 
   @CreateDateColumn()
   timestamp: Date;
