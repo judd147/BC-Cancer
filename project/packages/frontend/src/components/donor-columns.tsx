@@ -15,6 +15,8 @@ import {
 import { options } from "@/lib/utils";
 import { ColumnHeader } from "./column-header";
 import { useDonorStore } from "@/DonorStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editDonors } from "@/api/queries";
 
 export const columns: ColumnDef<Donor>[] = [
   {
@@ -204,7 +206,33 @@ export const columns: ColumnDef<Donor>[] = [
     },
     cell: ({ row }) => {
       const donor = row.original
-      const { updateDonorStatus } = useDonorStore();
+      const { eventId, updateDonorStatus } = useDonorStore();
+
+      const queryClient = useQueryClient();
+      const eventDonorMutation = useMutation({
+        mutationFn: editDonors,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["events"] });
+        },
+      });
+
+      const handleInvite = () => {
+        updateDonorStatus(donor.id, "invited");
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: [donor.id],
+          newStatus: "invited",
+        });
+      };
+
+      const handleExclude = () => {
+        updateDonorStatus(donor.id, "excluded");
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: [donor.id],
+          newStatus: "excluded",
+        });
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -221,10 +249,10 @@ export const columns: ColumnDef<Donor>[] = [
               Copy donor name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "invited")}>
+            <DropdownMenuItem onSelect={handleInvite}>
               Invite
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "excluded")}>
+            <DropdownMenuItem onSelect={handleExclude}>
               Exclude
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -18,13 +18,14 @@ import { useDonorStore } from "@/DonorStore";
 export default function EventDetail() {
   const location = useLocation();
   const { event } = location.state;
-  const { donors, setDonors } = useDonorStore();
+  const { donors, setDonors, setEventId } = useDonorStore();
   useEffect(() => { // set initial donors
     if (donors.length === 0 && event.donorsList) {
       const initialDonors = event.donorsList.map((donor: { status: string }) => ({
         ...donor,
         status: "preview",
       }));
+      setEventId(event.id);
       setDonors(initialDonors);
     }
   });
