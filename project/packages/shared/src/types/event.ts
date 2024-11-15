@@ -1,4 +1,4 @@
-import { DonorStatus, DonorWithStatus } from "./donor";
+import { Donor, DonorStatus } from "./donor";
 import { User } from "./user";
 
 /**
@@ -19,8 +19,6 @@ export interface Event {
   description?: string;
   /** Date of the event */
   date: Date | string;
-  /** List of donors associated with the event and their statuses */
-  donors: DonorWithStatus[];
   /** User who created the event */
   createdBy: User;
   /** List of users who have admin privileges for the event */
@@ -78,3 +76,8 @@ export interface UpdateDonorsStatusDto {
   /** New status to set for the donors */
   newStatus: DonorStatus;
 }
+
+/**
+ * Represents an event with donor status information.
+ */
+export type DonorsList = { [key in DonorStatus]: Donor[] };

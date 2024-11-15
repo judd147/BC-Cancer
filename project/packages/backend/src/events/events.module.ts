@@ -6,9 +6,13 @@ import { Event } from './event.entity';
 import { Donor } from '../donors/donor.entity';
 import { ChangeHistoryModule } from '../change-history/change-history.module';
 import { User } from '../users/user.entity';
+import { EventDonor } from './event-donor.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Event, Donor, User]), ChangeHistoryModule],
+  imports: [
+    TypeOrmModule.forFeature([Event, Donor, User, EventDonor]),
+    ChangeHistoryModule,
+  ],
   controllers: [EventController],
   providers: [EventService],
 })

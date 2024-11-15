@@ -1,5 +1,6 @@
 import { User } from "./user";
-import type { CreateEventDto } from "./event";
+import type { UpdateEventDto } from "./event";
+import { DonorStatus } from "./donor";
 
 export const enum ActionType {
   CREATED = "created",
@@ -7,12 +8,31 @@ export const enum ActionType {
   DELETED = "deleted",
 }
 
-export type PropertyChangeMap = {
-  [K in keyof CreateEventDto]?: {
-    previous: CreateEventDto[K];
-    current: CreateEventDto[K];
+type ChangeKey = keyof UpdateEventDto | DonorStatus;
+
+/**
+ * Type representing the structure of changes for event properties.
+ * Each key corresponds to a property from UpdateEventDto with its old and new values.
+ */
+type EventPropertyChangeMap = {
+  [K in keyof UpdateEventDto]?: {
+    old: UpdateEventDto[K];
+    new: UpdateEventDto[K];
   };
 };
+
+/**
+ * Type representing the structure of changes for donor statuses.
+ * Each key corresponds to a DonorStatus with its old and new arrays of Donor objects.
+ */
+type DonorStatusChangeMap = {
+  [K in DonorStatus]?: {
+    old: number[];
+    new: number[];
+  };
+};
+
+export type PropertyChangeMap = EventPropertyChangeMap & DonorStatusChangeMap;
 
 export interface EventChangeHistory {
   /**

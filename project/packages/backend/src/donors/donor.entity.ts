@@ -1,5 +1,6 @@
 import { Donor as DonorInterface } from '@bc-cancer/shared/src/types';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { EventDonor } from 'src/events/event-donor.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Donor implements DonorInterface {
@@ -89,4 +90,9 @@ export class Donor implements DonorInterface {
 
   @Column({ nullable: true })
   communicationPreference?: string;
+
+  @OneToMany(() => EventDonor, (eventDonor) => eventDonor.donor, {
+    cascade: true,
+  })
+  eventDonors: EventDonor[];
 }
