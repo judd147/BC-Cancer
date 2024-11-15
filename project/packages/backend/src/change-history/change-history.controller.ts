@@ -1,5 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ChangeHistoryService } from './change-history.service';
+import { EventChangeHistory } from '@bc-cancer/shared/src/types';
 
 @Controller('events/:eventId/history')
 export class ChangeHistoryController {
@@ -14,7 +15,7 @@ export class ChangeHistoryController {
   async getHistory(
     @Param('eventId', ParseIntPipe) eventId: number,
     @Query('userId', new ParseIntPipe({ optional: true })) userId?: number,
-  ) {
+  ): Promise<EventChangeHistory[]> {
     return this.changeHistoryService.getChangeHistoryForEvent(eventId, userId);
   }
 }

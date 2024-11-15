@@ -11,7 +11,8 @@ content-type: application/json
   "addressLine1": "fvcx",
   "addressLine2": "frefg",
   "city": "sdcx",
-  "date": "2021-12-12"  
+  "date": "2021-12-12",
+  "donorIds": [1, 2, 3, 4, 5]
 }
 
 ### Update an event
@@ -19,7 +20,6 @@ PATCH http://localhost:3000/events/1
 content-type: application/json
 
 {
-  "donorsList": [3],
   "city": "new city"
 }
 

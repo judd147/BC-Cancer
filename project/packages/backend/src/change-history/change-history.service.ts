@@ -4,7 +4,7 @@ import { EventChangeHistory } from './event-change-history.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Event } from '../events/event.entity';
-import { ActionType } from './event-change-history.entity';
+import { EventChangeHistory as IEventChangeHistory } from '@bc-cancer/shared/src/types';
 
 @Injectable()
 export class ChangeHistoryService {
@@ -23,12 +23,12 @@ export class ChangeHistoryService {
   async logChange(
     event: Event,
     user: User,
-    action: ActionType,
+    action: 'created' | 'updated' | 'deleted',
     changes?: Record<string, { old: any; new: any }>,
   ): Promise<EventChangeHistory> {
     const history = this.repo.create({ event, user, action, changes });
     // If the action is 'updated' and there are no changes, don't log anything
-    if (action === ActionType.UPDATED && Object.keys(changes).length === 0) {
+    if (action === 'updated' && Object.keys(changes).length === 0) {
       return null;
     }
     return this.repo.save(history);
@@ -42,7 +42,7 @@ export class ChangeHistoryService {
   async getChangeHistoryForEvent(
     eventId: number,
     userId?: number,
-  ): Promise<EventChangeHistory[]> {
+  ): Promise<IEventChangeHistory[]> {
     const where: FindOptionsWhere<EventChangeHistory> = {
       event: { id: eventId },
     };

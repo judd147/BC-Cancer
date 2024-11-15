@@ -28,13 +28,5 @@ export class UpdateEventDto implements UpdateEvent {
 
   @IsOptional()
   @IsArray()
-  donorsList?: number[];
-
-  @IsOptional()
-  @IsArray()
-  excludedDonors?: number[];
-
-  @IsOptional()
-  @IsArray()
   admins?: number[];
 }

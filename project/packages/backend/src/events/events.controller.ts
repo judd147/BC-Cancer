@@ -18,7 +18,8 @@ import { AuthGuard } from '../guards/auth.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
 import {
-  DonorsStatus,
+  DonorsList,
+  Event,
   UpdateDonorsStatusDto,
 } from '@bc-cancer/shared/src/types';
 
@@ -29,13 +30,12 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get('/:id')
-  getEvent(@Param('id', ParseIntPipe) id: number) {
+  getEvent(@Param('id', ParseIntPipe) id: number): Promise<Event> {
     return this.eventService.getEvent(id);
   }
 
   @Get()
-  getAllEvents() {
-    // Fetch all events via the service
+  getAllEvents(): Promise<Event[]> {
     return this.eventService.getAllEvents();
   }
 
@@ -43,7 +43,7 @@ export class EventController {
   createEvent(
     @Body() createEventDto: CreateEventDto,
     @CurrentUser() user: User,
-  ) {
+  ): Promise<Event> {
     const admins = createEventDto.admins ?? [];
     createEventDto.admins = [...new Set(admins)];
     return this.eventService.createEvent(createEventDto, user);
@@ -54,7 +54,7 @@ export class EventController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateEventDto: Partial<UpdateEventDto>,
     @CurrentUser() user: User,
-  ) {
+  ): Promise<Event> {
     return this.eventService.updateEvent(id, updateEventDto, user);
   }
 
@@ -68,20 +68,17 @@ export class EventController {
   }
 
   @Patch('/:id/donors')
-  updateDonorsStatus(
+  async updateDonorsStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDonorsStatusDto: UpdateDonorsStatusDto,
     @CurrentUser() user: User,
   ) {
-    return this.eventService.updateDonorsStatus(
-      id,
-      updateDonorsStatusDto,
-      user,
-    );
+    await this.eventService.updateDonorsStatus(id, updateDonorsStatusDto, user);
+    return { result: 'Donors updated' };
   }
 
   @Get('/:id/donors')
-  getEventDonors(@Param('id', ParseIntPipe) id: number): Promise<DonorsStatus> {
+  getEventDonors(@Param('id', ParseIntPipe) id: number): Promise<DonorsList> {
     return this.eventService.getEventDonors(id);
   }
 }

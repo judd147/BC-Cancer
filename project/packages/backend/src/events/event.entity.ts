@@ -1,5 +1,3 @@
-import { Event as EventInterface } from '@bc-cancer/shared/src/types';
-import { Donor } from '../donors/donor.entity';
 import { User } from '../users/user.entity';
 import {
   Entity,
@@ -12,9 +10,10 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { EventChangeHistory } from '../change-history/event-change-history.entity';
+import { EventDonor } from './event-donor.entity';
 
 @Entity()
-export class Event implements EventInterface {
+export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -36,13 +35,10 @@ export class Event implements EventInterface {
   @Column({ type: 'date' })
   date: Date;
 
-  @ManyToMany(() => Donor)
-  @JoinTable()
-  donorsList: Donor[];
-
-  @ManyToMany(() => Donor)
-  @JoinTable()
-  excludedDonors: Donor[];
+  @OneToMany(() => EventDonor, (eventDonor) => eventDonor.event, {
+    cascade: true,
+  })
+  eventDonors: EventDonor[];
 
   @ManyToOne(() => User, { eager: true })
   createdBy: User;

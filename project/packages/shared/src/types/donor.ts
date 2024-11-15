@@ -1,3 +1,10 @@
+export const donorStatuses = ["preview", "invited", "excluded"] as const;
+export type DonorStatus = (typeof donorStatuses)[number];
+
+/**
+ * Represents a donor with their donation history.
+ * The response from "GET /donors" endpoint.
+ */
 export interface Donor {
   id: number;
   pmm: string;
@@ -28,7 +35,6 @@ export interface Donor {
   subscriptionEventsInPerson: boolean;
   subscriptionEventsMagazine: boolean;
   communicationPreference?: string;
-  status?: string;
 }
 
 // Query parameters for getting donors
