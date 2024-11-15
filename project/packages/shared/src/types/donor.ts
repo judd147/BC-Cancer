@@ -1,3 +1,6 @@
+export const donorStatuses = ["preview", "invited", "excluded"] as const;
+export type DonorStatus = (typeof donorStatuses)[number];
+
 export interface Donor {
   id: number;
   pmm: string;
@@ -28,7 +31,7 @@ export interface Donor {
   subscriptionEventsInPerson: boolean;
   subscriptionEventsMagazine: boolean;
   communicationPreference?: string;
-  status?: string;
+  status?: DonorStatus;
 }
 
 // Query parameters for getting donors
@@ -47,3 +50,11 @@ export interface GetDonorsParams {
   orderBy?: string;
   orderDirection?: "ASC" | "DESC";
 }
+
+/**
+ * Extends the Donor type to include the status within an event.
+ */
+export type DonorWithStatus = Donor & {
+  /** Current status of the donor within the event */
+  status: DonorStatus;
+};

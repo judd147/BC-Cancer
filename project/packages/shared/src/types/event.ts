@@ -1,51 +1,80 @@
-import { Donor } from "./donor";
+import { DonorStatus, DonorWithStatus } from "./donor";
 import { User } from "./user";
 
+/**
+ * Represents an event with core properties.
+ */
 export interface Event {
+  /** Unique identifier for the event */
   id: number;
+  /** Name of the event */
   name: string;
+  /** Primary address line for the event's location */
   addressLine1: string;
+  /** Secondary address line for the event's location (optional) */
   addressLine2?: string;
+  /** City where the event is held */
   city: string;
+  /** Description of the event (optional) */
   description?: string;
+  /** Date of the event */
   date: Date | string;
-  donorsList: Donor[];
-  excludedDonors: Donor[];
+  /** List of donors associated with the event and their statuses */
+  donors: DonorWithStatus[];
+  /** User who created the event */
   createdBy: User;
+  /** List of users who have admin privileges for the event */
   admins: User[];
 }
 
+/**
+ * DTO for creating a new event.
+ */
 export interface CreateEventDto {
+  /** Name of the event */
   name: string;
+  /** Primary address line for the event's location */
   addressLine1: string;
+  /** Secondary address line for the event's location (optional) */
   addressLine2?: string;
+  /** City where the event is held */
   city: string;
+  /** Description of the event (optional) */
   description?: string;
-  // ISO8601 Format
+  /** Date of the event in ISO8601 format */
   date: string;
-  donorsList?: number[]; // Donor IDs
-  excludedDonors?: number[]; // Donor IDs
-  admins?: number[]; // User IDs
-}
-
-export interface UpdateEventDto {
-  name?: string;
-  addressLine1?: string;
-  addressLine2?: string;
-  city?: string;
-  description?: string;
-  // ISO8601 Format
-  date?: string;
-  donorsList?: number[];
-  excludedDonors?: number[];
+  /** List of donor IDs to be included in the event's initial donor pool */
+  donorIds: number[];
+  /** List of user IDs who will have admin privileges (optional) */
   admins?: number[];
 }
 
-export interface UpdateDonorsStatusDto {
-  donorIds: number[];
-  newStatus: "excluded" | "invited" | "preview";
+/**
+ * DTO for updating the details of an existing event.
+ */
+export interface UpdateEventDto {
+  /** New name for the event (optional) */
+  name?: string;
+  /** Updated primary address line for the event's location (optional) */
+  addressLine1?: string;
+  /** Updated secondary address line for the event's location (optional) */
+  addressLine2?: string;
+  /** Updated city where the event is held (optional) */
+  city?: string;
+  /** Updated description of the event (optional) */
+  description?: string;
+  /** Updated date of the event in ISO8601 format (optional) */
+  date?: string;
+  /** Updated list of user IDs for admin privileges (optional) */
+  admins?: number[];
 }
 
-export type DonorsStatus = (Donor & {
-  status: "excluded" | "invited" | "preview";
-})[];
+/**
+ * DTO for updating the status of donors associated with an event.
+ */
+export interface UpdateDonorsStatusDto {
+  /** List of donor IDs to update */
+  donorIds: number[];
+  /** New status to set for the donors */
+  newStatus: DonorStatus;
+}
