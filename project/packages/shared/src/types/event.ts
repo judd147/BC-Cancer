@@ -3,6 +3,7 @@ import { User } from "./user";
 
 /**
  * Represents an event with core properties.
+ * The response from "GET /events/:id" or "GET /events" endpoints.
  */
 export interface Event {
   /** Unique identifier for the event */
@@ -27,6 +28,7 @@ export interface Event {
 
 /**
  * DTO for creating a new event.
+ * Used in the request body of "POST /events" endpoint.
  */
 export interface CreateEventDto {
   /** Name of the event */
@@ -49,6 +51,7 @@ export interface CreateEventDto {
 
 /**
  * DTO for updating the details of an existing event.
+ * Used in the request body of "PATCH /events/:id" endpoint.
  */
 export interface UpdateEventDto {
   /** New name for the event (optional) */
@@ -69,6 +72,7 @@ export interface UpdateEventDto {
 
 /**
  * DTO for updating the status of donors associated with an event.
+ * Used in the request body of "PATCH /events/:id/donors" endpoint.
  */
 export interface UpdateDonorsStatusDto {
   /** List of donor IDs to update */
@@ -79,5 +83,6 @@ export interface UpdateDonorsStatusDto {
 
 /**
  * Represents an event with donor status information.
+ * The response from "GET /events/:id" endpoint.
  */
 export type DonorsList = { [key in DonorStatus]: Donor[] };

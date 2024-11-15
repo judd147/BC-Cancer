@@ -12,7 +12,6 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 import { Donor } from '../donors/donor.entity';
 import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
-import { ActionType } from '../change-history/event-change-history.entity';
 import {
   UpdateDonorsStatusDto,
   Event as EventResponse,
@@ -78,11 +77,7 @@ export class EventService {
 
     const savedEvent = await this.eventsRepository.save(newEvent);
 
-    await this.changeHistoryService.logChange(
-      savedEvent,
-      user,
-      ActionType.CREATED,
-    );
+    await this.changeHistoryService.logChange(savedEvent, user, 'created');
 
     return savedEvent;
   }
@@ -164,7 +159,7 @@ export class EventService {
     await this.changeHistoryService.logChange(
       updatedEvent,
       user,
-      ActionType.UPDATED,
+      'updated',
       changes,
     );
 
@@ -188,7 +183,7 @@ export class EventService {
       );
     }
 
-    await this.changeHistoryService.logChange(event, user, ActionType.DELETED);
+    await this.changeHistoryService.logChange(event, user, 'deleted');
     await this.eventsRepository.softRemove(event);
     return event;
   }
@@ -327,12 +322,7 @@ export class EventService {
     }
 
     // Log the update action with categorized changes
-    this.changeHistoryService.logChange(
-      event,
-      user,
-      ActionType.UPDATED,
-      changes,
-    );
+    this.changeHistoryService.logChange(event, user, 'updated', changes);
   }
 
   async getEventDonors(id: number): Promise<DonorsList> {
