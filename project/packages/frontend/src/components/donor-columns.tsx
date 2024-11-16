@@ -14,9 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { options } from "@/lib/utils";
 import { ColumnHeader } from "./column-header";
-import { useDonorStore } from "@/DonorStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editEventDonors } from "@/api/queries";
 
-export const columns: ColumnDef<Donor>[] = [
+export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
+  return [
   {
     id: "select",
     header: ({ table }) => (
@@ -143,9 +145,120 @@ export const columns: ColumnDef<Donor>[] = [
   },
   {
     id: "actions",
+    header: ({ table }) => {
+      const queryClient = useQueryClient();
+      const eventDonorMutation = useMutation({
+        mutationFn: editEventDonors,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["donors", eventId] });
+        },
+      });
+
+      const handleInviteSelected = () => {
+        const selectedRows = table.getSelectedRowModel().rows;
+        const donorIds: number[] = [];
+        selectedRows.forEach((row) => {
+          donorIds.push(row.original.id);
+        });
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: donorIds,
+          newStatus: "invited",
+        });
+      };
+
+      const handleExcludeSelected = () => {
+        const selectedRows = table.getSelectedRowModel().rows;
+        const donorIds: number[] = [];
+        selectedRows.forEach((row) => {
+          donorIds.push(row.original.id);
+        });
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: donorIds,
+          newStatus: "excluded",
+        });
+      };
+
+      const handleInviteAll = () => {
+        const allRows = table.getRowModel().rows;
+        const donorIds: number[] = [];
+        allRows.forEach((row) => {
+          donorIds.push(row.original.id);
+        });
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: donorIds,
+          newStatus: "invited",
+        });
+      };
+
+      const handleExcludeAll = () => {
+        const allRows = table.getRowModel().rows;
+        const donorIds: number[] = [];
+        allRows.forEach((row) => {
+          donorIds.push(row.original.id);
+        });
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: donorIds,
+          newStatus: "excluded",
+        });
+      };
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={handleInviteSelected}>
+              Invite Selected
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleExcludeSelected}>
+              Exclude Selected
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={handleInviteAll}>
+              Invite All
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleExcludeAll}>
+              Exclude All
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
     cell: ({ row }) => {
       const donor = row.original
-      const { updateDonorStatus } = useDonorStore();
+      const queryClient = useQueryClient();
+      const eventDonorMutation = useMutation({
+        mutationFn: editEventDonors,
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["donors", eventId] });
+        },
+      });
+
+      const handleInvite = () => {
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: [donor.id],
+          newStatus: "invited",
+        });
+      };
+
+      const handleExclude = () => {
+        eventDonorMutation.mutate({
+          eventId,
+          donorIds: [donor.id],
+          newStatus: "excluded",
+        });
+      };
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -162,10 +275,10 @@ export const columns: ColumnDef<Donor>[] = [
               Copy donor name
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "invited")}>
+            <DropdownMenuItem onSelect={handleInvite}>
               Invite
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => updateDonorStatus(donor.id, "excluded")}>
+            <DropdownMenuItem onSelect={handleExclude}>
               Exclude
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -176,3 +289,4 @@ export const columns: ColumnDef<Donor>[] = [
     enableHiding: false,
   },
 ];
+}

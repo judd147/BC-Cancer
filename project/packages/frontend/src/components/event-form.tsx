@@ -111,7 +111,7 @@ export function EventForm() {
         city: values.city,
         description: values.description,
         date: new Date(values.date).toISOString(),
-        donorsList: donorIds, // Initial as 10 donors' id from the API
+        donorIds: donorIds || [], // Initial as 10 donors' id from the API
       };
 
       // Make a POST request to create the event

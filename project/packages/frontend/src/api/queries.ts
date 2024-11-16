@@ -1,4 +1,4 @@
-import { Event } from "@bc-cancer/shared/src/types/event";
+import { Event, DonorsList } from "@bc-cancer/shared/src/types/event";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { GetDonorsParams } from "@bc-cancer/shared/src/types/donor";
@@ -16,28 +16,6 @@ function buildQueryString(params: GetDonorsParams): string {
   return query.toString();
 }
 
-export const getEvents = async () => {
-  const response = await fetch("http://localhost:3000/events", {
-    method: "GET",
-    credentials: "include",
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch events");
-  }
-  return response.json() as Promise<Event[]>;
-};
-
-export const deleteEvent = async (eventId: number) => {
-  const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete event");
-  }
-  return response.json() as Promise<Event>;
-};
-
 // Add filter as query params
 export const getDonors = async (params: GetDonorsParams = {}) => {
   const queryString = buildQueryString(params);
@@ -51,6 +29,50 @@ export const getDonors = async (params: GetDonorsParams = {}) => {
   return response.json() as Promise<Donor[]>;
 };
 
+export const getEventDonors = async (eventId: number) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}/donors`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch donors");
+  }
+  return response.json() as Promise<DonorsList>;
+};
+
+export const editEventDonors = async ({
+  eventId,
+  donorIds,
+  newStatus,
+}: {
+  eventId: number;
+  donorIds: number[];
+  newStatus: string;
+}) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}/donors`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ donorIds, newStatus }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to edit donors");
+  }
+};
+
+export const getEvents = async () => {
+  const response = await fetch("http://localhost:3000/events", {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch events");
+  }
+  return response.json() as Promise<Event[]>;
+};
+
 export const createEvent = async (event: CreateEventDto) => {
   const response = await fetch("http://localhost:3000/events", {
     method: "POST",
@@ -62,6 +84,17 @@ export const createEvent = async (event: CreateEventDto) => {
   });
   if (!response.ok) {
     throw new Error("Failed to create event");
+  }
+  return response.json() as Promise<Event>;
+};
+
+export const deleteEvent = async (eventId: number) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete event");
   }
   return response.json() as Promise<Event>;
 };

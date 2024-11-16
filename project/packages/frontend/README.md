@@ -5,7 +5,7 @@
 - [x] Setup Tailwind & shadcn UI
 - [x] Routing
   - [x] React Router setup
-  - [x] separate auth stack and app stack (display username after login)
+  - [x] separate auth stack and app stack
 - [x] Scaffold basic UI for each page
   - [x] Login
   - [x] Event
@@ -27,12 +27,12 @@
     - [ ] reuse for updating event
     - [ ] add admins
   - [x] Event detail
-    - [ ] Donor table
+    - [x] Donor table
       - [x] Status tab
       - [x] Row actions
         - [x] Exclude
         - [x] Invite
-        - [ ] Patch status
+        - [x] Patch status
       - [x] Pagination
       - [x] Sorting
       - [x] Filtering

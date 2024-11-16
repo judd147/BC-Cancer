@@ -1,4 +1,6 @@
 import { useLocation } from "react-router-dom";
+import { useMemo } from "react";
+import { Event } from "@bc-cancer/shared/src/types/event";
 import {
   Card,
   CardHeader,
@@ -8,51 +10,27 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { columns } from "@/components/donor-columns"
+import { createColumns } from "@/components/donor-columns"
 import { DonorDataTable } from "@/components/data-table"
 import { options } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect } from "react";
-import { useDonorStore } from "@/DonorStore";
+import { useQuery } from "@tanstack/react-query";
+import { getEventDonors } from "@/api/queries";
 
 export default function EventDetail() {
   const location = useLocation();
-  const { event } = location.state;
-  const { donors, setDonors } = useDonorStore();
-  useEffect(() => { // set initial donors
-    if (donors.length === 0 && event.donorsList) {
-      const initialDonors = event.donorsList.map((donor: { status: string }) => ({
-        ...donor,
-        status: "preview",
-      }));
-      setDonors(initialDonors);
-    }
-  });
-  const previewDonors = donors.filter((donor) => donor.status === "preview");
-  const invitedDonors = donors.filter((donor) => donor.status === "invited");
-  const excludedDonors = donors.filter((donor) => donor.status === "excluded");
+  const { event }: { event: Event } = location.state;
 
-  // useEffect(() => {
-  //   const fetchDonors = async () => {
-  //     try {
-  //       const response = await fetch(`http://localhost:3000/events/9/donors`, {
-  //         method: "GET",
-  //         credentials: "include",
-  //         headers: {
-  //           "Accept": "application/json",
-  //         },
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error(`Error: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       console.log(data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchDonors();
-  // }, []);
+  const { data } = useQuery({
+    queryKey: ["donors", event.id],
+    queryFn: () => getEventDonors(event.id),
+  });
+
+  const previewDonors = data?.preview || [];
+  const invitedDonors = data?.invited || [];
+  const excludedDonors = data?.excluded || [];
+
+  const columns = useMemo(() => createColumns(event.id), [event.id]);
 
   return (
     <div className="container mx-auto py-10 space-y-8">
