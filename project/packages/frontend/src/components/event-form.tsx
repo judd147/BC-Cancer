@@ -33,8 +33,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Event, CreateEventDto } from "@bc-cancer/shared/src/types/event";
-import { getDonors, createEvent } from "@/api/queries";
+import {
+  Event,
+  CreateEventDto,
+  UpdateEventDto,
+} from "@bc-cancer/shared/src/types/event";
+import { getDonors, createEvent, updateEvent } from "@/api/queries";
+import { useMemo } from "react";
 
 const bcCites = [
   "Vancouver",
@@ -46,7 +51,7 @@ const bcCites = [
 ] as const;
 
 // Define validation schema
-const formSchema = z.object({
+const baseFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   addressLine1: z.string().min(1, { message: "Address Line 1 is required." }),
   addressLine2: z.string().optional(),
@@ -62,18 +67,31 @@ const formSchema = z.object({
 
 export function EventForm({ event }: { event?: Event }) {
   const navigate = useNavigate();
-  // Initialize the form with validation schema
+  // Modify schema for editing
+  const formSchema = useMemo(() => {
+    if (event) {
+      return baseFormSchema.extend({
+        donorLimit: z
+          .number()
+          .min(1, { message: "Must be at least 1" })
+          .max(99, { message: "Must be less than 100" })
+          .optional(),
+      });
+    }
+    return baseFormSchema;
+  }, [event]);
+  // Initialize the form with schema and default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: event?.name || "",
       addressLine1: event?.addressLine1 || "",
       addressLine2: event?.addressLine2 || "",
-      city: event?.city as typeof bcCites[number] || undefined,
+      city: (event?.city as (typeof bcCites)[number]) || undefined,
       description: event?.description || "",
       date: event?.date ? new Date(event.date).toISOString() : "",
       donorLimit: undefined,
-      eventCityOnly: false, // Default to not filtering by city
+      eventCityOnly: false,
     },
   });
   const donorQueryParams = {
@@ -89,21 +107,28 @@ export function EventForm({ event }: { event?: Event }) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
-  const eventMutation = useMutation({
+
+  const createEventMutation = useMutation({
     mutationFn: createEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
       navigate("/events");
     },
   });
-  // Handle form submission
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log("Form values:", values);
-    try {
-      // Fetch donors with query params based on user input
-      const donorIds = donorsQuery.data?.map((donor) => donor.id);
 
-      // Create the event data object following the CreateEventDto structure
+  const updateEventMutation = useMutation({
+    mutationFn: updateEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      navigate("/events");
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      // collect donor IDs
+      const donorIds = donorsQuery.data?.map((donor) => donor.id);
+      // prepare event data
       const eventData: CreateEventDto = {
         name: values.name,
         addressLine1: values.addressLine1,
@@ -111,11 +136,29 @@ export function EventForm({ event }: { event?: Event }) {
         city: values.city,
         description: values.description,
         date: new Date(values.date).toISOString(),
-        donorIds: donorIds || [], // Initial as 10 donors' id from the API
+        donorIds: donorIds || [],
       };
+      createEventMutation.mutate(eventData); // request to create the event
+    } catch (error) {
+      console.error("Error creating event:", error);
+      alert("Failed to create event. Please try again.");
+    }
+  }
 
-      // Make a POST request to create the event
-      eventMutation.mutate(eventData);
+  async function onUpdate(values: z.infer<typeof formSchema>) {
+    try {
+      // prepare event data
+      const eventData: UpdateEventDto = {
+        name: values.name,
+        addressLine1: values.addressLine1,
+        addressLine2: values.addressLine2,
+        city: values.city,
+        description: values.description,
+        date: new Date(values.date).toISOString(),
+      };
+      if (event) {
+        updateEventMutation.mutate({ eventId: event.id, event: eventData }); // request to update the event
+      }
     } catch (error) {
       console.error("Error creating event:", error);
       alert("Failed to create event. Please try again.");
@@ -124,7 +167,12 @@ export function EventForm({ event }: { event?: Event }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={
+          event ? form.handleSubmit(onUpdate) : form.handleSubmit(onSubmit)
+        }
+        className="space-y-8"
+      >
         {/* Name field */}
         <FormField
           control={form.control}
@@ -265,53 +313,61 @@ export function EventForm({ event }: { event?: Event }) {
         />
 
         {/* Donor Limit field */}
-        <FormField
-          control={form.control}
-          name="donorLimit"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Donor Limit *</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Enter limit (1-99)"
-                  value={field.value ?? ""}
-                  onChange={(e) =>
-                    field.onChange(
-                      e.target.value ? Number(e.target.value) : undefined,
-                    )
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!event && (
+          <FormField
+            control={form.control}
+            name="donorLimit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Donor Limit *</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder={
+                      event
+                        ? "Enter a new value (1-99) to refetch donors"
+                        : "Enter limit (1-99)"
+                    }
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number(e.target.value) : undefined,
+                      )
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Switch for filtering by city */}
-        <FormField
-          control={form.control}
-          name="eventCityOnly"
-          render={({ field }) => (
-            <FormItem className="flex place-items-center space-x-4">
-              <FormLabel className="mr-2">
-                Invite Donors from Event City Only
-              </FormLabel>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className="!m-0"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        {!event && (
+          <FormField
+            control={form.control}
+            name="eventCityOnly"
+            render={({ field }) => (
+              <FormItem className="flex place-items-center space-x-4">
+                <FormLabel className="mr-2">
+                  Invite Donors from Event City Only
+                </FormLabel>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className="!m-0"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Submit Button */}
         <div className="space-x-4">
           <Button type="submit" className="mt-4">
-            Create
+            {event ? "Update" : "Create"}
           </Button>
           <Button
             variant="outline"
