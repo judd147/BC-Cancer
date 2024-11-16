@@ -10,8 +10,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { createColumns } from "@/components/donor-columns"
-import { DonorDataTable } from "@/components/data-table"
+import { createColumns } from "@/components/donor-columns";
+import { DonorDataTable } from "@/components/data-table";
 import { options } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
@@ -44,30 +44,22 @@ export default function EventDetail() {
           <CardDescription>{event.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Left Column */}
-            <div className="space-y-2">
-              <p>Date: {new Date(event.date).toLocaleString("en-CA", options)}</p>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-gray-500">We look forward to seeing you at the event!</p>
-        </CardFooter>
-      </Card>
-
-      {/* Location Card */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Location</CardTitle>
-        </CardHeader>
-        <CardContent>
           <div className="space-y-2">
-            <p>Address: {event.addressLine1} {event.addressLine2 && `, ${event.addressLine2}`}</p>
+            <p>Date: {new Date(event.date).toLocaleString("en-CA", options)}</p>
+            <p>
+              Address: {event.addressLine1}{" "}
+              {event.addressLine2 && `, ${event.addressLine2}`}
+            </p>
             <p>City: {event.city}</p>
           </div>
         </CardContent>
+        <CardFooter>
+          <p className="text-sm text-gray-500">
+            We look forward to seeing you at the event!
+          </p>
+        </CardFooter>
       </Card>
+
       <Separator />
 
       {/* Tabs for Donors List */}
@@ -89,5 +81,5 @@ export default function EventDetail() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

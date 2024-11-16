@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 import Events from "./pages/events";
 import CreateEvent from "./pages/create-event";
+import EditEvent from "./pages/edit-event";
 import EventDetail from "./pages/event-detail";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route element={<PrivateRoute />}>
         <Route path="events" element={<Events />} />
         <Route path="create-event" element={<CreateEvent />} />
+        <Route path="edit-event" element={<EditEvent />} />
         <Route path="events/:eventId" element={<EventDetail />} />
       </Route>
     </>,

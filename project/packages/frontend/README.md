@@ -13,6 +13,7 @@
   - [x] Event Detail
 - [x] Communicate with backend
   - [x] React Query
+  - [ ] Refactor queries and mutations
 - [x] Implement functionality
   - [x] Login with username/password
   - [x] Event table

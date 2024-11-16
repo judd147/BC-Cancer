@@ -33,7 +33,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
+import { Event, CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { getDonors, createEvent } from "@/api/queries";
 
 const bcCites = [
@@ -60,18 +60,18 @@ const formSchema = z.object({
   eventCityOnly: z.boolean().optional(),
 });
 
-export function EventForm() {
+export function EventForm({ event }: { event?: Event }) {
   const navigate = useNavigate();
   // Initialize the form with validation schema
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      addressLine1: "",
-      addressLine2: "",
-      city: undefined,
-      description: "",
-      date: "",
+      name: event?.name || "",
+      addressLine1: event?.addressLine1 || "",
+      addressLine2: event?.addressLine2 || "",
+      city: event?.city as typeof bcCites[number] || undefined,
+      description: event?.description || "",
+      date: event?.date ? new Date(event.date).toISOString() : "",
       donorLimit: undefined,
       eventCityOnly: false, // Default to not filtering by city
     },
