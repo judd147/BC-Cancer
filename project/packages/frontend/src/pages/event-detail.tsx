@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { createColumns } from "@/components/donor-columns";
 import { DonorDataTable } from "@/components/data-table";
 import { ChangeHistoryScroll } from "@/components/change-history-scroll";
+import { UserAvatar } from "@/components/user-avatar";
 import { options } from "@/lib/utils";
 import {
   Tabs,
@@ -40,8 +41,13 @@ export default function EventDetail() {
 
   return (
     <div className="container mx-auto py-10 space-y-8">
-      {/* Event Title */}
-      <h1 className="text-4xl font-bold text-center">{event.name}</h1>
+      {/* Event Title and User Avatar*/}
+      <div className="relative flex items-center">
+        <h1 className="text-4xl font-bold text-center w-full">{event.name}</h1>
+        <div className="absolute right-0">
+          <UserAvatar />
+        </div>
+    </div>
 
       {/* Event Details, Location, and Change History */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
