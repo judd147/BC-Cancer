@@ -1,6 +1,5 @@
-// Import statements
 import { useLocation } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Event } from "@bc-cancer/shared/src/types/event";
 import {
   Card,
@@ -23,15 +22,6 @@ import {
 } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { getEventDonors } from "@/api/queries";
-import { Button } from "@/components/ui/button"; 
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetClose,
-} from "@/components/ui/sheet"; 
 
 export default function EventDetail() {
   const location = useLocation();
@@ -48,74 +38,62 @@ export default function EventDetail() {
 
   const columns = useMemo(() => createColumns(event.id), [event.id]);
 
-  // State to control the sidebar
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   return (
     <div className="container mx-auto py-10 space-y-8">
       {/* Event Title */}
       <h1 className="text-4xl font-bold text-center">{event.name}</h1>
 
-      {/* Event Details Card */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Event Details</CardTitle>
-          <CardDescription>{event.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Left Column */}
-            <div className="space-y-2">
-              <p>
-                Date: {new Date(event.date).toLocaleString("en-CA", options)}
+      {/* Event Details, Location, and Change History */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Left Column: Event Details and Location */}
+        <div className="space-y-4">
+          {/* Event Details Card */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Event Details</CardTitle>
+              <CardDescription>{event.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p>
+                  Date: {new Date(event.date).toLocaleString("en-CA", options)}
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <p className="text-sm text-gray-500">
+                We look forward to seeing you at the event!
               </p>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-gray-500">
-            We look forward to seeing you at the event!
-          </p>
-        </CardFooter>
-      </Card>
+            </CardFooter>
+          </Card>
 
-      {/* Location Card */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Location</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <p>
-              Address: {event.addressLine1}{" "}
-              {event.addressLine2 && `, ${event.addressLine2}`}
-            </p>
-            <p>City: {event.city}</p>
-          </div>
-        </CardContent>
-      </Card>
+          {/* Location Card */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Location</CardTitle>
+            </CardHeader>
+            <CardContent >
+              <div className="space-y-2">
+                <p>
+                  Address: {event.addressLine1}{" "}
+                  {event.addressLine2 && `, ${event.addressLine2}`}
+                </p>
+                <p>City: {event.city}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Change History Toggle Button under Location Card */}
-      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetTrigger asChild>
-          <Button type="button" className="mt-4">
-            {isSidebarOpen ? "Hide Change History" : "Show Change History"}
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="w-100 flex flex-col">
-          <SheetHeader>
-            <SheetTitle>Change History</SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 flex-grow overflow-y-auto">
+        {/* Right Column: Change History Card */}
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle>Change History</CardTitle>
+          </CardHeader>
+          <CardContent className="overflow-y-auto max-h-[250px]">
             <ChangeHistoryScroll eventId={event.id} />
-          </div>
-          <SheetClose asChild>
-            <Button type="button" className="mt-4">
-              Close
-            </Button>
-          </SheetClose>
-        </SheetContent>
-      </Sheet>
+          </CardContent>
+        </Card>
+      </div>
 
       <Separator />
 
