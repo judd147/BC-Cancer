@@ -1,4 +1,4 @@
-import { Event } from "@bc-cancer/shared/src/types/event";
+import { Event, DonorsList } from "@bc-cancer/shared/src/types/event";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { CreateEventDto } from "@bc-cancer/shared/src/types/event";
 import { GetDonorsParams } from "@bc-cancer/shared/src/types/donor";
@@ -29,7 +29,18 @@ export const getDonors = async (params: GetDonorsParams = {}) => {
   return response.json() as Promise<Donor[]>;
 };
 
-export const editDonors = async ({
+export const getEventDonors = async (eventId: number) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}/donors`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch donors");
+  }
+  return response.json() as Promise<DonorsList>;
+};
+
+export const editEventDonors = async ({
   eventId,
   donorIds,
   newStatus,
@@ -49,8 +60,6 @@ export const editDonors = async ({
   if (!response.ok) {
     throw new Error("Failed to edit donors");
   }
-  console.log(await response.json());
-  return response.json() as Promise<Event[]>;
 };
 
 export const getEvents = async () => {

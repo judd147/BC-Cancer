@@ -32,7 +32,7 @@
       - [x] Row actions
         - [x] Exclude
         - [x] Invite
-        - [ ] Patch status
+        - [x] Patch status
       - [x] Pagination
       - [x] Sorting
       - [x] Filtering
