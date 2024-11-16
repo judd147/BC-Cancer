@@ -12,6 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { createColumns } from "@/components/donor-columns"
 import { DonorDataTable } from "@/components/data-table"
+import { ChangeHistoryScroll } from "@/components/change-history-scroll";
 import { options } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
@@ -88,6 +89,10 @@ export default function EventDetail() {
           <DonorDataTable columns={columns} data={excludedDonors} />
         </TabsContent>
       </Tabs>
+
+      {/* Change History Section */}
+      <Separator />
+      <ChangeHistoryScroll eventId={event.id} />
     </div>
   )
 }
