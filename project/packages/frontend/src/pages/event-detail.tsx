@@ -1,3 +1,4 @@
+// Import statements
 import { useLocation } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Event } from "@bc-cancer/shared/src/types/event";
@@ -23,6 +24,14 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getEventDonors } from "@/api/queries";
 import { Button } from "@/components/ui/button"; 
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetClose,
+} from "@/components/ui/sheet"; 
 
 export default function EventDetail() {
   const location = useLocation();
@@ -39,10 +48,11 @@ export default function EventDetail() {
 
   const columns = useMemo(() => createColumns(event.id), [event.id]);
 
+  // State to control the sidebar
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="container mx-auto py-10 space-y-8 relative">
+    <div className="container mx-auto py-10 space-y-8">
       {/* Event Title */}
       <h1 className="text-4xl font-bold text-center">{event.name}</h1>
 
@@ -56,7 +66,9 @@ export default function EventDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="space-y-2">
-              <p>Date: {new Date(event.date).toLocaleString("en-CA", options)}</p>
+              <p>
+                Date: {new Date(event.date).toLocaleString("en-CA", options)}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -74,20 +86,36 @@ export default function EventDetail() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-              <p>Address: {event.addressLine1} {event.addressLine2 && `, ${event.addressLine2}`}</p>
-              <p>City: {event.city}</p>
+            <p>
+              Address: {event.addressLine1}{" "}
+              {event.addressLine2 && `, ${event.addressLine2}`}
+            </p>
+            <p>City: {event.city}</p>
           </div>
         </CardContent>
       </Card>
 
       {/* Change History Toggle Button under Location Card */}
-      <Button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        type="button"
-        className="mt-4"
-      >
-        {isSidebarOpen ? "Hide Change History" : "Show Change History"}
-      </Button>
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+        <SheetTrigger asChild>
+          <Button type="button" className="mt-4">
+            {isSidebarOpen ? "Hide Change History" : "Show Change History"}
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-100 flex flex-col">
+          <SheetHeader>
+            <SheetTitle>Change History</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4 flex-grow overflow-y-auto">
+            <ChangeHistoryScroll eventId={event.id} />
+          </div>
+          <SheetClose asChild>
+            <Button type="button" className="mt-4">
+              Close
+            </Button>
+          </SheetClose>
+        </SheetContent>
+      </Sheet>
 
       <Separator />
 
@@ -109,18 +137,6 @@ export default function EventDetail() {
           <DonorDataTable columns={columns} data={excludedDonors} />
         </TabsContent>
       </Tabs>
-
-      {/* Change History Sidebar */}
-      {isSidebarOpen && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-white shadow-lg z-50 flex flex-col">
-          <div className="flex-shrink-0 p-4 border-b">
-            <h2 className="text-xl font-bold">Change History</h2>
-          </div>
-          <div className="flex-grow overflow-y-auto">
-            <ChangeHistoryScroll eventId={event.id} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
