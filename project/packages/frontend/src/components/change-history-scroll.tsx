@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getEventChangeHistory } from "@/api/queries";
-import { ScrollArea } from "@/components/ui/scroll-area";
+// import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 interface ChangeHistoryProps {

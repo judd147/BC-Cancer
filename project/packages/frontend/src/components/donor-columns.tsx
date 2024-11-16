@@ -151,6 +151,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
         mutationFn: editEventDonors,
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["donors", eventId] });
+          queryClient.invalidateQueries({queryKey: ["eventHistory", eventId]}); // Invalidate change history query
         },
       });
 
@@ -241,6 +242,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
         mutationFn: editEventDonors,
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["donors", eventId] });
+          queryClient.invalidateQueries({queryKey: ["eventHistory", eventId]}); // Invalidate change history query
         },
       });
 
