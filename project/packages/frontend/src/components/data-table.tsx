@@ -190,7 +190,6 @@ export function DonorDataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const isPinned = header.column.getIsPinned();
-                  console.log(isPinned);
                   return (
                     <TableHead key={header.id} className={`
                       ${isPinned === 'right' ? 'sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}

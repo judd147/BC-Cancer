@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import { Event } from "@bc-cancer/shared/src/types/event";
 import {
@@ -15,16 +15,13 @@ import { DonorDataTable } from "@/components/data-table";
 import { ChangeHistoryScroll } from "@/components/change-history-scroll";
 import { UserAvatar } from "@/components/user-avatar";
 import { options } from "@/lib/utils";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { getEventDonors } from "@/api/queries";
+import { Button } from "@/components/ui/button";
 
 export default function EventDetail() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { event }: { event: Event } = location.state;
 
@@ -43,11 +40,12 @@ export default function EventDetail() {
     <div className="container mx-auto py-10 space-y-8">
       {/* Event Title and User Avatar*/}
       <div className="relative flex items-center">
+        <Button onClick={() => navigate("/events")}>Back</Button>
         <h1 className="text-4xl font-bold text-center w-full">{event.name}</h1>
         <div className="absolute right-0">
           <UserAvatar />
         </div>
-    </div>
+      </div>
 
       {/* Event Details, Location, and Change History */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -78,7 +76,7 @@ export default function EventDetail() {
             <CardHeader>
               <CardTitle>Location</CardTitle>
             </CardHeader>
-            <CardContent >
+            <CardContent>
               <div className="space-y-2">
                 <p>
                   Address: {event.addressLine1}{" "}
