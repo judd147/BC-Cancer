@@ -162,6 +162,9 @@ export function DonorDataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+      columnPinning: {
+        right: ['actions'],
+      },
     },
   });
 
@@ -186,8 +189,11 @@ export function DonorDataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  const isPinned = header.column.getIsPinned();
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className={`
+                      ${isPinned === 'right' ? 'sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}
+                    `}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -207,14 +213,22 @@ export function DonorDataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const isPinned = cell.column.getIsPinned();
+                    return (
+                      <TableCell 
+                        key={cell.id}
+                        className={`
+                          ${isPinned === 'right' ? 'sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}
+                        `}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (

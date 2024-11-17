@@ -16,14 +16,15 @@
   - [ ] Refactor queries and mutations
 - [x] Implement functionality
   - [x] Login with username/password
+  - [x] Logout and user avatar
   - [x] Event table
     - [x] Row actions
-      - [ ] Edit
+      - [x] Edit
       - [x] Delete
     - [x] Pagination
     - [x] Sorting
     - [x] Filtering
-  - [x] Create new event
+  - [x] Create/Edit event
     - [x] filter by city & limit
     - [x] reuse for updating event
     - [ ] add admins
@@ -39,10 +40,5 @@
       - [x] Filtering
       - [x] Column visibility
       - [ ] Global search & category filter
-    - [ ] Change history
-
-## Components for Future Reusability
-
-- User Avatar
-
-  - `./src/pages/creat-event.tsx`: Right side of the header on the create-event page
+    - [x] Change history
+      - [ ] improve UI
