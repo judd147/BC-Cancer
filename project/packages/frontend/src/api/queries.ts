@@ -5,6 +5,7 @@ import {
   UpdateEventDto,
 } from "@bc-cancer/shared/src/types/event";
 import { Donor, GetDonorsParams } from "@bc-cancer/shared/src/types/donor";
+import { EventChangeHistory } from "@bc-cancer/shared/src/types/change-history";
 
 // Function to build query string from params
 function buildQueryString(params: GetDonorsParams): string {
@@ -128,3 +129,14 @@ export const deleteEvent = async (eventId: number) => {
   }
   return response.json() as Promise<Event>;
 };
+
+export const getEventChangeHistory = async (eventId: number) => {
+  const response = await fetch(`http://localhost:3000/events/${eventId}/history`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch event change history");
+  }
+  return response.json() as Promise<EventChangeHistory[]>;
+}

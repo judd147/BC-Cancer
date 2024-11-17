@@ -12,8 +12,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { createColumns } from "@/components/donor-columns";
 import { DonorDataTable } from "@/components/data-table";
+import { ChangeHistoryScroll } from "@/components/change-history-scroll";
+import { UserAvatar } from "@/components/user-avatar";
 import { options } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { getEventDonors } from "@/api/queries";
 
@@ -34,31 +41,65 @@ export default function EventDetail() {
 
   return (
     <div className="container mx-auto py-10 space-y-8">
-      {/* Event Title */}
-      <h1 className="text-4xl font-bold text-center">{event.name}</h1>
+      {/* Event Title and User Avatar*/}
+      <div className="relative flex items-center">
+        <h1 className="text-4xl font-bold text-center w-full">{event.name}</h1>
+        <div className="absolute right-0">
+          <UserAvatar />
+        </div>
+    </div>
 
-      {/* Event Details Card */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Event Details</CardTitle>
-          <CardDescription>{event.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <p>Date: {new Date(event.date).toLocaleString("en-CA", options)}</p>
-            <p>
-              Address: {event.addressLine1}{" "}
-              {event.addressLine2 && `, ${event.addressLine2}`}
-            </p>
-            <p>City: {event.city}</p>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-gray-500">
-            We look forward to seeing you at the event!
-          </p>
-        </CardFooter>
-      </Card>
+      {/* Event Details, Location, and Change History */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Left Column: Event Details and Location */}
+        <div className="space-y-4">
+          {/* Event Details Card */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Event Details</CardTitle>
+              <CardDescription>{event.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p>
+                  Date: {new Date(event.date).toLocaleString("en-CA", options)}
+                </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <p className="text-sm text-gray-500">
+                We look forward to seeing you at the event!
+              </p>
+            </CardFooter>
+          </Card>
+
+          {/* Location Card */}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Location</CardTitle>
+            </CardHeader>
+            <CardContent >
+              <div className="space-y-2">
+                <p>
+                  Address: {event.addressLine1}{" "}
+                  {event.addressLine2 && `, ${event.addressLine2}`}
+                </p>
+                <p>City: {event.city}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column: Change History Card */}
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle>Change History</CardTitle>
+          </CardHeader>
+          <CardContent className="overflow-y-auto max-h-[250px]">
+            <ChangeHistoryScroll eventId={event.id} />
+          </CardContent>
+        </Card>
+      </div>
 
       <Separator />
 
