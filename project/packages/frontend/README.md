@@ -13,6 +13,7 @@
   - [x] Event Detail
 - [x] Communicate with backend
   - [x] React Query
+  - [ ] Refactor queries and mutations
 - [x] Implement functionality
   - [x] Login with username/password
   - [x] Event table
@@ -24,7 +25,7 @@
     - [x] Filtering
   - [x] Create new event
     - [x] filter by city & limit
-    - [ ] reuse for updating event
+    - [x] reuse for updating event
     - [ ] add admins
   - [x] Event detail
     - [x] Donor table
@@ -37,6 +38,7 @@
       - [x] Sorting
       - [x] Filtering
       - [x] Column visibility
+      - [ ] Global search & category filter
     - [ ] Change history
 
 ## Components for Future Reusability

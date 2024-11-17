@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { ColumnDef } from "@tanstack/react-table";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Event } from "@bc-cancer/shared/src/types/event";
 import { options } from "@/lib/utils";
 import { MoreHorizontal } from "lucide-react";
@@ -17,10 +17,6 @@ import {
 import { ColumnHeader } from "./column-header";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteEvent } from "@/api/queries";
-
-const handleEditEvent = async (event: Event) => {
-  console.log("Edit event:", event);
-};
 
 export const columns: ColumnDef<Event>[] = [
   {
@@ -77,6 +73,14 @@ export const columns: ColumnDef<Event>[] = [
     },
   },
   {
+    accessorKey: "createdBy",
+    header: ({ column }) => <ColumnHeader column={column} title="Created By" />,
+    cell: ({ row }) => {
+      const user = row.original.createdBy;
+      return <div>{user.username}</div>;
+    },
+  },
+  {
     id: "actions",
     header: ({ table }) => {
       const queryClient = useQueryClient();
@@ -124,6 +128,11 @@ export const columns: ColumnDef<Event>[] = [
       );
     },
     cell: ({ row }) => {
+      const navigate = useNavigate();
+      const handleEditEvent = async (event: Event) => {
+        navigate("/edit-event", { state: { event } });
+      };
+
       const queryClient = useQueryClient();
       const eventMutation = useMutation({
         mutationFn: deleteEvent,

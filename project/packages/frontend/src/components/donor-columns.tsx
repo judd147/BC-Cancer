@@ -144,6 +144,46 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
     },
   },
   {
+    accessorKey: "addressLine1",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Address Line 1" />
+    ),
+  },
+  {
+    accessorKey: "addressLine2",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Address Line 2" />
+    ),
+  },
+  {
+    accessorKey: "contactPhoneType",
+    header: ({ column }) => <ColumnHeader column={column} title="Contact Phone Type" />,
+  },
+  {
+    accessorKey: "phoneRestrictions",
+    header: ({ column }) => <ColumnHeader column={column} title="Phone Restrictions" />,
+  },
+  {
+    accessorKey: "emailRestrictions",
+    header: ({ column }) => <ColumnHeader column={column} title="Email Restrictions" />,
+  },
+  {
+    accessorKey: "communicationRestrictions",
+    header: ({ column }) => <ColumnHeader column={column} title="Communication Restrictions" />,
+  },
+  {
+    accessorKey: "subscriptionEventsInPerson",
+    header: ({ column }) => <ColumnHeader column={column} title="Subscription Events In Person" />,
+  },
+  {
+    accessorKey: "subscriptionEventsMagazine",
+    header: ({ column }) => <ColumnHeader column={column} title="Subscription Events Magazine" />,
+  },
+  {
+    accessorKey: "communicationPreference",
+    header: ({ column }) => <ColumnHeader column={column} title="Communication Preference" />,
+  },
+  { 
     id: "actions",
     header: ({ table }) => {
       const queryClient = useQueryClient();
