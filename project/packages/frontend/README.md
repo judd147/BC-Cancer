@@ -35,6 +35,7 @@
         - [x] Exclude
         - [x] Invite
         - [x] Patch status
+        - [ ] Document reasons for change
       - [x] Pagination
       - [x] Sorting
       - [x] Filtering
@@ -42,3 +43,4 @@
       - [ ] Global search & category filter
     - [x] Change history
       - [ ] improve UI
+      - [ ] reflect reasons for change

@@ -94,7 +94,7 @@ export default function EventDetail() {
             <CardTitle>Change History</CardTitle>
           </CardHeader>
           <CardContent className="overflow-y-auto max-h-[250px]">
-            <ChangeHistoryScroll eventId={event.id} />
+            <ChangeHistoryScroll eventId={event.id} donors={[...previewDonors, ...invitedDonors, ...excludedDonors]} />
           </CardContent>
         </Card>
       </div>
