@@ -94,7 +94,10 @@ export default function EventDetail() {
             <CardTitle>Change History</CardTitle>
           </CardHeader>
           <CardContent className="overflow-y-auto max-h-[250px]">
-            <ChangeHistoryScroll eventId={event.id} donors={[...previewDonors, ...invitedDonors, ...excludedDonors]} />
+            <ChangeHistoryScroll
+              eventId={event.id}
+              donors={[...previewDonors, ...invitedDonors, ...excludedDonors]}
+            />
           </CardContent>
         </Card>
       </div>
@@ -104,9 +107,15 @@ export default function EventDetail() {
       {/* Tabs for Donors List */}
       <Tabs defaultValue="preview">
         <TabsList className="grid grid-cols-3 w-1/3">
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="invited">Invited</TabsTrigger>
-          <TabsTrigger value="excluded">Excluded</TabsTrigger>
+          <TabsTrigger value="preview">
+            Preview ({previewDonors.length})
+          </TabsTrigger>
+          <TabsTrigger value="invited">
+            Invited ({invitedDonors.length})
+          </TabsTrigger>
+          <TabsTrigger value="excluded">
+            Excluded ({excludedDonors.length})
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="preview">
