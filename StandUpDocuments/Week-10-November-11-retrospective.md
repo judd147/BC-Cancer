@@ -1,46 +1,44 @@
 # Retrospective Document Template
 
 ## Team Name
-[Insert Team Name Here]
+ClientFirst Solutions
 
 ## Date
 Week 10 November 11
 
 ## Participants
-- [Team Member 1]
-- [Team Member 2]
-- [Team Member 3]
-- [Team Member 4]
-- [Team Member 5]
+- Tsz Wai Tam
+- Liyao Zhang
+- Jiahuan He
+- Yuxin Wang (Nora)
+- Harshil Chudasama
 
 ---
 
 ## Overview
-Briefly describe the purpose of this retrospective and what you aim to achieve.
+The purpose of this repository is to review the activities of the previous week, summarize the successes and failures, and thereby aspire to achieve more productive results in the current week.
 
 ---
 
 ## What Went Well
 List the things that went well during the project.
--
--
--
+- Prepared for MVP presentation.
+- Added more features to our project.
+- Learned new knowledge as always.
 
 ---
 
 ## What Could Be Improved
 List the areas where there is room for improvement.
--
--
+- More clear task splitting.
 -
 
 ---
 
 ## Action Items
 Identify actionable steps that can be taken to improve future projects.
-1.
-2.
-3.
+1. Ramp up the project.
+2. Prepare for the final presentation.
 
 ---
 
@@ -55,15 +53,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   -
 
-### [Team Member 2]
+### Jiahuan He
 - **Achievements and Contributions:**
-  -
+  - Adjusted some features of Event Obj.
+  - Started DB self-learning.
 - **Challenges Faced:**
-  -
+  - Not familiar with frontend features. 
 - **Areas for Improvement:**
-  -
+  - Check more external resources. 
 - **Feedback and Suggestions:**
-  -
+  - Same as above.
 
 ### [Team Member 3]
 - **Achievements and Contributions:**
