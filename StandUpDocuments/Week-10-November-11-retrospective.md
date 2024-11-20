@@ -43,15 +43,15 @@ Identify actionable steps that can be taken to improve future projects.
 ---
 
 ## Individual Self-Assessments
-### [Team Member 1]
+### Tsz Wai Tam
 - **Achievements and Contributions:**
-  -
+  - Prepared for MVP presentation.
 - **Challenges Faced:**
-  -
+  - TypeScript complier error.
 - **Areas for Improvement:**
-  -
+  - No
 - **Feedback and Suggestions:**
-  -
+  - No
 
 ### Jiahuan He
 - **Achievements and Contributions:**
