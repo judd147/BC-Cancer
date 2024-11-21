@@ -68,6 +68,8 @@ export interface UpdateEventDto {
   date?: string;
   /** Updated list of user IDs for admin privileges (optional) */
   admins?: number[];
+  /** Comment to be included with the change history (optional) */
+  comment?: string;
 }
 
 /**
@@ -79,10 +81,14 @@ export interface UpdateDonorsStatusDto {
   donorIds: number[];
   /** New status to set for the donors */
   newStatus: DonorStatus;
+  /** Comment to be included with the change history (optional) */
+  comment?: string;
 }
 
 /**
  * Represents an event with donor status information.
  * The response from "GET /events/:id" endpoint.
  */
-export type DonorsList = { [key in DonorStatus]: Donor[] };
+export type DonorsList = {
+  [key in DonorStatus]: (Donor & { comment?: string })[];
+};

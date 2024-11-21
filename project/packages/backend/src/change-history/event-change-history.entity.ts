@@ -33,4 +33,7 @@ export class EventChangeHistory {
 
   @Column('json', { nullable: true })
   changes: Record<string, { old: any; new: any }>;
+
+  @Column({ nullable: true })
+  comment?: string;
 }

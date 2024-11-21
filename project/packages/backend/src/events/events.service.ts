@@ -13,13 +13,13 @@ import { Donor } from '../donors/donor.entity';
 import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import {
-  UpdateDonorsStatusDto,
   Event as EventResponse,
   // donorStatuses, // BUG: import this will cause MODULE_NOT_FOUND error
   DonorsList,
   DonorStatus,
 } from '@bc-cancer/shared/src/types';
 import { EventDonor } from './event-donor.entity';
+import { UpdateDonorsStatusDto } from './dtos/update-donor-status.dto';
 
 export const donorStatuses = ['preview', 'invited', 'excluded'] as const;
 
@@ -161,6 +161,7 @@ export class EventService {
       user,
       'updated',
       changes,
+      updateData.comment,
     );
 
     return updatedEvent;
@@ -271,10 +272,15 @@ export class EventService {
     // Update existing donors' status
     const updatedDonorIds: number[] = [];
     for (const eventDonor of donorsToUpdate) {
-      if (eventDonor.status !== newStatus) {
+      // Update the status and comment if they have changed
+      if (
+        eventDonor.status !== newStatus ||
+        eventDonor.comment !== updateDonorsStatusDto.comment
+      ) {
         eventDonor.status = newStatus;
-        await this.eventDonorRepository.save(eventDonor);
         updatedDonorIds.push(eventDonor.donor.id);
+        eventDonor.comment = updateDonorsStatusDto.comment;
+        await this.eventDonorRepository.save(eventDonor);
       }
     }
 
@@ -334,7 +340,13 @@ export class EventService {
     }
 
     // Log the update action with categorized changes
-    this.changeHistoryService.logChange(event, user, 'updated', changes);
+    this.changeHistoryService.logChange(
+      event,
+      user,
+      'updated',
+      changes,
+      updateDonorsStatusDto.comment,
+    );
   }
 
   async getEventDonors(id: number): Promise<DonorsList> {
@@ -359,7 +371,11 @@ export class EventService {
     for (const eventDonor of event.eventDonors) {
       // Ensure the status is valid
       if (Object.values(donorStatuses).includes(eventDonor.status)) {
-        donorsList[eventDonor.status].push(eventDonor.donor);
+        donorsList[eventDonor.status].push({
+          ...eventDonor.donor,
+          comment: eventDonor.comment,
+        });
+        console.log(eventDonor.comment);
       }
     }
 

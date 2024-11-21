@@ -34,8 +34,9 @@ PATCH http://localhost:3000/events/1/donors
 content-type: application/json
 
 {
-  "donorIds": [1,2,3],
-  "newStatus": "invited"
+  "donorIds": [4],
+  "newStatus": "invited",
+  "comment": "Contacted via phonesss"
 }
 
 ### GET all donors of an event

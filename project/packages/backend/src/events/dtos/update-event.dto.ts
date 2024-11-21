@@ -29,4 +29,8 @@ export class UpdateEventDto implements UpdateEvent {
   @IsOptional()
   @IsArray()
   admins?: number[];
+
+  @IsOptional()
+  @IsString()
+  comment?: string;
 }

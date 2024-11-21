@@ -25,8 +25,9 @@ export class ChangeHistoryService {
     user: User,
     action: 'created' | 'updated' | 'deleted',
     changes?: Record<string, { old: any; new: any }>,
+    comment?: string,
   ): Promise<EventChangeHistory> {
-    const history = this.repo.create({ event, user, action, changes });
+    const history = this.repo.create({ event, user, action, changes, comment });
     // If the action is 'updated' and there are no changes, don't log anything
     if (action === 'updated' && Object.keys(changes).length === 0) {
       return null;

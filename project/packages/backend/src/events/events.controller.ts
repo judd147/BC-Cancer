@@ -17,11 +17,8 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
-import {
-  DonorsList,
-  Event,
-  UpdateDonorsStatusDto,
-} from '@bc-cancer/shared/src/types';
+import { DonorsList, Event } from '@bc-cancer/shared/src/types';
+import { UpdateDonorsStatusDto } from './dtos/update-donor-status.dto';
 
 @Controller('events')
 @UseGuards(AuthGuard)
