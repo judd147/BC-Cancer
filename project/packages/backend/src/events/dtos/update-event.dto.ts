@@ -33,4 +33,8 @@ export class UpdateEventDto implements UpdateEvent {
   @IsOptional()
   @IsString()
   comment?: string;
+
+  @IsOptional()
+  @IsArray()
+  tags?: string[];
 }

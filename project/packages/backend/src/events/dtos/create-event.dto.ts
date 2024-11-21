@@ -29,6 +29,10 @@ export class CreateEventDto implements CreateEvent {
   description?: string;
 
   @IsArray()
+  @IsOptional()
+  tags?: string[];
+
+  @IsArray()
   @ArrayUnique()
   @IsNotEmpty()
   donorIds: number[];

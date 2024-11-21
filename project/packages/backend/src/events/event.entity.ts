@@ -40,6 +40,16 @@ export class Event {
   })
   eventDonors: EventDonor[];
 
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value: string[]) => (value ? value.join(',') : ''),
+      from: (value: string) => (value ? value.split(',') : []),
+    },
+  })
+  tags: string[];
+
   @ManyToOne(() => User, { eager: true })
   createdBy: User;
 

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Donor } from '../donors/donor.entity'; // Adjust the path as necessary
 import { Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
+import { randomInt } from 'crypto';
 
 @Injectable()
 export class SeederService implements OnModuleInit {
@@ -34,13 +35,76 @@ export class SeederService implements OnModuleInit {
 
     const initialDonors: Partial<Donor>[] = [];
 
-    const bcCites = [
-      'Vancouver',
-      'Victoria',
-      'Surrey',
-      'Burnaby',
-      'Kelowna',
-      'Nanaimo',
+    const bcCities = [
+      "Abbotsford",
+      "Armstrong",
+      "Burnaby",
+      "Campbell River",
+      "Castlegar",
+      "Chilliwack",
+      "Colwood",
+      "Coquitlam",
+      "Courtenay",
+      "Cranbrook",
+      "Dawson Creek",
+      "Delta",
+      "Duncan",
+      "Enderby",
+      "Fernie",
+      "Fort St. John",
+      "Grand Forks",
+      "Greenwood",
+      "Kamloops",
+      "Kelowna",
+      "Kimberley",
+      "Langford",
+      "Langley",
+      "Maple Ridge",
+      "Merritt",
+      "Mission",
+      "Nanaimo",
+      "Nelson",
+      "New Westminster",
+      "North Vancouver",
+      "Parksville",
+      "Penticton",
+      "Pitt Meadows",
+      "Port Alberni",
+      "Port Coquitlam",
+      "Port Moody",
+      "Powell River",
+      "Prince George",
+      "Prince Rupert",
+      "Quesnel",
+      "Revelstoke",
+      "Richmond",
+      "Rossland",
+      "Salmon Arm",
+      "Surrey",
+      "Terrace",
+      "Trail",
+      "Vancouver",
+      "Vernon",
+      "Victoria",
+      "West Kelowna",
+      "White Rock",
+      "Williams Lake"
+    ];
+
+    const interests = [
+      "Bladder Cancer",
+      "Breast Cancer",
+      "Colon and Rectal Cancer",
+      "Endometrial Cancer",
+      "Kidney Cancer",
+      "Leukemia",
+      "Liver",
+      "Lung Cancer",
+      "Melanoma",
+      "Non-Hodgkin Lymphoma",
+      "Pancreatic Cancer",
+      "Prostate Cancer",
+      "Thyroid Cancer"
     ];
 
     for (let i = 0; i < donorsToCreate; i++) {
@@ -62,7 +126,8 @@ export class SeederService implements OnModuleInit {
         addressLine2: faker.datatype.boolean()
           ? faker.location.secondaryAddress()
           : null,
-        city: faker.helpers.arrayElement(bcCites),
+        city: faker.helpers.arrayElement(bcCities),
+        interests: faker.helpers.shuffle(interests).slice(0, randomInt(0, 7)),
         contactPhoneType: faker.helpers.arrayElement([
           'Mobile',
           'Home',

@@ -28,6 +28,7 @@ export interface Donor {
   addressLine1: string;
   addressLine2?: string;
   city: string;
+  interests: string[];
   contactPhoneType: string;
   phoneRestrictions?: string;
   emailRestrictions?: string;
@@ -44,6 +45,7 @@ export interface GetDonorsParams {
   exclude?: boolean;
   deceased?: boolean;
   city?: string;
+  interests?: string[];
   minTotalDonations?: number;
   maxTotalDonations?: number;
   firstGiftDateFrom?: Date;

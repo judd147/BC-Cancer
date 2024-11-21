@@ -24,6 +24,8 @@ export interface Event {
   createdBy: User;
   /** List of users who have admin privileges for the event */
   admins: User[];
+  /** Tags of the event */
+  tags: string[];
 }
 
 /**
@@ -49,6 +51,8 @@ export interface CreateEventDto {
   admins?: number[];
   /** Comment to be included with the change history (optional) */
   comment?: string;
+  /** List of tags for the event (optional) */
+  tags?: string[];
 }
 
 /**
@@ -72,6 +76,8 @@ export interface UpdateEventDto {
   admins?: number[];
   /** Comment to be included with the change history (optional) */
   comment?: string;
+  /** Updated list of tags for the event (optional) */
+  tags?: string[];
 }
 
 /**

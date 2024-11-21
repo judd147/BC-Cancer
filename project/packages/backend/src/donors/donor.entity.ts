@@ -95,4 +95,14 @@ export class Donor implements DonorInterface {
     cascade: true,
   })
   eventDonors: EventDonor[];
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value: string[]) => (value ? value.join(',') : ''),
+      from: (value: string) => (value ? value.split(',') : []),
+    },
+  })
+  interests: string[];
 }

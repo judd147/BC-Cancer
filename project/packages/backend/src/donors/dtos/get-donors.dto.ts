@@ -30,6 +30,10 @@ export class GetDonorsDto implements GetDonorsParams {
   city?: string;
 
   @IsOptional()
+  @IsString({ each: true })
+  interests?: string[];
+
+  @IsOptional()
   @IsNumber()
   minTotalDonations?: number;
 

@@ -79,6 +79,7 @@ describe('EventService', () => {
         city: 'Test City',
         description: 'Test Description',
         donorIds: [1, 2],
+        tags: ['breast cancer'],
       };
       const user: User = { id: 1 } as User;
       const donorsList: Donor[] = [];

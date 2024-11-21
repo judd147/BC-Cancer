@@ -14,7 +14,6 @@ import { ChangeHistoryService } from '../change-history/change-history.service';
 import { User } from '../users/user.entity';
 import {
   Event as EventResponse,
-  // donorStatuses, // BUG: import this will cause MODULE_NOT_FOUND error
   DonorsList,
   DonorStatus,
 } from '@bc-cancer/shared/src/types';
@@ -73,6 +72,7 @@ export class EventService {
       eventDonors,
       createdBy: user,
       admins,
+      tags: eventData.tags ?? [],
     });
 
     const savedEvent = await this.eventsRepository.save(newEvent);
@@ -133,31 +133,24 @@ export class EventService {
       );
     }
 
-    const admins: User[] = [
-      ...(await this.usersRepository.find({
-        where: { id: In([...(updateData.admins ?? [])]) },
-      })),
-    ];
-
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (['admins', 'comment'].includes(key)) {
-        // handle donorsList and admins separately
+      if (['admin', 'tags'].includes(key)) {
+        // handle changes of list of objects
+        this.recordDiff(
+          event[key],
+          updateData[key],
+          key,
+          changes,
+        );        
+      } else if (['comment'].includes(key)) {
         // skip the comment key as it is for logging only
         continue;
-      }
-      // Compare the old and new values
-      if (event[key] !== updateData[key]) {
+      } else if (event[key] !== updateData[key]) {
         // Log the change
         changes[key] = { old: event[key], new: updateData[key] };
-        event[key] = updateData[key];
-      }
-    }
-
-    // Handle admins changes
-    if (updateData.admins) {
-      this.recordDiff(event.admins, admins, 'admins', changes);
-      event.admins = admins;
+      }      
+      event[key] = updateData[key];
     }
 
     const updatedEvent = await this.eventsRepository.save(event);

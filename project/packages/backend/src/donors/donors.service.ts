@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Donor } from './donor.entity';
 import { GetDonorsDto } from './dtos/get-donors.dto';
 
@@ -15,6 +15,7 @@ export class DonorsService {
       exclude,
       deceased,
       city,
+      interests,
       minTotalDonations,
       maxTotalDonations,
       firstGiftDateFrom,
@@ -51,6 +52,14 @@ export class DonorsService {
       query.andWhere('donor.city LIKE :city', {
         city: `%${city}%`,
       });
+    }
+
+    if (interests && interests.length > 0) {
+      query.andWhere(new Brackets(qb => {
+        interests.forEach(interest => {
+          qb.orWhere('donor.interests LIKE :interest', { interest: `%${interest}%` });
+        });
+      }));
     }
 
     if (minTotalDonations !== undefined) {
