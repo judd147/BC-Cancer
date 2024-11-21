@@ -64,15 +64,16 @@ Identify actionable steps that can be taken to improve future projects.
 - **Feedback and Suggestions:**
   - Same as above.
 
-### [Team Member 3]
+### Liyao Zhang
 - **Achievements and Contributions:**
-  -
+  - Implemented Edit Event screen.
+  - Improved UIs of change history and data-table.
 - **Challenges Faced:**
-  -
+  - Arrange time for presentation practice.
 - **Areas for Improvement:**
-  -
+  - NA
 - **Feedback and Suggestions:**
-  -
+  - Make sure we practice as a team before final presentation.
 
 ### [Team Member 4]
 - **Achievements and Contributions:**
