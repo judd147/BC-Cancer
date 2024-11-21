@@ -135,14 +135,22 @@ export class EventService {
 
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (['admin', 'tags'].includes(key)) {
-        // handle changes of list of objects
+      if (['admin'].includes(key)) {
+        // handle changes of admins
         this.recordDiff(
           event[key],
           updateData[key],
           key,
           changes,
         );        
+      } else if (['tags'].includes(key)) {
+        // handle changes of tags
+        const oldTags = event.tags ?? [];
+        const newTags = updateData.tags ?? [];
+        if (oldTags.join(',') !== newTags.join(',')) {
+          changes[key] = { old: oldTags, new: newTags };
+        }
+        event[key] = newTags;
       } else if (['comment'].includes(key)) {
         // skip the comment key as it is for logging only
         continue;

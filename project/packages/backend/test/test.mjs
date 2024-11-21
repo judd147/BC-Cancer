@@ -92,7 +92,7 @@ const requestBody = {
 
 console.log('Request Body:', requestBody);
 
-const eventRes = await fetch('http://localhost:3000/events/16', {
+const eventRes = await fetch('http://localhost:3000/events/10', {
   method: 'PATCH',
   headers: {
     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ if (!eventRes.ok) {
 
 // console.log('Request Body:', requestBody);
 
-// const eventRes = await fetch('http://localhost:3000/events/9/donors', {
+// const eventRes = await fetch('http://localhost:3000/events/10/donors', {
 //   method: 'PATCH',
 //   headers: {
 //     'Content-Type': 'application/json',
@@ -137,34 +137,19 @@ if (!eventRes.ok) {
 //   console.log('Succeed in updating events\' donors::\n', JSON.stringify(eventResBody, null, 2));
 // }
 
-// const tags = await fetch('http://localhost:3000/tags', {
-//   headers: {
-//     'Cookie': sessionCookie,
-//   },
-// });
 
-// const tagsBody = await tags.json();
-// console.log('Tags:', JSON.stringify(tagsBody, null, 2));
+const donorsRes = await fetch('http://localhost:3000/events/10/history', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Cookie': sessionCookie,
+  },
+});
 
-// const requestBodyForCreateTag = {
-//   name: 'Test Tag',
-// };
+const donorResBody = await donorsRes.json();
 
-// console.log('Request Body:', requestBodyForCreateTag);
-
-// const createTagRes = await fetch('http://localhost:3000/tags', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'Cookie': sessionCookie,
-//   },
-//   body: JSON.stringify(requestBodyForCreateTag),
-// });
-
-// const createTagResBody = await createTagRes.json();
-
-// if (!createTagResBody.ok) {
-//   console.error('Error when creating an event:', createTagResBody);
-// } else {
-//   console.log('Succeed in creating an event:\n', createTagResBody);
-// }
+if (!donorsRes.ok) {
+  console.error('Error when getting donors\' donors:', donorResBody);
+} else {
+  console.log('Succeed in updating events\' donors::\n', JSON.stringify(donorResBody, null, 2));
+}
