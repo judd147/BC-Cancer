@@ -147,7 +147,7 @@ export class EventService {
         // handle changes of tags
         const oldTags = event.tags ?? [];
         const newTags = updateData.tags ?? [];
-        if (oldTags.join(',') !== newTags.join(',')) {
+        if (oldTags.sort().join(',') !== newTags.sort().join(',')) {
           changes[key] = { old: oldTags, new: newTags };
         }
         event[key] = newTags;
