@@ -60,4 +60,9 @@ export interface EventChangeHistory {
    * Null if the action is 'created' or 'deleted'.
    */
   changes: PropertyChangeMap | null;
+
+  /**
+   * An optional comment provided by the user for the change.
+   */
+  comment?: string;
 }

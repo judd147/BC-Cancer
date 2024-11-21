@@ -23,4 +23,7 @@ export class EventDonor {
 
   @Column({ type: 'text' })
   status: DonorStatus;
+
+  @Column({ type: 'text', nullable: true })
+  comment?: string;
 }
