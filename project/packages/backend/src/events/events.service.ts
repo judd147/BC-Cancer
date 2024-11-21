@@ -54,7 +54,7 @@ export class EventService {
     user: User,
   ): Promise<EventResponse> {
     const admins = await this.usersRepository.find({
-      where: { id: In(eventData.admins) },
+      where: { id: In(eventData.admins ?? []) },
     });
 
     const invitedDonors = await this.donorsRepository.find({
@@ -141,8 +141,9 @@ export class EventService {
 
     const changes: Record<string, { old: any; new: any }> = {};
     for (const key of Object.keys(updateData)) {
-      if (['admins'].includes(key)) {
+      if (['admins', 'comment'].includes(key)) {
         // handle donorsList and admins separately
+        // skip the comment key as it is for logging only
         continue;
       }
       // Compare the old and new values
