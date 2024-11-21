@@ -3,12 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { Donor } from './donor.entity';
 import { GetDonorsDto } from './dtos/get-donors.dto';
+import { SeederService } from '../seeder/seeder.service';
 
 @Injectable()
 export class DonorsService {
-  constructor(@InjectRepository(Donor) private repo: Repository<Donor>) {}
+  constructor(
+    @InjectRepository(Donor) private repo: Repository<Donor>,
+    private readonly seederService: SeederService,
+) {}
 
-  find(getDonorsDto: GetDonorsDto) {
+  async find(getDonorsDto: GetDonorsDto) {
+    // Ensure donors are seeded before fetching
+    await this.seederService.seedDonorsIfNeeded();
+
     const {
       firstName,
       lastName,
@@ -92,5 +99,10 @@ export class DonorsService {
       .take(limit);
 
     return query.getMany();
+  }
+
+  async deleteAllAndSeedNew() {
+    await this.repo.clear();
+    await this.seederService.seedDonorsIfNeeded();
   }
 }

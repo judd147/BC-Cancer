@@ -86,29 +86,37 @@ const sessionCookie = session.split(',').map(cookie => cookie.split(';')[0]).joi
 // const eventsBody = await events.json();
 // console.log('Events:', JSON.stringify(eventsBody, null, 2));
 
-const requestBody = {
-  tags: ['Test Tag2222'],
-};
+// const requestBody = {
+//   tags: ['Test Tag'],
+// };
 
-console.log('Request Body:', requestBody);
+// console.log('Request Body:', requestBody);
 
-const eventRes = await fetch('http://localhost:3000/events/10', {
-  method: 'PATCH',
-  headers: {
-    'Content-Type': 'application/json',
-    'Cookie': sessionCookie,
-  },
-  body: JSON.stringify(requestBody),
-});
+// const eventRes = await fetch('http://localhost:3000/events/10', {
+//   method: 'PATCH',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Cookie': sessionCookie,
+//   },
+//   body: JSON.stringify(requestBody),
+// });
 
-const eventResBody = await eventRes.json();
+// const eventResBody = await eventRes.json();
 
-if (!eventRes.ok) {
-  console.error('Error when updating events\' donors:', eventResBody);
-} else {
-  console.log('Succeed in updating events\' donors::\n', JSON.stringify(eventResBody, null, 2));
-}
+// if (!eventRes.ok) {
+//   console.error('Error when updating events\' donors:', eventResBody);
+// } else {
+//   console.log('Succeed in updating events\' donors:\n', JSON.stringify(eventResBody, null, 2));
+// }
 
+// const historyRes = await fetch('http://localhost:3000/events/10/history', {
+//   headers: {
+//     'Cookie': sessionCookie,
+//   },
+// });
+
+// const historyResBody = await historyRes.json();
+// console.log('History:', JSON.stringify(historyResBody, null, 2));
 
 // const requestBody = {
 //   donorIds: [1],
@@ -138,18 +146,54 @@ if (!eventRes.ok) {
 // }
 
 
-const donorsRes = await fetch('http://localhost:3000/events/10/history', {
+// const requestBody = {
+//   donorIds: [3, 5, 8],
+//   newStatus: 'invited',
+// }; 
+
+// const addedDonorsToEventRes = await fetch('http://localhost:3000/events/10/donors', {
+//   method: 'PATCH',
+//   headers: {
+//     'Content-Type': 'application/json',
+//     'Cookie': sessionCookie,
+//   },
+//   body: JSON.stringify(requestBody),
+// });
+
+// const eventDonorsResBody = await addedDonorsToEventRes.json();
+
+// if (!addedDonorsToEventRes.ok) {
+//   console.error('Error when getting donors\' donors:', eventDonorsResBody);
+// } else {
+//   console.log('Succeed in updating events\' donors::\n', JSON.stringify(eventDonorsResBody, null, 2));
+// }
+
+// const resetDonorsRes = await fetch('http://localhost:3000/donors/reset', {
+//   method: 'POST',
+//   headers: {
+//     'Cookie': sessionCookie,
+//   },
+// });
+
+// const resetDonorsResBody = await resetDonorsRes.json();
+
+// if (!resetDonorsRes.ok) {
+//   console.error('Error when resetting donors:', resetDonorsResBody);
+// } else {
+//   console.log('Succeed in resetting donors:\n', JSON.stringify(resetDonorsResBody, null, 2));
+// }
+
+const donorsRes = await fetch('http://localhost:3000/donors', {
   method: 'GET',
   headers: {
-    'Content-Type': 'application/json',
     'Cookie': sessionCookie,
   },
 });
 
-const donorResBody = await donorsRes.json();
+const donorsResBody = await donorsRes.json();
 
 if (!donorsRes.ok) {
-  console.error('Error when getting donors\' donors:', donorResBody);
+  console.error('Error when getting donors:', donorsResBody);
 } else {
-  console.log('Succeed in updating events\' donors::\n', JSON.stringify(donorResBody, null, 2));
+  console.log('Succeed in getting donors:\n', JSON.stringify(donorsResBody, null, 2));
 }

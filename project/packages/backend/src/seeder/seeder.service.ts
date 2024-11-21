@@ -18,6 +18,17 @@ export class SeederService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
+    await this.seedDonorsIfNeeded();
+  }
+
+  async seedDonorsIfNeeded() {
+    const donorsCount = await this.donorRepository.count();
+    if (donorsCount >= this.TOTAL_DONORS) {
+      this.logger.log(
+        `Donors already seeded with ${donorsCount} entries. Skipping seeding.`,
+      );
+      return;
+    }
     await this.seedDonors();
   }
 

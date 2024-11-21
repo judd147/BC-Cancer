@@ -41,13 +41,60 @@ import {
 import { getDonors, createEvent, updateEvent } from "@/api/queries";
 import { useMemo } from "react";
 
-const bcCites = [
-  "Vancouver",
-  "Victoria",
-  "Surrey",
+const bcCities = [
+  "Abbotsford",
+  "Armstrong",
   "Burnaby",
+  "Campbell River",
+  "Castlegar",
+  "Chilliwack",
+  "Colwood",
+  "Coquitlam",
+  "Courtenay",
+  "Cranbrook",
+  "Dawson Creek",
+  "Delta",
+  "Duncan",
+  "Enderby",
+  "Fernie",
+  "Fort St. John",
+  "Grand Forks",
+  "Greenwood",
+  "Kamloops",
   "Kelowna",
+  "Kimberley",
+  "Langford",
+  "Langley",
+  "Maple Ridge",
+  "Merritt",
+  "Mission",
   "Nanaimo",
+  "Nelson",
+  "New Westminster",
+  "North Vancouver",
+  "Parksville",
+  "Penticton",
+  "Pitt Meadows",
+  "Port Alberni",
+  "Port Coquitlam",
+  "Port Moody",
+  "Powell River",
+  "Prince George",
+  "Prince Rupert",
+  "Quesnel",
+  "Revelstoke",
+  "Richmond",
+  "Rossland",
+  "Salmon Arm",
+  "Surrey",
+  "Terrace",
+  "Trail",
+  "Vancouver",
+  "Vernon",
+  "Victoria",
+  "West Kelowna",
+  "White Rock",
+  "Williams Lake"
 ] as const;
 
 // Define validation schema
@@ -55,7 +102,7 @@ const baseFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   addressLine1: z.string().min(1, { message: "Address Line 1 is required." }),
   addressLine2: z.string().optional(),
-  city: z.enum(bcCites, { message: "Please select a valid city." }),
+  city: z.enum(bcCities, { message: "Please select a valid city." }),
   description: z.string().optional(),
   date: z.string().datetime({ message: "Date is required" }),
   donorLimit: z
@@ -87,7 +134,7 @@ export function EventForm({ event }: { event?: Event }) {
       name: event?.name || "",
       addressLine1: event?.addressLine1 || "",
       addressLine2: event?.addressLine2 || "",
-      city: (event?.city as (typeof bcCites)[number]) || undefined,
+      city: (event?.city as (typeof bcCities)[number]) || undefined,
       description: event?.description || "",
       date: event?.date ? new Date(event.date).toISOString() : "",
       donorLimit: undefined,
@@ -298,7 +345,7 @@ export function EventForm({ event }: { event?: Event }) {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Cities</SelectLabel>
-                      {bcCites.map((city) => (
+                      {bcCities.map((city) => (
                         <SelectItem key={city} value={city}>
                           {city}
                         </SelectItem>
