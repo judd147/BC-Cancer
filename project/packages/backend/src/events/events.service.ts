@@ -54,7 +54,7 @@ export class EventService {
     user: User,
   ): Promise<EventResponse> {
     const admins = await this.usersRepository.find({
-      where: { id: In(eventData.admins ?? []) },
+      where: { id: In(eventData.admins) },
     });
 
     const invitedDonors = await this.donorsRepository.find({
@@ -77,7 +77,13 @@ export class EventService {
 
     const savedEvent = await this.eventsRepository.save(newEvent);
 
-    await this.changeHistoryService.logChange(savedEvent, user, 'created');
+    await this.changeHistoryService.logChange(
+      savedEvent,
+      user,
+      'created',
+      null,
+      eventData.comment,
+    );
 
     return savedEvent;
   }

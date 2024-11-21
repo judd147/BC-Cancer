@@ -47,6 +47,8 @@ export interface CreateEventDto {
   donorIds: number[];
   /** List of user IDs who will have admin privileges (optional) */
   admins?: number[];
+  /** Comment to be included with the change history (optional) */
+  comment?: string;
 }
 
 /**
