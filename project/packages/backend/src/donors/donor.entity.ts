@@ -104,5 +104,19 @@ export class Donor implements DonorInterface {
       from: (value: string) => (value ? value.split(',') : []),
     },
   })
-  interests: string[];
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value: unknown) => {
+        if (Array.isArray(value)) {
+          return value.join(',');
+        }
+        return '';
+      },
+      from: (value: string) => (value ? value.split(',') : []),
+    },
+  })
+  interests: string[];  
 }

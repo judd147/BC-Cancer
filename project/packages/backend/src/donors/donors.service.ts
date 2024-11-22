@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, Repository, MoreThanOrEqual, Like } from 'typeorm';
 import { Donor } from './donor.entity';
 import { GetDonorsDto } from './dtos/get-donors.dto';
 import { SeederService } from '../seeder/seeder.service';
+import { GetRecommendationsDto } from './dtos/get-recommendations.dto';
 
 @Injectable()
 export class DonorsService {
@@ -104,5 +105,20 @@ export class DonorsService {
   async deleteAllAndSeedNew() {
     await this.repo.clear();
     await this.seederService.seedDonorsIfNeeded();
+  }
+
+  async findRecommendations(query: GetRecommendationsDto) {
+    const { eventType, minTotalDonations } = query;
+
+    return this.repo.find({
+      where: [
+        {
+          interests: Like(`%${eventType || ''}%`),
+          totalDonations: minTotalDonations
+            ? MoreThanOrEqual(minTotalDonations)
+            : undefined,
+        },
+      ],
+    });
   }
 }
