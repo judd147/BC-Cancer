@@ -16,7 +16,6 @@ export class DonorsController {
 
   @Get('/recommendations')
   recommendDonors(@Query() query: Record<string, any>) {
-    // Parse array and numeric query parameters explicitly
     if (query.eventType) {
       query.eventType = Array.isArray(query.eventType)
         ? query.eventType
