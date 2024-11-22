@@ -16,6 +16,11 @@ export class DonorsController {
 
   @Get('/recommendations')
   recommendDonors(@Query() query: GetRecommendationsDto) {
+    console.log('recommendDonors endpoint was hit');
+    if (query.minTotalDonations) {
+      query.minTotalDonations = +query.minTotalDonations;
+    }
+    console.log('Query Parameters:', query);
     return this.donorsService.findRecommendations(query);
   }
 

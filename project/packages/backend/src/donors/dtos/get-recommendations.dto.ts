@@ -1,4 +1,5 @@
 import { IsOptional, IsString, IsNumber, IsArray } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class GetRecommendationsDto {
   @IsString()
@@ -9,7 +10,8 @@ export class GetRecommendationsDto {
   location?: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsNumber({}, { message: 'minTotalDonations must be a number conforming to the specified constraints' })
+  @Transform(({ value }) => (value !== undefined ? Number(value) : undefined))
   minTotalDonations?: number;
 
   @IsOptional()
