@@ -1,11 +1,19 @@
-import { IsNumber, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsString, IsNumber, IsArray } from 'class-validator';
 
 export class GetRecommendationsDto {
   @IsString()
   eventType: string;
 
-  @Type(() => Number)
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
   @IsNumber()
-  minTotalDonations: number;
+  minTotalDonations?: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  intendedAttendees?: string[];
 }

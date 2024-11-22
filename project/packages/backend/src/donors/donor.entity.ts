@@ -97,26 +97,8 @@ export class Donor implements DonorInterface {
   eventDonors: EventDonor[];
 
   @Column({
-    type: 'text',
+    type: 'simple-array',
     nullable: true,
-    transformer: {
-      to: (value: string[]) => (value ? value.join(',') : ''),
-      from: (value: string) => (value ? value.split(',') : []),
-    },
   })
-
-  @Column({
-    type: 'text',
-    nullable: true,
-    transformer: {
-      to: (value: unknown) => {
-        if (Array.isArray(value)) {
-          return value.join(',');
-        }
-        return '';
-      },
-      from: (value: string) => (value ? value.split(',') : []),
-    },
-  })
-  interests: string[];  
+  interests: string[];
 }

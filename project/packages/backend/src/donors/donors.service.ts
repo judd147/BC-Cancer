@@ -11,10 +11,9 @@ export class DonorsService {
   constructor(
     @InjectRepository(Donor) private repo: Repository<Donor>,
     private readonly seederService: SeederService,
-) {}
+  ) {}
 
   async find(getDonorsDto: GetDonorsDto) {
-    // Ensure donors are seeded before fetching
     await this.seederService.seedDonorsIfNeeded();
 
     const {
@@ -57,17 +56,19 @@ export class DonorsService {
     }
 
     if (city !== undefined) {
-      query.andWhere('donor.city LIKE :city', {
-        city: `%${city}%`,
-      });
+      query.andWhere('donor.city LIKE :city', { city: `%${city}%` });
     }
 
     if (interests && interests.length > 0) {
-      query.andWhere(new Brackets(qb => {
-        interests.forEach(interest => {
-          qb.orWhere('donor.interests LIKE :interest', { interest: `%${interest}%` });
-        });
-      }));
+      query.andWhere(
+        new Brackets((qb) => {
+          interests.forEach((interest) => {
+            qb.orWhere('donor.interests LIKE :interest', {
+              interest: `%${interest}%`,
+            });
+          });
+        }),
+      );
     }
 
     if (minTotalDonations !== undefined) {
@@ -94,10 +95,7 @@ export class DonorsService {
       });
     }
 
-    query
-      .orderBy(`donor.${orderBy}`, orderDirection)
-      .skip((page - 1) * limit)
-      .take(limit);
+    query.orderBy(`donor.${orderBy}`, orderDirection).skip((page - 1) * limit).take(limit);
 
     return query.getMany();
   }
@@ -108,17 +106,36 @@ export class DonorsService {
   }
 
   async findRecommendations(query: GetRecommendationsDto) {
-    const { eventType, minTotalDonations } = query;
+    const { eventType, location, minTotalDonations, intendedAttendees } = query;
 
-    return this.repo.find({
-      where: [
-        {
-          interests: Like(`%${eventType || ''}%`),
-          totalDonations: minTotalDonations
-            ? MoreThanOrEqual(minTotalDonations)
-            : undefined,
-        },
-      ],
-    });
+    const queryBuilder = this.repo.createQueryBuilder('donor');
+
+    if (eventType) {
+      queryBuilder.andWhere('donor.interests LIKE :eventType', {
+        eventType: `%${eventType}%`,
+      });
+    }
+
+    if (location) {
+      queryBuilder.andWhere('donor.city LIKE :location', { location: `%${location}%` });
+    }
+
+    if (minTotalDonations !== undefined) {
+      queryBuilder.andWhere('donor.totalDonations >= :minTotalDonations', {
+        minTotalDonations,
+      });
+    }
+
+    if (intendedAttendees && intendedAttendees.length > 0) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          intendedAttendees.forEach((attendee) => {
+            qb.orWhere('donor.interests LIKE :attendee', { attendee: `%${attendee}%` });
+          });
+        }),
+      );
+    }
+
+    return queryBuilder.getMany();
   }
 }
