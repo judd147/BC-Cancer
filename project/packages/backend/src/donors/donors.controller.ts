@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { DonorsService } from './donors.service';
 import { GetDonorsDto } from './dtos/get-donors.dto';
 import { AuthGuard } from '../guards/auth.guard';
@@ -15,20 +15,38 @@ export class DonorsController {
   }
 
   @Get('/recommendations')
-  recommendDonors(@Query() query: Record<string, any>) {
-    if (query.eventType) {
-      query.eventType = Array.isArray(query.eventType)
-        ? query.eventType
-        : [query.eventType];
-    }
-    if (query.minTotalDonations) {
-      query.minTotalDonations = parseFloat(query.minTotalDonations);
-    }
-    if (query.targetAttendees) {
-      query.targetAttendees = parseInt(query.targetAttendees, 10);
+  recommendDonors(@Query() query: any) {
+    let { eventType, minTotalDonations, targetAttendees, location } = query;
+
+    if (eventType && !Array.isArray(eventType)) {
+      eventType = [eventType];
     }
 
-    return this.donorsService.findRecommendations(query as GetRecommendationsDto);
+    minTotalDonations = minTotalDonations !== undefined ? Number(minTotalDonations) : undefined;
+    targetAttendees = targetAttendees !== undefined ? Number(targetAttendees) : undefined;
+
+    if (!eventType || !Array.isArray(eventType) || eventType.length === 0) {
+      throw new BadRequestException('eventType must be a non-empty array.');
+    }
+
+    if (minTotalDonations !== undefined && (isNaN(minTotalDonations) || minTotalDonations < 0)) {
+      throw new BadRequestException('minTotalDonations must be a non-negative number.');
+    }
+
+    if (targetAttendees !== undefined && (!Number.isInteger(targetAttendees) || targetAttendees < 1)) {
+      throw new BadRequestException('targetAttendees must be a positive integer.');
+    }
+
+    if (location && typeof location !== 'string') {
+      throw new BadRequestException('location must be a string.');
+    }
+
+    return this.donorsService.findRecommendations({
+      eventType,
+      minTotalDonations,
+      targetAttendees,
+      location,
+    });
   }
 
   @Post('reset')

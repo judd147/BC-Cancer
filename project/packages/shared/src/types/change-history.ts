@@ -34,35 +34,31 @@ export interface EventChangeHistory {
   /**
    * Unique identifier for the change history record.
    */
-  id: number;
+  id?: number;
 
   /**
    * The user who made the change.
-   * Null if user's account was deleted.
    */
-  user: User | null;
+  user?: User | null;
 
   /**
-   * The type of action performed.
-   * Examples include 'created', 'updated', etc.
+   * The type of action performed (e.g., 'created', 'updated').
    */
   action: "created" | "updated" | "deleted";
 
   /**
-   * The timestamp when the change was made.
-   * e.g. "2024-11-08T08:42:10.000Z"
+   * The timestamp of the change.
    */
   timestamp: Date | string;
 
   /**
-   * A record of the changes made.
-   * Each key represents a property that was changed, with its old and new values.
-   * Null if the action is 'created' or 'deleted'.
+   * A record of detailed changes made.
+   * Null if not applicable.
    */
-  changes: PropertyChangeMap | null;
+  changes?: PropertyChangeMap | null;
 
   /**
-   * An optional comment provided by the user for the change.
+   * A comment provided by the user, if applicable.
    */
   comment?: string;
 }

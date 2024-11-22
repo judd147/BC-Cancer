@@ -112,38 +112,48 @@ export class DonorsService {
       minTotalDonations,
       targetAttendees = 100,
     } = query;
-
+  
+    if (!eventType || eventType.length === 0) {
+      throw new Error('eventType must be a non-empty array.');
+    }
+  
+    const primaryType = eventType[0];
     const queryBuilder = this.repo.createQueryBuilder('donor');
-
+  
     queryBuilder.where(
       new Brackets((qb) => {
         eventType.forEach((type, index) => {
+          const clause = 'donor.interests LIKE :type' + index;
           if (index === 0) {
-            qb.where('donor.interests LIKE :type', { type: `%${type}%` });
+            qb.where(clause, { [`type${index}`]: `%${type}%` });
           } else {
-            qb.orWhere('donor.interests LIKE :type', { type: `%${type}%` });
+            qb.orWhere(clause, { [`type${index}`]: `%${type}%` });
           }
         });
       }),
     );
-
+  
     if (location) {
       queryBuilder.andWhere('donor.city LIKE :location', {
         location: `%${location}%`,
       });
     }
-
-    if (minTotalDonations) {
+  
+    if (minTotalDonations !== undefined) {
       queryBuilder.andWhere('donor.totalDonations >= :minTotalDonations', {
         minTotalDonations,
       });
     }
-
+  
     queryBuilder
-      .orderBy('CASE WHEN donor.interests LIKE :primaryType THEN 1 ELSE 2 END', 'ASC')
+      .orderBy(
+        `CASE WHEN donor.interests LIKE :primaryType THEN 1 ELSE 2 END`,
+        'ASC',
+      )
       .addOrderBy('donor.totalDonations', 'DESC')
+      .setParameter('primaryType', `%${primaryType}%`)
       .take(targetAttendees);
-
+  
     return queryBuilder.getMany();
-  }
+  }  
 }
