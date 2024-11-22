@@ -15,13 +15,21 @@ export class DonorsController {
   }
 
   @Get('/recommendations')
-  recommendDonors(@Query() query: GetRecommendationsDto) {
-    console.log('recommendDonors endpoint was hit');
-    if (query.minTotalDonations) {
-      query.minTotalDonations = +query.minTotalDonations;
+  recommendDonors(@Query() query: Record<string, any>) {
+    // Parse array and numeric query parameters explicitly
+    if (query.eventType) {
+      query.eventType = Array.isArray(query.eventType)
+        ? query.eventType
+        : [query.eventType];
     }
-    console.log('Query Parameters:', query);
-    return this.donorsService.findRecommendations(query);
+    if (query.minTotalDonations) {
+      query.minTotalDonations = parseFloat(query.minTotalDonations);
+    }
+    if (query.targetAttendees) {
+      query.targetAttendees = parseInt(query.targetAttendees, 10);
+    }
+
+    return this.donorsService.findRecommendations(query as GetRecommendationsDto);
   }
 
   @Post('reset')

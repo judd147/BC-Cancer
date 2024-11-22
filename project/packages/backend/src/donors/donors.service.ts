@@ -106,35 +106,43 @@ export class DonorsService {
   }
 
   async findRecommendations(query: GetRecommendationsDto) {
-    const { eventType, location, minTotalDonations, intendedAttendees } = query;
+    const {
+      eventType,
+      location,
+      minTotalDonations,
+      targetAttendees = 100,
+    } = query;
 
     const queryBuilder = this.repo.createQueryBuilder('donor');
 
-    if (eventType) {
-      queryBuilder.andWhere('donor.interests LIKE :eventType', {
-        eventType: `%${eventType}%`,
+    queryBuilder.where(
+      new Brackets((qb) => {
+        eventType.forEach((type, index) => {
+          if (index === 0) {
+            qb.where('donor.interests LIKE :type', { type: `%${type}%` });
+          } else {
+            qb.orWhere('donor.interests LIKE :type', { type: `%${type}%` });
+          }
+        });
+      }),
+    );
+
+    if (location) {
+      queryBuilder.andWhere('donor.city LIKE :location', {
+        location: `%${location}%`,
       });
     }
 
-    if (location) {
-      queryBuilder.andWhere('donor.city LIKE :location', { location: `%${location}%` });
-    }
-
-    if (minTotalDonations !== undefined) {
+    if (minTotalDonations) {
       queryBuilder.andWhere('donor.totalDonations >= :minTotalDonations', {
         minTotalDonations,
       });
     }
 
-    if (intendedAttendees && intendedAttendees.length > 0) {
-      queryBuilder.andWhere(
-        new Brackets((qb) => {
-          intendedAttendees.forEach((attendee) => {
-            qb.orWhere('donor.interests LIKE :attendee', { attendee: `%${attendee}%` });
-          });
-        }),
-      );
-    }
+    queryBuilder
+      .orderBy('CASE WHEN donor.interests LIKE :primaryType THEN 1 ELSE 2 END', 'ASC')
+      .addOrderBy('donor.totalDonations', 'DESC')
+      .take(targetAttendees);
 
     return queryBuilder.getMany();
   }

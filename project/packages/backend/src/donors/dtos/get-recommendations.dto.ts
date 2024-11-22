@@ -1,21 +1,21 @@
-import { IsOptional, IsString, IsNumber, IsArray } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsOptional, IsString, IsNumber, IsArray, IsInt, Min } from 'class-validator';
 
 export class GetRecommendationsDto {
-  @IsString()
-  eventType: string;
+  @IsArray()
+  @IsString({ each: true })
+  eventType: string[];
 
   @IsOptional()
   @IsString()
   location?: string;
 
   @IsOptional()
-  @IsNumber({}, { message: 'minTotalDonations must be a number conforming to the specified constraints' })
-  @Transform(({ value }) => (value !== undefined ? Number(value) : undefined))
+  @IsNumber({}, { message: 'minTotalDonations must be a number' })
+  @Min(0, { message: 'minTotalDonations must be at least 0' })
   minTotalDonations?: number;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  intendedAttendees?: string[];
+  @IsInt({ message: 'targetAttendees must be a whole number' })
+  @Min(1, { message: 'targetAttendees must be at least 1' })
+  targetAttendees?: number;
 }
