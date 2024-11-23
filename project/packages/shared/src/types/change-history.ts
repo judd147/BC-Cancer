@@ -39,7 +39,7 @@ export interface EventChangeHistory {
   /**
    * The user who made the change.
    */
-  user?: User | null; // Optional for lightweight use
+  user: User | null;
 
   /**
    * The type of action performed (e.g., 'created', 'updated').
@@ -56,7 +56,7 @@ export interface EventChangeHistory {
    * Each key represents a property that was changed, with its old and new values.
    * Null if the action is 'created' or 'deleted'.
    */
-  changes?: PropertyChangeMap | null;
+  changes: PropertyChangeMap | null;
 
   /**
    * A comment provided by the user, if applicable.

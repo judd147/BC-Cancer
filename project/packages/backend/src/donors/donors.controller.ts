@@ -8,6 +8,12 @@ import { GetRecommendationsDto } from './dtos/get-recommendations.dto';
 export class DonorsController {
   constructor(private readonly donorsService: DonorsService) {}
 
+  @Get()
+  @UseGuards(AuthGuard)
+  getDonors(@Query() getDonorsDto: GetDonorsDto) {
+    return this.donorsService.find(getDonorsDto);
+  }
+  
   @Get('/recommendations')
   async recommendDonors(@Query() query: any) {
     let { eventType, minTotalDonations, targetAttendees, location, eventFocus } = query;
