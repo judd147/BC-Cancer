@@ -18,4 +18,8 @@ export class GetRecommendationsDto {
   @IsInt({ message: 'targetAttendees must be a whole number' })
   @Min(1, { message: 'targetAttendees must be at least 1' })
   targetAttendees?: number;
+
+  @IsOptional()
+  @IsString()
+  eventFocus?: 'fundraising' | 'attendees';
 }

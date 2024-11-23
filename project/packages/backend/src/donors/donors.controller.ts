@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, InternalServerErrorException, Post, Query, UseGuards } from '@nestjs/common';
 import { DonorsService } from './donors.service';
 import { GetDonorsDto } from './dtos/get-donors.dto';
 import { AuthGuard } from '../guards/auth.guard';
@@ -8,15 +8,9 @@ import { GetRecommendationsDto } from './dtos/get-recommendations.dto';
 export class DonorsController {
   constructor(private readonly donorsService: DonorsService) {}
 
-  @Get()
-  @UseGuards(AuthGuard)
-  getDonors(@Query() getDonorsDto: GetDonorsDto) {
-    return this.donorsService.find(getDonorsDto);
-  }
-
   @Get('/recommendations')
-  recommendDonors(@Query() query: any) {
-    let { eventType, minTotalDonations, targetAttendees, location } = query;
+  async recommendDonors(@Query() query: any) {
+    let { eventType, minTotalDonations, targetAttendees, location, eventFocus } = query;
 
     if (eventType && !Array.isArray(eventType)) {
       eventType = [eventType];
@@ -41,12 +35,22 @@ export class DonorsController {
       throw new BadRequestException('location must be a string.');
     }
 
-    return this.donorsService.findRecommendations({
-      eventType,
-      minTotalDonations,
-      targetAttendees,
-      location,
-    });
+    if (eventFocus && !['fundraising', 'attendees'].includes(eventFocus)) {
+      throw new BadRequestException('eventFocus must be either "fundraising" or "attendees".');
+    }
+
+    try {
+      return await this.donorsService.findRecommendations({
+        eventType,
+        minTotalDonations,
+        targetAttendees,
+        location,
+        eventFocus,
+      });
+    } catch (error) {
+      console.error('Error in recommendDonors:', error.message);
+      throw new InternalServerErrorException('An error occurred while processing recommendations.');
+    }
   }
 
   @Post('reset')
@@ -55,3 +59,4 @@ export class DonorsController {
     return { message: 'All donors deleted and new donors seeded' };
   }
 }
+
