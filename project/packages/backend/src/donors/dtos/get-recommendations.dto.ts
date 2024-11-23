@@ -1,24 +1,45 @@
-import { IsOptional, IsString, IsNumber, IsArray, IsInt, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsNumber, IsArray, ArrayNotEmpty } from 'class-validator';
 
 export class GetRecommendationsDto {
+  @ApiProperty({
+    description: 'Array of event types to filter donors by.',
+    example: ['Lung Cancer', 'Kidney Cancer'],
+  })
   @IsArray()
+  @ArrayNotEmpty()
   @IsString({ each: true })
   eventType: string[];
 
+  @ApiPropertyOptional({
+    description: 'Minimum total donations a donor must have made.',
+    example: 50000,
+  })
+  @IsOptional()
+  @IsNumber()
+  minTotalDonations?: number;
+
+  @ApiPropertyOptional({
+    description: 'Number of donors to recommend.',
+    example: 50,
+  })
+  @IsOptional()
+  @IsNumber()
+  targetAttendees?: number;
+
+  @ApiPropertyOptional({
+    description: 'City location to filter donors by.',
+    example: 'Vancouver',
+  })
   @IsOptional()
   @IsString()
   location?: string;
 
-  @IsOptional()
-  @IsNumber({}, { message: 'minTotalDonations must be a number' })
-  @Min(0, { message: 'minTotalDonations must be at least 0' })
-  minTotalDonations?: number;
-
-  @IsOptional()
-  @IsInt({ message: 'targetAttendees must be a whole number' })
-  @Min(1, { message: 'targetAttendees must be at least 1' })
-  targetAttendees?: number;
-
+  @ApiPropertyOptional({
+    description: 'Focus of recommendations: "fundraising" or "attendees".',
+    enum: ['fundraising', 'attendees'],
+    example: 'fundraising',
+  })
   @IsOptional()
   @IsString()
   eventFocus?: 'fundraising' | 'attendees';
