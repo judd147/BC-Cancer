@@ -11,6 +11,10 @@ export class CreateEventDto implements CreateEvent {
   @IsString()
   name: string;
 
+  @IsOptional()
+  @IsString()
+  coverImage?: string;
+
   @IsString()
   addressLine1: string;
 

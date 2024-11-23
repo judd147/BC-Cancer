@@ -1,4 +1,9 @@
-import { Module, ValidationPipe, MiddlewareConsumer, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  Module,
+  ValidationPipe,
+  MiddlewareConsumer,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,11 +14,18 @@ import { EventsModule } from './events/events.module';
 import { DonorsModule } from './donors/donors.module';
 import { SeederModule } from './seeder/seeder.module';
 import { ChangeHistoryModule } from './change-history/change-history.module';
+import { UploadModule } from './upload/upload.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join('uploads/images'), // Serve images from this directory
+      serveRoot: '/img',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
@@ -31,6 +43,7 @@ const cookieSession = require('cookie-session');
     DonorsModule,
     SeederModule,
     ChangeHistoryModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [

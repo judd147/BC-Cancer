@@ -20,6 +20,9 @@ export class Event {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  coverImage: string;
+
   @Column()
   addressLine1: string;
 
