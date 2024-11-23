@@ -8,6 +8,10 @@ export class UpdateEventDto implements UpdateEvent {
 
   @IsOptional()
   @IsString()
+  coverImage?: string;
+
+  @IsOptional()
+  @IsString()
   addressLine1: string;
 
   @IsOptional()

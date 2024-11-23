@@ -10,6 +10,8 @@ export interface Event {
   id: number;
   /** Name of the event */
   name: string;
+  /** Cover image relative URL for the event (optional) */
+  coverImage?: string;
   /** Primary address line for the event's location */
   addressLine1: string;
   /** Secondary address line for the event's location (optional) */
@@ -35,6 +37,8 @@ export interface Event {
 export interface CreateEventDto {
   /** Name of the event */
   name: string;
+  /** Cover image relative URL for the event (optional) */
+  coverImage?: string;
   /** Primary address line for the event's location */
   addressLine1: string;
   /** Secondary address line for the event's location (optional) */
@@ -62,6 +66,8 @@ export interface CreateEventDto {
 export interface UpdateEventDto {
   /** New name for the event (optional) */
   name?: string;
+  /** Cover image relative URL for the event (optional) */
+  coverImage?: string;
   /** Updated primary address line for the event's location (optional) */
   addressLine1?: string;
   /** Updated secondary address line for the event's location (optional) */
