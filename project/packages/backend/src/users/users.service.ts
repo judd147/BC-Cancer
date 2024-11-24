@@ -3,9 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { FindUsersDto } from './dtos/find-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -24,8 +25,16 @@ export class UsersService {
     return this.repo.findOne({ where: { id } });
   }
 
-  find(username: string) {
-    return this.repo.find({ where: { username } });
+  find(findUsersDto: FindUsersDto) {
+    const { username = '', page = 1, limit = 20 } = findUsersDto;
+
+    return this.repo.find({
+      where: {
+        username: ILike(`%${username}%`),
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
   }
 
   async update(id: number, attrs: Partial<User>) {

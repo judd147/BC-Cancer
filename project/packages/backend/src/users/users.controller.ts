@@ -23,6 +23,8 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { AuthGuard } from '../guards/auth.guard';
+import { FindUsersDto } from './dtos/find-users.dto';
+import { User as IUser } from '@bc-cancer/shared/src/types';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -67,9 +69,10 @@ export class UsersController {
     return user;
   }
 
-  // @Get()
-  findAllUsers(@Query('username') username: string) {
-    return this.usersService.find(username);
+  @Get('/users')
+  @UseGuards(AuthGuard)
+  findAllUsers(@Query() findUserDto: FindUsersDto): Promise<IUser[]> {
+    return this.usersService.find(findUserDto);
   }
 
   // @Delete('/:id')
@@ -78,7 +81,10 @@ export class UsersController {
   }
 
   // @Patch('/:id')
-  updateUser(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateUserDto) {
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateUserDto,
+  ) {
     return this.usersService.update(id, body);
   }
 }

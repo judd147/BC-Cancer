@@ -18,7 +18,7 @@ describe('UsersController', () => {
           password: 'kovkozpk',
         } as User);
       },
-      find: (username: string) => {
+      find: ({ username }: { username?: string }) => {
         return Promise.resolve([
           { id: 1, username, password: 'kovkozpk' } as User,
         ]);
@@ -46,7 +46,7 @@ describe('UsersController', () => {
   });
 
   it('findAllUsers returns a list of users with the given username', async () => {
-    const users = await controller.findAllUsers('oijvizxp');
+    const users = await controller.findAllUsers({ username: 'oijvizxp' });
     expect(users.length).toEqual(1);
     expect(users[0].username).toEqual('oijvizxp');
   });
