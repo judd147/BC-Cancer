@@ -27,6 +27,8 @@ export interface Donor {
   lastGiftAppeal?: string;
   addressLine1: string;
   addressLine2?: string;
+  lat: number;
+  lng: number;
   city: string;
   interests: string[];
   contactPhoneType: string;
