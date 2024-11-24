@@ -102,9 +102,9 @@ export class Donor implements DonorInterface {
   })
   interests: string[];
 
-  @Column()
+  @Column({ type: 'real' })
   lat: number;
 
-  @Column()
+  @Column({ type: 'real' })
   lng: number;
 }
