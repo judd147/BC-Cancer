@@ -27,6 +27,8 @@ export interface Donor {
   lastGiftAppeal?: string;
   addressLine1: string;
   addressLine2?: string;
+  lat: number;
+  lng: number;
   city: string;
   interests: string[];
   contactPhoneType: string;
@@ -39,7 +41,7 @@ export interface Donor {
 }
 
 // Query parameters for getting donors
-export interface GetDonorsParams {
+export type GetDonorsParams = {
   firstName?: string;
   lastName?: string;
   exclude?: boolean;
@@ -52,6 +54,18 @@ export interface GetDonorsParams {
   firstGiftDateTo?: Date;
   page?: number;
   limit?: number;
-  orderBy?: string;
   orderDirection?: "ASC" | "DESC";
-}
+} & (
+  | {
+      latitude: number;
+      longitude: number;
+      distance: number;
+      orderBy: keyof Donor | "distance";
+    }
+  | {
+      latitude?: never;
+      longitude?: never;
+      distance?: never;
+      orderBy: keyof Donor;
+    }
+);

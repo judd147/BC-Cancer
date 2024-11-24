@@ -101,4 +101,10 @@ export class Donor implements DonorInterface {
     nullable: true,
   })
   interests: string[];
+
+  @Column({ type: 'real' })
+  lat: number;
+
+  @Column({ type: 'real' })
+  lng: number;
 }

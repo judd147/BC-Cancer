@@ -6,9 +6,9 @@ import {
   IsDate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { GetDonorsParams } from '@bc-cancer/shared/src/types';
+import { Donor } from '@bc-cancer/shared/src/types';
 
-export class GetDonorsDto implements GetDonorsParams {
+export class GetDonorsDto {
   @IsOptional()
   @IsString()
   firstName?: string;
@@ -63,9 +63,25 @@ export class GetDonorsDto implements GetDonorsParams {
 
   @IsOptional()
   @IsString()
-  orderBy?: string;
+  orderBy?: keyof Donor | 'distance';
 
   @IsOptional()
   @IsString()
   orderDirection?: 'ASC' | 'DESC';
+
+  // New fields for proximity search
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  latitude?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  longitude?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  distance?: number; // Distance in kilometers
 }
