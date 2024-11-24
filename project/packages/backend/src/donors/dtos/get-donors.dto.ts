@@ -6,9 +6,9 @@ import {
   IsDate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Donor, GetDonorsParams } from '@bc-cancer/shared/src/types';
+import { Donor } from '@bc-cancer/shared/src/types';
 
-export class GetDonorsDto implements GetDonorsParams {
+export class GetDonorsDto {
   @IsOptional()
   @IsString()
   firstName?: string;
