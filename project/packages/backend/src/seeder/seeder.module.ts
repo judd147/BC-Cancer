@@ -18,6 +18,6 @@ import { EventSeederService } from './event-seeder.service';
     EventsModule,
   ],
   providers: [DonorSeederService, EventSeederService],
-  exports: [DonorSeederService],
+  exports: [DonorSeederService, EventSeederService],
 })
 export class SeederModule {}

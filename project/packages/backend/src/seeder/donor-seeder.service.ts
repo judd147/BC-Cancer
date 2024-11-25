@@ -107,7 +107,7 @@ const BC_CITIES: { [key: string]: City } = {
   },
 };
 
-const INTERESTS: string[] = [
+export const INTERESTS: string[] = [
   'Bladder Cancer',
   'Breast Cancer',
   'Colon and Rectal Cancer',
