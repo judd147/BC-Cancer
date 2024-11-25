@@ -211,14 +211,12 @@ const eventDefinitions = [
 ];
 
 // Generate the fakeEvents array by mapping over eventDefinitions
-const fakeEvents: CreateEventDto[] = eventDefinitions.map((event) =>
-  createFakeEvent(event),
-);
+const fakeEvents: CreateEventDto[] = eventDefinitions.map(createFakeEvent);
 
 @Injectable()
 export class EventSeederService implements OnModuleInit {
   private readonly logger = new Logger(EventSeederService.name);
-  private readonly TOTAL_EVENT = 20;
+  private readonly TOTAL_EVENTS = 20;
   private readonly TOTAL_USERS = 100;
 
   constructor(
@@ -231,54 +229,118 @@ export class EventSeederService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.seedUser();
-    await this.seedEvent();
-    await this.seedChangeHistory();
+    try {
+      await this.seedUsers();
+      await this.seedEvents();
+    } catch (error) {
+      this.logger.error(`Failed to seed events: ${error}`);
+    }
   }
 
-  async seedUser() {
-    const usersCount = await this.userRepository.count();
-    if (usersCount >= this.TOTAL_USERS) {
+  async seedUsers() {
+    const existingUserCount = await this.userRepository.count();
+    if (existingUserCount >= this.TOTAL_USERS) {
       this.logger.log(
-        `Users already seeded with ${usersCount} entries. Skipping seeding.`,
+        `Users already seeded with ${existingUserCount} entries. Skipping seeding.`,
       );
       return;
     }
 
-    const count = this.TOTAL_USERS - usersCount;
+    const usersToCreate = this.TOTAL_USERS - existingUserCount;
+    const userPromises = Array.from({ length: usersToCreate }, () =>
+      this.authService.signup(faker.internet.username(), 'password'),
+    );
+    userPromises.push(this.authService.signup('demouser', 'password'));
+    await Promise.all(userPromises);
 
-    for (let i = 0; i < count; i++) {
-      await this.authService.signup(faker.internet.username(), 'password');
-    }
-    await this.authService.signup('demouser', 'password');
-
-    this.logger.log(`Seeded ${count} users.`);
+    this.logger.log(`Seeded ${usersToCreate} users.`);
   }
 
-  async seedEvent() {
-    const eventsCount = await this.eventRepository.count();
-    if (eventsCount >= this.TOTAL_EVENT) {
+  async seedEvents() {
+    const existingEventCount = await this.eventRepository.count();
+    if (existingEventCount >= this.TOTAL_EVENTS) {
       this.logger.log(
-        `Events already seeded with ${eventsCount} entries. Skipping seeding.`,
+        `Events already seeded with ${existingEventCount} entries. Skipping event seeding.`,
       );
       return;
     }
 
-    const count = this.TOTAL_EVENT - eventsCount;
+    const eventsToCreate = this.TOTAL_EVENTS - existingEventCount;
     const users = await this.userRepository.find();
 
-    for (let i = 0; i < count; i++) {
-      const event = fakeEvents[i % fakeEvents.length];
-      await this.eventService.createEvent(
-        event,
-        faker.helpers.arrayElement(users),
-      );
-    }
+    const eventPromises = Array.from({ length: eventsToCreate }, (_, index) => {
+      const eventData = fakeEvents[index % fakeEvents.length];
+      const creator = faker.helpers.arrayElement(users);
+      return this.eventService.createEvent(eventData, creator);
+    });
 
-    this.logger.log(`Seeded ${count} events.`);
+    await Promise.all(eventPromises);
+    this.logger.log(`Seeded ${eventsToCreate} events.`);
+
+    // Seed change history for the first newly created event
+    const firstNewEventId = existingEventCount + 1;
+    await this.seedChangeHistory(firstNewEventId);
   }
 
-  async seedChangeHistory() {
-    // TODO: Implement change history seeder
+  async seedChangeHistory(eventId: number) {
+    try {
+      const event = await this.eventService.getEvent(eventId);
+      const donors = await this.eventService.getEventDonors(eventId);
+      const creator = event.createdBy as User;
+      const admins = event.admins as User[];
+
+      await this.eventService.updateEvent(
+        eventId,
+        {
+          name: 'Hope Gala Vancouver 2024',
+          description:
+            'An evening of hope and fundraising for BC Cancer, featuring keynote speakers and live music.',
+          comment: 'Updated event name and description.',
+        },
+        creator,
+      );
+
+      await this.eventService.updateEvent(
+        eventId,
+        {
+          addressLine1: '124 Maple Street',
+          addressLine2: 'Suite 201',
+          city: 'Vancouver',
+        },
+        faker.helpers.arrayElement(admins),
+      );
+
+      const donorIds = donors.preview.map((donor) => donor.id);
+      const invitedDonorIds = faker.helpers.arrayElements(donorIds, 10);
+      const excludedDonorIds = faker.helpers.arrayElements(donorIds, 7);
+
+      await Promise.all([
+        this.eventService.updateDonorsStatus(
+          eventId,
+          {
+            donorIds: invitedDonorIds,
+            newStatus: 'invited',
+            comment: 'Donors confirmed attendance.',
+          },
+          faker.helpers.arrayElement(admins),
+        ),
+        this.eventService.updateDonorsStatus(
+          eventId,
+          {
+            donorIds: excludedDonorIds,
+            newStatus: 'excluded',
+            comment: 'Donors unable to attend.',
+          },
+          faker.helpers.arrayElement(admins),
+        ),
+      ]);
+
+      this.logger.log(`Seeded change history for event ${eventId}.`);
+    } catch (error) {
+      this.logger.error(
+        `Failed to seed change history for event ${eventId}.`,
+        error,
+      );
+    }
   }
 }
