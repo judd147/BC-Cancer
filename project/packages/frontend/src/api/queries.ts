@@ -21,7 +21,7 @@ function buildQueryString(params: GetDonorsParams): string {
 }
 
 // Add filter as query params
-export const getDonors = async (params: GetDonorsParams = {}) => {
+export const getDonors = async (params: GetDonorsParams) => {
   const queryString = buildQueryString(params);
   const response = await fetch(`http://localhost:3000/donors?${queryString}`, {
     method: "GET",
