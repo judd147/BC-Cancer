@@ -15,5 +15,6 @@ import { EventDonor } from './event-donor.entity';
   ],
   controllers: [EventController],
   providers: [EventService],
+  exports: [EventService], // Exported for Seeder
 })
 export class EventsModule {}

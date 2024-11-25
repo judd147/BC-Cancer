@@ -180,8 +180,8 @@ function randomizeCoordinates(
 }
 
 @Injectable()
-export class SeederService implements OnModuleInit {
-  private readonly logger = new Logger(SeederService.name);
+export class DonorSeederService implements OnModuleInit {
+  private readonly logger = new Logger(DonorSeederService.name);
   private readonly TOTAL_DONORS = 500;
   private readonly BATCH_SIZE = 100;
   private readonly MAX_DISTANCE_KM = 5; // Maximum distance from city center

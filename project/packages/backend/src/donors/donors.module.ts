@@ -3,11 +3,11 @@ import { DonorsController } from './donors.controller';
 import { DonorsService } from './donors.service';
 import { Donor } from './donor.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SeederService } from '../seeder/seeder.service';
+import { DonorSeederService } from '../seeder/donor-seeder.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Donor])],
   controllers: [DonorsController],
-  providers: [DonorsService, SeederService],
+  providers: [DonorsService, DonorSeederService],
 })
 export class DonorsModule {}
