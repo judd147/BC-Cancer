@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DonorsService } from './donors.service';
 import { Donor } from './donor.entity';
-import { SeederService } from '../seeder/seeder.service';
+import { DonorSeederService } from '../seeder/donor-seeder.service';
 
 describe('DonorsService', () => {
   let service: DonorsService;
@@ -17,7 +17,7 @@ describe('DonorsService', () => {
           provide: getRepositoryToken(Donor),
           useClass: Repository,
         },
-        SeederService,
+        DonorSeederService,
       ],
     }).compile();
 
