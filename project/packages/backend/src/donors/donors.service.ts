@@ -7,14 +7,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { Donor } from './donor.entity';
 import { GetDonorsDto } from './dtos/get-donors.dto';
-import { SeederService } from '../seeder/seeder.service';
+import { DonorSeederService } from '../seeder/donor-seeder.service';
 import { GetRecommendationsDto } from './dtos/get-recommendations.dto';
 
 @Injectable()
 export class DonorsService {
   constructor(
     @InjectRepository(Donor) private repo: Repository<Donor>,
-    private readonly seederService: SeederService,
+    private readonly seederService: DonorSeederService,
   ) {}
 
   async find(getDonorsDto: GetDonorsDto) {

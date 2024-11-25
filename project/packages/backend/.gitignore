@@ -58,5 +58,8 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # database
 db.sqlite
 
-# upload directory for images
-uploads/
+# Ignore all files inside uploads/images/
+uploads/images/*
+
+# Do not ignore coverImage*.jpg files inside uploads/images/
+!uploads/images/coverImage*.jpg
