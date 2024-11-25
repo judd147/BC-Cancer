@@ -22,14 +22,13 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -40,6 +39,7 @@ import {
 } from "@bc-cancer/shared/src/types/event";
 import { getDonors, createEvent, updateEvent } from "@/api/queries";
 import { useMemo } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 const bcCities = [
   "Abbotsford",
@@ -94,7 +94,7 @@ const bcCities = [
   "Victoria",
   "West Kelowna",
   "White Rock",
-  "Williams Lake"
+  "Williams Lake",
 ] as const;
 
 // Define validation schema
@@ -269,7 +269,7 @@ export function EventForm({ event }: { event?: Event }) {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-[250px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
                       >
@@ -330,30 +330,58 @@ export function EventForm({ event }: { event?: Event }) {
           )}
         />
 
-        {/* City field as Select */}
         <FormField
           control={form.control}
           name="city"
           render={({ field }) => (
-            <FormItem>
+            <FormItem  className="flex flex-col">
               <FormLabel>City *</FormLabel>
-              <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Cities</SelectLabel>
-                      {bcCities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value || "Select a city"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search city..." />
+                    <CommandList>
+                      <CommandEmpty>No city found.</CommandEmpty>
+                      <CommandGroup>
+                        {bcCities.map((city) => (
+                          <CommandItem
+                            key={city}
+                            value={city}
+                            onSelect={() => {
+                              form.setValue("city", city);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2",
+                                city === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {city}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

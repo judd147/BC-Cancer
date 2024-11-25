@@ -89,7 +89,11 @@ export const columns: ColumnDef<Event>[] = [
       return (
         <div className="flex flex-row -space-x-4">
           {admins.map((admin, index) => (
-            <AdminAvatar key={admin.username} username={admin.username} zIndex={admins.length - index}></AdminAvatar>
+            <AdminAvatar
+              key={admin.username}
+              username={admin.username}
+              zIndex={admins.length - index}
+            ></AdminAvatar>
           ))}
         </div>
       );

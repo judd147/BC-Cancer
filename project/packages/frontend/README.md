@@ -13,6 +13,11 @@
   - [x] Event Detail
 - [x] Communicate with backend
   - [x] React Query
+- [ ] Sonnet Toasts
+  - [ ] create event
+  - [ ] delete event
+  - [ ] update event
+  - [ ] access denied (change donor status)
 - [x] Implement functionality
   - [x] Login with username/password
   - [x] Logout and user avatar
