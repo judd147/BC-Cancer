@@ -11,7 +11,7 @@ describe('AuthService', () => {
     // Create a fake copy of the users service
     const users: User[] = [];
     fakeUsersService = {
-      find: (username: string) => {
+      find: ({ username }) => {
         const filteredUsers = users.filter(
           (user) => user.username === username,
         );
