@@ -1,16 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { EventChangeHistory } from '../change-history/event-change-history.entity';
-import { Event } from '../events/event.entity';
-import {
-  AfterInsert,
-  AfterRemove,
-  AfterUpdate,
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  // OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User {
@@ -30,24 +20,4 @@ export class User {
 
   @OneToMany(() => EventChangeHistory, (changeHistory) => changeHistory.user)
   changeHistories: EventChangeHistory[];
-
-  @AfterInsert()
-  logInsert() {
-    console.log(
-      'Inserted User with id',
-      this.id,
-      'and username',
-      this.username,
-    );
-  }
-
-  @AfterUpdate()
-  logUpdate() {
-    console.log('Updated User with id', this.id, 'and username', this.username);
-  }
-
-  @AfterRemove()
-  logRemove() {
-    console.log('Removed User with id', this.id, 'and username', this.username);
-  }
 }
