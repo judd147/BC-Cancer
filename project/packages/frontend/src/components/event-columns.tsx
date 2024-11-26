@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnHeader } from "./column-header";
+import { AdminAvatar } from "./admin-avatar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteEvent } from "@/api/queries";
 
@@ -81,6 +82,24 @@ export const columns: ColumnDef<Event>[] = [
     },
   },
   {
+    accessorKey: "admins",
+    header: ({ column }) => <ColumnHeader column={column} title="Admins" />,
+    cell: ({ row }) => {
+      const admins = row.original.admins;
+      return (
+        <div className="flex flex-row -space-x-4">
+          {admins.map((admin, index) => (
+            <AdminAvatar
+              key={admin.username}
+              username={admin.username}
+              zIndex={admins.length - index}
+            ></AdminAvatar>
+          ))}
+        </div>
+      );
+    },
+  },
+  {
     id: "actions",
     header: ({ table }) => {
       const queryClient = useQueryClient();
@@ -95,14 +114,14 @@ export const columns: ColumnDef<Event>[] = [
       const handleDeleteSelected = () => {
         const selectedRows = table.getSelectedRowModel().rows;
         selectedRows.forEach((row) => {
-          eventMutation.mutate(row.original.id)
+          eventMutation.mutate(row.original.id);
         });
       };
 
       const handleDeleteAll = () => {
         const allRows = table.getRowModel().rows;
         allRows.forEach((row) => {
-          eventMutation.mutate(row.original.id)
+          eventMutation.mutate(row.original.id);
         });
       };
 

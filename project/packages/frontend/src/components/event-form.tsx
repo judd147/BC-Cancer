@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,14 +23,13 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -38,8 +38,10 @@ import {
   CreateEventDto,
   UpdateEventDto,
 } from "@bc-cancer/shared/src/types/event";
-import { getDonors, createEvent, updateEvent } from "@/api/queries";
-import { useMemo } from "react";
+import { getDonors, createEvent, updateEvent, getUsers } from "@/api/queries";
+import { useState, useMemo } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 const bcCities = [
   "Abbotsford",
@@ -94,7 +96,7 @@ const bcCities = [
   "Victoria",
   "West Kelowna",
   "White Rock",
-  "Williams Lake"
+  "Williams Lake",
 ] as const;
 
 // Define validation schema
@@ -109,11 +111,14 @@ const baseFormSchema = z.object({
     .number()
     .min(1, { message: "Must be at least 1" })
     .max(99, { message: "Must be less than 100" }), // Limit to 1-99 donors
+  admin: z.string().optional(),
   eventCityOnly: z.boolean().optional(),
 });
 
 export function EventForm({ event }: { event?: Event }) {
   const navigate = useNavigate();
+  const [username, setUsername] = useState<string>("");
+
   // Modify schema for editing
   const formSchema = useMemo(() => {
     if (event) {
@@ -127,6 +132,7 @@ export function EventForm({ event }: { event?: Event }) {
     }
     return baseFormSchema;
   }, [event]);
+
   // Initialize the form with schema and default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -138,6 +144,7 @@ export function EventForm({ event }: { event?: Event }) {
       description: event?.description || "",
       date: event?.date ? new Date(event.date).toISOString() : "",
       donorLimit: undefined,
+      admin: undefined,
       eventCityOnly: false,
     },
   });
@@ -145,11 +152,20 @@ export function EventForm({ event }: { event?: Event }) {
     limit: form.watch("donorLimit"),
     ...(form.watch("eventCityOnly") && { city: form.watch("city") }),
   };
+
   // define react query/mutation
   const queryClient = useQueryClient();
   const donorsQuery = useQuery({
     queryKey: ["donors", donorQueryParams],
     queryFn: () => getDonors(donorQueryParams),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  const { data: users } = useQuery({
+    queryKey: ["users", username],
+    queryFn: () => getUsers(username),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -171,10 +187,16 @@ export function EventForm({ event }: { event?: Event }) {
     },
   });
 
+  const handleSearch = useDebouncedCallback((term: string) => {
+    setUsername(term);
+  }, 300);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // collect donor IDs
       const donorIds = donorsQuery.data?.map((donor) => donor.id);
+      // collect admin IDs
+      const adminQuery = await getUsers(values.admin);
       // prepare event data
       const eventData: CreateEventDto = {
         name: values.name,
@@ -184,6 +206,7 @@ export function EventForm({ event }: { event?: Event }) {
         description: values.description,
         date: new Date(values.date).toISOString(),
         donorIds: donorIds || [],
+        admins: adminQuery.map((user) => user.id),
       };
       createEventMutation.mutate(eventData); // request to create the event
     } catch (error) {
@@ -269,7 +292,7 @@ export function EventForm({ event }: { event?: Event }) {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-[250px] pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
                       >
@@ -330,30 +353,58 @@ export function EventForm({ event }: { event?: Event }) {
           )}
         />
 
-        {/* City field as Select */}
         <FormField
           control={form.control}
           name="city"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>City *</FormLabel>
-              <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Cities</SelectLabel>
-                      {bcCities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value || "Select a city"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search city..."/>
+                    <CommandList>
+                      <CommandEmpty>No city found.</CommandEmpty>
+                      <CommandGroup>
+                        {bcCities.map((city) => (
+                          <CommandItem
+                            key={city}
+                            value={city}
+                            onSelect={() => {
+                              form.setValue("city", city);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2",
+                                city === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {city}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -388,6 +439,67 @@ export function EventForm({ event }: { event?: Event }) {
             )}
           />
         )}
+
+        {/* Add Admin */}
+        <FormField
+          control={form.control}
+          name="admin"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Add an Admin</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground",
+                      )}
+                    >
+                      {field.value || "Select a user"}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search users..." onChangeCapture={(e) => handleSearch(e.target.value)} />
+                    <CommandList>
+                      <CommandEmpty>No users found.</CommandEmpty>
+                      <CommandGroup>
+                        {users?.map((user) => (
+                          <CommandItem
+                            key={user.id}
+                            value={user.username}
+                            onSelect={() => {
+                              form.setValue("admin", user.username);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2",
+                                user.username === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {user.username}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Admin will be able to edit this event.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Switch for filtering by city */}
         {!event && (
