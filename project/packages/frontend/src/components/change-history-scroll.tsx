@@ -89,9 +89,9 @@ export function ChangeHistoryScroll({ eventId, donors }: ChangeHistoryProps) {
     return donor ? donor.firstName + " " + donor.lastName : String(donorId);
   };
 
-  const formatUserList = (userIds: number[]) => {
-    if (!userIds?.length) return "";
-    return userIds.map(getDonorName).join(", ");
+  const formatDonorList = (donorIds: number[]) => {
+    if (!donorIds?.length) return "";
+    return donorIds.map(getDonorName).join(", ");
   };
 
   return (
@@ -130,7 +130,7 @@ export function ChangeHistoryScroll({ eventId, donors }: ChangeHistoryProps) {
                           <span className="font-medium">
                             Invited from preview:{" "}
                           </span>
-                          {formatUserList(statusChanges.newlyInvited)}
+                          {formatDonorList(statusChanges.newlyInvited)}
                         </p>
                       </div>
                     </div>
@@ -144,7 +144,7 @@ export function ChangeHistoryScroll({ eventId, donors }: ChangeHistoryProps) {
                           <span className="font-medium">
                             Excluded from preview:{" "}
                           </span>
-                          {formatUserList(statusChanges.newlyExcluded)}
+                          {formatDonorList(statusChanges.newlyExcluded)}
                         </p>
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export function ChangeHistoryScroll({ eventId, donors }: ChangeHistoryProps) {
                           <span className="font-medium">
                             Excluded from invited:{" "}
                           </span>
-                          {formatUserList(
+                          {formatDonorList(
                             statusChanges.movedFromInvitedToExcluded,
                           )}
                         </p>
@@ -174,13 +174,23 @@ export function ChangeHistoryScroll({ eventId, donors }: ChangeHistoryProps) {
                           <span className="font-medium">
                             Invited from excluded:{" "}
                           </span>
-                          {formatUserList(
+                          {formatDonorList(
                             statusChanges.movedFromExcludedToInvited,
                           )}
                         </p>
                       </div>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Display the comment if available */}
+              {entry.comment && (
+                <div className="mt-2">
+                  <p className="italic text-gray-700">
+                    <span className="font-medium">Comment: </span>
+                    {entry.comment}
+                  </p>
                 </div>
               )}
 
