@@ -52,10 +52,12 @@ export const editEventDonors = async ({
   eventId,
   donorIds,
   newStatus,
+  comment,
 }: {
   eventId: number;
   donorIds: number[];
   newStatus: string;
+  comment?: string;
 }) => {
   const response = await fetch(
     `http://localhost:3000/events/${eventId}/donors`,
@@ -65,13 +67,14 @@ export const editEventDonors = async ({
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify({ donorIds, newStatus }),
-    },
+      body: JSON.stringify({ donorIds, newStatus, comment }),
+    }
   );
   if (!response.ok) {
     throw new Error("Failed to edit donors");
   }
 };
+
 
 export const getEvents = async () => {
   const response = await fetch("http://localhost:3000/events", {
