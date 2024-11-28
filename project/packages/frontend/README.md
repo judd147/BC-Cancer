@@ -31,7 +31,8 @@
   - [x] Create/Edit event
     - [x] filter by city & limit
     - [x] reuse for updating event
-    - [ ] add admins
+    - [x] add admins
+    - [ ] add navigation to edit inside event detail
     - [ ] add distance, map cities to coordinates
     - [ ] add other filters (donation amount, interests)
     - [ ] upload cover image
@@ -42,7 +43,7 @@
         - [x] Exclude
         - [x] Invite
         - [x] Patch status
-        - [ ] Document reasons for change
+        - [x] Document reasons for change
       - [x] Pagination
       - [x] Sorting
       - [x] Filtering
@@ -50,4 +51,4 @@
       - [ ] Global search & category filter
     - [x] Change history
       - [x] improve UI
-      - [ ] reflect reasons for change
+      - [x] reflect reasons for change

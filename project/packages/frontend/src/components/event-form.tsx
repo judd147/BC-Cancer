@@ -38,6 +38,7 @@ import {
   CreateEventDto,
   UpdateEventDto,
 } from "@bc-cancer/shared/src/types/event";
+import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { getDonors, createEvent, updateEvent, getUsers } from "@/api/queries";
 import { useState, useMemo } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -151,6 +152,7 @@ export function EventForm({ event }: { event?: Event }) {
   const donorQueryParams = {
     limit: form.watch("donorLimit"),
     ...(form.watch("eventCityOnly") && { city: form.watch("city") }),
+    orderBy: "id" as keyof Donor,
   };
 
   // define react query/mutation
@@ -465,7 +467,7 @@ export function EventForm({ event }: { event?: Event }) {
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search users..." onChangeCapture={(e) => handleSearch(e.target.value)} />
+                    <CommandInput placeholder="Search users..." onChangeCapture={(e) => handleSearch((e.target as HTMLInputElement).value)} />
                     <CommandList>
                       <CommandEmpty>No users found.</CommandEmpty>
                       <CommandGroup>
