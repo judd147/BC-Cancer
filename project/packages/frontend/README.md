@@ -14,7 +14,6 @@
 - [x] Communicate with backend
   - [x] React Query
 - [ ] Sonnet Toasts
-  - [ ] create event
   - [ ] delete event
   - [ ] update event
   - [ ] access denied (change donor status)

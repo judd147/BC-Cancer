@@ -7,11 +7,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../AuthContext";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -25,6 +33,8 @@ const loginSchema = z.object({
     .max(20, { message: "Password must not exceed 20 characters" }),
 });
 
+type LoginFormValues = z.infer<typeof loginSchema>;
+
 export function LoginForm({
   isSignup,
   toggleMode,
@@ -34,90 +44,86 @@ export function LoginForm({
 }) {
   const navigate = useNavigate();
   const { setIsAuthed, setUser } = useAuth();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{
-    username?: string;
-    password?: string;
-  }>({});
 
-  const handleSignup = async () => {
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const handleSignup = async (values: LoginFormValues) => {
     try {
-      // validation
-      loginSchema.parse({ username, password });
-      // send request to backend
       const response = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(values),
       });
-      // error handling
+
       if (!response.ok) {
         if (response.status === 400) {
-          setErrors({
-            username: "username already exists",
+          form.setError("username", {
+            type: "manual",
+            message: "Username already exists",
           });
+          return;
         }
-      } else {
-        const data = await response.json();
-        // console.log("Signed up successfully:", data);
-        setIsAuthed(true);
-        setUser({ id: data.id, username: data.username });
-        navigate("/events");
       }
+
+      const data = await response.json();
+      setIsAuthed(true);
+      setUser({ id: data.id, username: data.username });
+      navigate("/events");
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors = error.flatten().fieldErrors;
-        setErrors({
-          username: fieldErrors.username?.[0],
-          password: fieldErrors.password?.[0],
-        });
-      }
+      console.error("Signup failed:", error);
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (values: LoginFormValues) => {
     try {
-      // validation
-      loginSchema.parse({ username, password });
-      // send request to backend
       const response = await fetch("http://localhost:3000/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Include cookies in the request
-        body: JSON.stringify({ username, password }),
+        credentials: "include",
+        body: JSON.stringify(values),
       });
-      // error handling
+
       if (!response.ok) {
         if (response.status === 404) {
-          setErrors({
-            username: "username not found",
+          form.setError("username", {
+            type: "manual",
+            message: "Username not found",
           });
+          return;
         } else if (response.status === 400) {
-          setErrors({
-            password: "password does not match our records",
+          form.setError("password", {
+            type: "manual",
+            message: "Password does not match our records",
           });
+          return;
         }
-      } else {
-        const data = await response.json();
-        //console.log("Logged in successfully:", data);
-        setIsAuthed(true);
-        setUser({ id: data.id, username: data.username });
-        navigate("/events");
       }
+
+      const data = await response.json();
+      setIsAuthed(true);
+      setUser({ id: data.id, username: data.username });
+      navigate("/events");
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors = error.flatten().fieldErrors;
-        setErrors({
-          username: fieldErrors.username?.[0],
-          password: fieldErrors.password?.[0],
-        });
-      }
+      console.error("Login failed:", error);
+    }
+  };
+
+  const onSubmit = async (values: LoginFormValues) => {
+    if (isSignup) {
+      await handleLogin(values);
+    } else {
+      await handleSignup(values);
     }
   };
 
@@ -134,69 +140,64 @@ export function LoginForm({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.username && (
-              <span className="text-red-500 text-sm font-medium">
-                {errors.username}
-              </span>
-            )}
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <a href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </a>
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Password</FormLabel>
+                    <a href="#" className="text-sm underline">
+                      Forgot your password?
+                    </a>
+                  </div>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full">
+              {isSignup ? "Login" : "Register"}
+            </Button>
+
+            <div className="mt-4 text-center text-sm">
+              {isSignup ? (
+                <>
+                  Don't have an account?{" "}
+                  <a href="#" className="underline" onClick={toggleMode}>
+                    Sign up
+                  </a>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <a href="#" className="underline" onClick={toggleMode}>
+                    Login
+                  </a>
+                </>
+              )}
             </div>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {errors.password && (
-              <span className="text-red-500 text-sm font-medium">
-                {errors.password}
-              </span>
-            )}
-          </div>
-          {isSignup ? (
-            <Button type="button" className="w-full" onClick={handleLogin}>
-              Login
-            </Button>
-          ) : (
-            <Button type="button" className="w-full" onClick={handleSignup}>
-              Register
-            </Button>
-          )}
-        </div>
-        <div className="mt-4 text-center text-sm">
-          {isSignup ? (
-            <>
-              Don't have an account?{" "}
-              <a href="#" className="underline" onClick={toggleMode}>
-                Sign up
-              </a>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <a href="#" className="underline" onClick={toggleMode}>
-                Login
-              </a>
-            </>
-          )}
-        </div>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

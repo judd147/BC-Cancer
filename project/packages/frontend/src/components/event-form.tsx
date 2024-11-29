@@ -379,7 +379,7 @@ export function EventForm({ event }: { event?: Event }) {
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search city..."/>
+                    <CommandInput placeholder="Search city..." />
                     <CommandList>
                       <CommandEmpty>No city found.</CommandEmpty>
                       <CommandGroup>
@@ -443,65 +443,72 @@ export function EventForm({ event }: { event?: Event }) {
         )}
 
         {/* Add Admin */}
-        <FormField
-          control={form.control}
-          name="admin"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Add an Admin</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      {field.value || "Select a user"}
-                      <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search users..." onChangeCapture={(e) => handleSearch((e.target as HTMLInputElement).value)} />
-                    <CommandList>
-                      <CommandEmpty>No users found.</CommandEmpty>
-                      <CommandGroup>
-                        {users?.map((user) => (
-                          <CommandItem
-                            key={user.id}
-                            value={user.username}
-                            onSelect={() => {
-                              form.setValue("admin", user.username);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2",
-                                user.username === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {user.username}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                Admin will be able to edit this event.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!event && (
+          <FormField
+            control={form.control}
+            name="admin"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Add an Admin</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value || "Select a user"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search users..."
+                        onChangeCapture={(e) =>
+                          handleSearch((e.target as HTMLInputElement).value)
+                        }
+                      />
+                      <CommandList>
+                        <CommandEmpty>No users found.</CommandEmpty>
+                        <CommandGroup>
+                          {users?.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.username}
+                              onSelect={() => {
+                                form.setValue("admin", user.username);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2",
+                                  user.username === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {user.username}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  Admin will be able to edit this event.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Switch for filtering by city */}
         {!event && (
