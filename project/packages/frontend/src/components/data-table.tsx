@@ -73,9 +73,7 @@ export function EventDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Button onClick={() => navigate("/create-event")}>
-          New Event
-        </Button>
+        <Button onClick={() => navigate("/create-event")}>New Event</Button>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -128,7 +126,7 @@ export function EventDataTable<TData, TValue>({
         </Table>
       </div>
       <div className="py-4">
-        <Pagination table={table}/>
+        <Pagination table={table} />
       </div>
     </div>
   );
@@ -145,6 +143,7 @@ export function DonorDataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState<string>("");
 
   const table = useReactTable({
     data,
@@ -157,14 +156,17 @@ export function DonorDataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
       columnPinning: {
-        right: ['actions'],
+        right: ["actions"],
       },
+      globalFilter,
     },
   });
 
@@ -172,16 +174,12 @@ export function DonorDataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter first names..."
-          value={
-            (table.getColumn("firstName")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("firstName")?.setFilterValue(event.target.value)
-          }
+          placeholder="Filter by anything..."
+          value={globalFilter}
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
-        <ColumnToggle table={table}/>
+        <ColumnToggle table={table} />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -191,9 +189,12 @@ export function DonorDataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   const isPinned = header.column.getIsPinned();
                   return (
-                    <TableHead key={header.id} className={`
-                      ${isPinned === 'right' ? 'sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}
-                    `}>
+                    <TableHead
+                      key={header.id}
+                      className={`
+                      ${isPinned === "right" ? "sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]" : ""}
+                    `}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -216,10 +217,10 @@ export function DonorDataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => {
                     const isPinned = cell.column.getIsPinned();
                     return (
-                      <TableCell 
+                      <TableCell
                         key={cell.id}
                         className={`
-                          ${isPinned === 'right' ? 'sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]' : ''}
+                          ${isPinned === "right" ? "sticky right-0 bg-white shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]" : ""}
                         `}
                       >
                         {flexRender(
@@ -245,7 +246,7 @@ export function DonorDataTable<TData, TValue>({
         </Table>
       </div>
       <div className="py-4">
-        <Pagination table={table}/>
+        <Pagination table={table} />
       </div>
     </div>
   );
