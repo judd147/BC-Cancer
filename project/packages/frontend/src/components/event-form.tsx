@@ -185,7 +185,7 @@ export function EventForm({ event }: { event?: Event }) {
     mutationFn: updateEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      navigate("/events");
+      navigate(`/events/${event?.id}`, {state: { event }});
     },
   });
 
@@ -540,7 +540,7 @@ export function EventForm({ event }: { event?: Event }) {
           <Button
             variant="outline"
             className="mt-4"
-            onClick={() => navigate("/events")}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>

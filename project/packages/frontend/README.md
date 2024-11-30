@@ -16,7 +16,7 @@
 - [ ] Sonnet Toasts
   - [ ] delete event
   - [ ] update event
-  - [ ] access denied (change donor status)
+  - [ ] change donor status
 - [x] Implement functionality
   - [x] Login with username/password
   - [x] Logout and user avatar

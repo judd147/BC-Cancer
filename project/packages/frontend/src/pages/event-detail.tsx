@@ -54,7 +54,10 @@ export default function EventDetail() {
           {/* Event Details Card */}
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle>Event Details</CardTitle>
+              <div className="flex w-full items-center justify-between">
+                <CardTitle>Event Details</CardTitle>
+                <Button className="h-auto py-0" variant="ghost" onClick={() => navigate("/edit-event", { state: { event } })}>Edit</Button>
+              </div>
               <CardDescription>{event.description}</CardDescription>
             </CardHeader>
             <CardContent>
