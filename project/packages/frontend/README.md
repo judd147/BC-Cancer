@@ -13,10 +13,6 @@
   - [x] Event Detail
 - [x] Communicate with backend
   - [x] React Query
-- [ ] Sonnet Toasts
-  - [ ] delete event
-  - [ ] update event
-  - [ ] change donor status
 - [x] Implement functionality
   - [x] Login with username/password
   - [x] Logout and user avatar
@@ -31,10 +27,7 @@
     - [x] filter by city & limit
     - [x] reuse for updating event
     - [x] add admins
-    - [ ] add navigation to edit inside event detail
-    - [ ] add distance, map cities to coordinates
-    - [ ] add other filters (donation amount, interests)
-    - [ ] upload cover image
+    - [x] add navigation to edit inside event detail
   - [x] Event detail
     - [x] Donor table
       - [x] Status tab
@@ -47,7 +40,7 @@
       - [x] Sorting
       - [x] Filtering
       - [x] Column visibility
-      - [ ] Global search & category filter
+      - [x] Global search
     - [x] Change history
       - [x] improve UI
       - [x] reflect reasons for change
