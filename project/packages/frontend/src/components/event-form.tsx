@@ -538,6 +538,7 @@ export function EventForm({ event }: { event?: Event }) {
             {event ? "Update" : "Create"}
           </Button>
           <Button
+            type="button"
             variant="outline"
             className="mt-4"
             onClick={() => navigate(-1)}
