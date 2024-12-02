@@ -6,7 +6,6 @@ import { Event } from "@bc-cancer/shared/src/types/event";
 export default function EditEvent() {
   const location = useLocation();
   const { event }: { event: Event } = location.state;
-  console.log("Edit event:", event);
   return (
     <div className="container mx-auto py-10">
       {/* Header Row with Avatar */}

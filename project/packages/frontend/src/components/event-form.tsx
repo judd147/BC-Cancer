@@ -38,6 +38,7 @@ import {
   CreateEventDto,
   UpdateEventDto,
 } from "@bc-cancer/shared/src/types/event";
+import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { getDonors, createEvent, updateEvent, getUsers } from "@/api/queries";
 import { useState, useMemo } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -151,6 +152,7 @@ export function EventForm({ event }: { event?: Event }) {
   const donorQueryParams = {
     limit: form.watch("donorLimit"),
     ...(form.watch("eventCityOnly") && { city: form.watch("city") }),
+    orderBy: "id" as keyof Donor,
   };
 
   // define react query/mutation
@@ -183,7 +185,7 @@ export function EventForm({ event }: { event?: Event }) {
     mutationFn: updateEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      navigate("/events");
+      navigate(`/events/${event?.id}`, {state: { event }});
     },
   });
 
@@ -377,7 +379,7 @@ export function EventForm({ event }: { event?: Event }) {
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
-                    <CommandInput placeholder="Search city..."/>
+                    <CommandInput placeholder="Search city..." />
                     <CommandList>
                       <CommandEmpty>No city found.</CommandEmpty>
                       <CommandGroup>
@@ -441,65 +443,72 @@ export function EventForm({ event }: { event?: Event }) {
         )}
 
         {/* Add Admin */}
-        <FormField
-          control={form.control}
-          name="admin"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Add an Admin</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      {field.value || "Select a user"}
-                      <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search users..." onChangeCapture={(e) => handleSearch(e.target.value)} />
-                    <CommandList>
-                      <CommandEmpty>No users found.</CommandEmpty>
-                      <CommandGroup>
-                        {users?.map((user) => (
-                          <CommandItem
-                            key={user.id}
-                            value={user.username}
-                            onSelect={() => {
-                              form.setValue("admin", user.username);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2",
-                                user.username === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {user.username}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                Admin will be able to edit this event.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {!event && (
+          <FormField
+            control={form.control}
+            name="admin"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Add an Admin</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value || "Select a user"}
+                        <ChevronsUpDown className="opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search users..."
+                        onChangeCapture={(e) =>
+                          handleSearch((e.target as HTMLInputElement).value)
+                        }
+                      />
+                      <CommandList>
+                        <CommandEmpty>No users found.</CommandEmpty>
+                        <CommandGroup>
+                          {users?.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.username}
+                              onSelect={() => {
+                                form.setValue("admin", user.username);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2",
+                                  user.username === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {user.username}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  Admin will be able to edit this event.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {/* Switch for filtering by city */}
         {!event && (
@@ -531,7 +540,7 @@ export function EventForm({ event }: { event?: Event }) {
           <Button
             variant="outline"
             className="mt-4"
-            onClick={() => navigate("/events")}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>

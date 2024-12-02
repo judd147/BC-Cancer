@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Table, Row } from "@tanstack/react-table";
 import { Donor } from "@bc-cancer/shared/src/types/donor";
 import { MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
   // Component for the Actions Header
-  const ActionsHeader = ({ table }: { table: any }) => {
+  const ActionsHeader = ({ table }: { table: Table<Donor> }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [comment, setComment] = useState("");
     const [donorIdsToExclude, setDonorIdsToExclude] = useState<number[]>([]);
@@ -46,7 +45,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
 
     const handleInviteSelected = () => {
       const selectedRows = table.getSelectedRowModel().rows;
-      const donorIds = selectedRows.map((row: any) => row.original.id);
+      const donorIds = selectedRows.map((row: Row<Donor>) => row.original.id);
       eventDonorMutation.mutate({
         eventId,
         donorIds: donorIds,
@@ -56,7 +55,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
 
     const handleExcludeSelected = () => {
       const selectedRows = table.getSelectedRowModel().rows;
-      const donorIds = selectedRows.map((row: any) => row.original.id);
+      const donorIds = selectedRows.map((row: Row<Donor>) => row.original.id);
       if (donorIds.length > 0) {
         setDonorIdsToExclude(donorIds);
         setIsDialogOpen(true);
@@ -65,7 +64,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
 
     const handleInviteAll = () => {
       const allRows = table.getRowModel().rows;
-      const donorIds = allRows.map((row: any) => row.original.id);
+      const donorIds = allRows.map((row: Row<Donor>) => row.original.id);
       eventDonorMutation.mutate({
         eventId,
         donorIds: donorIds,
@@ -75,7 +74,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
 
     const handleExcludeAll = () => {
       const allRows = table.getRowModel().rows;
-      const donorIds = allRows.map((row: any) => row.original.id);
+      const donorIds = allRows.map((row: Row<Donor>) => row.original.id);
       if (donorIds.length > 0) {
         setDonorIdsToExclude(donorIds);
         setIsDialogOpen(true);
@@ -149,7 +148,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
   };
 
   // Component for the Actions Cell
-  const ActionsCell = ({ row }: { row: any }) => {
+  const ActionsCell = ({ row }: { row: Row<Donor> }) => {
     const donor = row.original;
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [comment, setComment] = useState("");
@@ -200,7 +199,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
             <DropdownMenuItem
               onClick={() =>
                 navigator.clipboard.writeText(
-                  donor.firstName + " " + donor.lastName
+                  donor.firstName + " " + donor.lastName,
                 )
               }
             >
@@ -220,7 +219,8 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
             <DialogHeader>
               <DialogTitle>Exclude Donor</DialogTitle>
               <DialogDescription>
-                Please provide a reason for excluding {donor.firstName}{" "}{donor.lastName}.
+                Please provide a reason for excluding {donor.firstName}{" "}
+                {donor.lastName}.
               </DialogDescription>
             </DialogHeader>
             <Textarea
@@ -277,9 +277,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
     },
     {
       accessorKey: "city",
-      header: ({ column }) => (
-        <ColumnHeader column={column} title="City" />
-      ),
+      header: ({ column }) => <ColumnHeader column={column} title="City" />,
     },
     {
       accessorKey: "totalDonations",
@@ -330,9 +328,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
       ),
       cell: ({ row }) => {
         const dateStr: string = row.getValue("firstGiftDate");
-        return (
-          <div>{new Date(dateStr).toLocaleString("en-CA", options)}</div>
-        );
+        return <div>{new Date(dateStr).toLocaleString("en-CA", options)}</div>;
       },
     },
     {
@@ -342,9 +338,7 @@ export const createColumns = (eventId: number): ColumnDef<Donor>[] => {
       ),
       cell: ({ row }) => {
         const dateStr: string = row.getValue("lastGiftDate");
-        return (
-          <div>{new Date(dateStr).toLocaleString("en-CA", options)}</div>
-        );
+        return <div>{new Date(dateStr).toLocaleString("en-CA", options)}</div>;
       },
     },
     {
